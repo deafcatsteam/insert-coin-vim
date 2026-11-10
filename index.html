@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Insert Coin — Phase 0 playground</title>
+    <title>Insert Coin — engine playground</title>
     <style>
       body {
         font-family: system-ui, sans-serif;
@@ -15,12 +15,6 @@
       #keys {
         white-space: pre-wrap;
         word-break: break-all;
-      }
-      #log {
-        height: 20rem;
-        overflow: auto;
-        border: 1px solid #888;
-        padding: 0.5rem;
       }
     </style>
   </head>
@@ -35,7 +29,8 @@
     <p>Status: <strong id="status"></strong></p>
     <p>Mode: <strong id="mode">normal</strong></p>
     <p>
-      Keys: <strong id="count">0</strong>
+      Keys: <strong id="count">0</strong> Blocked:
+      <strong id="faults">0</strong>
       <button id="reset" type="button">Reset</button>
     </p>
     <pre id="keys"></pre>
@@ -45,8 +40,6 @@
         <input id="forbidden"
       /></label>
     </p>
-    <p>Key log (newest first):</p>
-    <pre id="log"></pre>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

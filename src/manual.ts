@@ -1,6 +1,5 @@
-import { EditorState } from '@codemirror/state';
-import { Vim, vim } from '@replit/codemirror-vim';
-import { EditorView, minimalSetup } from 'codemirror';
+import { EditorView } from 'codemirror';
+import { createEditor } from './engine/editor';
 import { createRecorder, type Recorder } from './engine/recorder';
 import { steps } from './manual-steps';
 
@@ -74,8 +73,6 @@ const load = (): void => {
   recorder?.destroy();
   view?.destroy();
   recorder = view = undefined;
-  // Vim keeps macro recording and registers across editors: a failed step must not break the next.
-  Vim.resetVimGlobalState_();
   state.raw = [];
   save();
   pasteEl.value = '';
@@ -101,23 +98,14 @@ const load = (): void => {
   wantEl.textContent = step.want;
   pasteRowEl.hidden = step.paste === undefined;
 
-  // Same editor setup as the headless replay, so both see the same Vim.
-  view = new EditorView({
-    doc: step.start,
-    extensions: [
-      vim(),
-      minimalSetup,
-      EditorState.allowMultipleSelections.of(true),
-      EditorView.updateListener.of((update) => {
-        if (update.docChanged) show();
-      }),
-    ],
-    parent: appEl,
-  });
   const [line, ch] = step.cursor ?? [0, 0];
-  view.dispatch({
-    selection: { anchor: view.state.doc.line(line + 1).from + ch },
-  });
+  view = createEditor(
+    { start: step.start, cursor: { line, ch } },
+    appEl,
+    EditorView.updateListener.of((update) => {
+      if (update.docChanged) show();
+    }),
+  );
   recorder = createRecorder(view, show);
   if (step.clipboard !== undefined)
     navigator.clipboard.writeText(step.clipboard).catch(() => {

@@ -1,14 +1,9 @@
-import { getCM, vim } from '@replit/codemirror-vim';
-import { EditorState } from '@codemirror/state';
-import { EditorView, minimalSetup } from 'codemirror';
+import { getCM } from '@replit/codemirror-vim';
 import { parseKeys } from '../scoring/keys';
+import { createEditor, type EditorLevel } from './editor';
 import { createRecorder } from './recorder';
 
-/** The level fields (SPEC §7) that a replay needs. */
-export interface ReplayLevel {
-  start: string;
-  cursor?: { line: number; ch: number };
-}
+export type ReplayLevel = EditorLevel;
 
 const KEY_NAMES: Record<string, string> = {
   Esc: 'Escape',
@@ -48,20 +43,7 @@ export function replay(
   level: ReplayLevel,
   solution: string,
 ): { buffer: string; keys: number } {
-  const view = new EditorView({
-    doc: level.start,
-    // "u" needs the history from minimalSetup; "<C-v>" blocks need multiple selections.
-    extensions: [
-      vim(),
-      minimalSetup,
-      EditorState.allowMultipleSelections.of(true),
-    ],
-    parent: document.body,
-  });
-  if (level.cursor) {
-    const line = view.state.doc.line(level.cursor.line + 1);
-    view.dispatch({ selection: { anchor: line.from + level.cursor.ch } });
-  }
+  const view = createEditor(level, document.body);
   const recorder = createRecorder(view);
   const cm = getCM(view);
   // jsdom has no layout, so the plugin's pixel-based check in "j"/"k" jumps to the last line.
