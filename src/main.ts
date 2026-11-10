@@ -1,10 +1,25 @@
 import { getCM, vim } from '@replit/codemirror-vim';
 import { basicSetup, EditorView } from 'codemirror';
+import { createRecorder } from './engine/recorder';
+import { parseKeys } from './scoring/keys';
 
 const parent = document.querySelector('#app');
 const logEl = document.querySelector('#log');
 const modeEl = document.querySelector('#mode');
-if (!parent || !logEl || !modeEl) throw new Error('playground markup missing');
+const countEl = document.querySelector('#count');
+const keysEl = document.querySelector('#keys');
+const resetEl = document.querySelector('#reset');
+const forbiddenEl = document.querySelector<HTMLInputElement>('#forbidden');
+if (
+  !parent ||
+  !logEl ||
+  !modeEl ||
+  !countEl ||
+  !keysEl ||
+  !resetEl ||
+  !forbiddenEl
+)
+  throw new Error('playground markup missing');
 
 const view = new EditorView({
   doc: 'const a = 1;\nconst b = 2;',
@@ -38,9 +53,25 @@ window.addEventListener(
   true,
 );
 
+const showKeys = (): void => {
+  countEl.textContent = String(recorder.keys.length);
+  keysEl.textContent = recorder.keys.join('');
+};
+
 // Every key the Vim layer receives, in Vim notation (also in insert mode).
-cm.on('inputEvent', (e: { type: string; key?: string }) => {
-  if (e.type === 'handleKey' && e.key) log('vim', e.key);
+const recorder = createRecorder(view, (key, blocked) => {
+  log(blocked ? 'blocked' : 'vim', key);
+  showKeys();
+});
+
+resetEl.addEventListener('click', () => {
+  recorder.reset();
+  showKeys();
+  view.focus();
+});
+
+forbiddenEl.addEventListener('input', () => {
+  recorder.forbidden = new Set(parseKeys(forbiddenEl.value));
 });
 
 // Only keys Vim consumed itself; plain insert-mode typing is absent here.

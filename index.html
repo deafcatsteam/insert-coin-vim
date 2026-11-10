@@ -12,6 +12,10 @@
       #app {
         border: 1px solid #888;
       }
+      #keys {
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
       #log {
         height: 20rem;
         overflow: auto;
@@ -23,6 +27,17 @@
   <body>
     <div id="app"></div>
     <p>Mode: <strong id="mode">normal</strong></p>
+    <p>
+      Keys: <strong id="count">0</strong>
+      <button id="reset" type="button">Reset</button>
+    </p>
+    <pre id="keys"></pre>
+    <p>
+      <label
+        >Forbidden keys (Vim notation, e.g. <code>hjkl&lt;Left&gt;</code>):
+        <input id="forbidden"
+      /></label>
+    </p>
     <p>Key log (newest first):</p>
     <pre id="log"></pre>
     <script type="module" src="/src/main.ts"></script>
