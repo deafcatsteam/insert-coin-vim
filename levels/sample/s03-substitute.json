@@ -1,0 +1,12 @@
+{
+  "id": "s03-substitute",
+  "chapter": 10,
+  "concepts": ["ex-substitute", "ex-range"],
+  "start": "red\nred\nred\n",
+  "target": "blue\nblue\nblue\n",
+  "cursor": { "line": 0, "ch": 0 },
+  "par": 20,
+  "optimal": 14,
+  "solutions": [":%s/red/blue/<CR>"],
+  "match": "exact"
+}

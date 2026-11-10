@@ -1,0 +1,12 @@
+{
+  "id": "s02-change-word",
+  "chapter": 3,
+  "concepts": ["operator-c", "motion-f", "insert-mode"],
+  "start": "let x = foo;\n",
+  "target": "let x = bar;\n",
+  "cursor": { "line": 0, "ch": 0 },
+  "par": 12,
+  "optimal": 8,
+  "solutions": ["ffcwbar<Esc>", "$bcwbar<Esc>", "$hhhxxxibar<Esc>"],
+  "match": "exact"
+}
