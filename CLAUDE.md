@@ -15,7 +15,7 @@ Reference spec: `SPEC.md`. Read it before any task. If a request conflicts with 
 - If unsure about state (branch, files, config), check first instead of assuming.
 
 ## Current phase
-**Phase 0 — technical prototype** (SPEC §12). Do not design levels or polish UI before `docs/phase0-report.md` is approved.
+**Phase 1 — MVP v0.1** (SPEC §12). Phase 0 is approved; its findings in `docs/phase0-report.md` are rules for levels and engine (no `Ctrl+N`/`Ctrl+T`/`Ctrl+W` in levels, shared editor setup, Vim state reset per level).
 
 ## Conventions
 - TypeScript strict mode. No `any` without a comment explaining why.

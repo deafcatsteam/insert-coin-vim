@@ -163,14 +163,16 @@ its own rendering, and the bundle is already large. Decide again only if the Pha
   Space after `^` and `` ` ``.
 - Reset the Vim global state at each level start (finding 1).
 
-### Before Phase 1 is called safe
+### Open checks, left to community testers
 
-These checks are open. `docs/phase0-manual-checklist.md` describes them; each takes a few minutes.
+Decision of the maintainer (2026-11-10): this report is approved and Phase 1 starts. The checks
+below stay open until testers with other browsers and keyboards report them, once the repository
+is public. `docs/phase0-manual-checklist.md` describes them; each takes a few minutes.
 
 1. Chrome, window mode, 21 steps. Chrome is the most used browser and has no result yet.
 2. Chrome and Edge in fullscreen with Keyboard Lock, 6 steps: tells whether fullscreen is worth
    offering as the answer to `Ctrl+W`.
 3. One QWERTY or QWERTZ run, if a tester with such a keyboard is available.
 
-Phase 1 work on chapters 0 to 3 does not depend on check 2 or 3. It does depend on check 1 for
-`Ctrl+R` (chapter 1).
+Phase 1 work on chapters 0 to 3 does not depend on check 2 or 3. Check 1 is an accepted risk:
+if Chrome keeps `Ctrl+R` (redo, chapter 1), the redo levels must change.

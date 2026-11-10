@@ -36,7 +36,8 @@ Do run 1 first. The other runs are short. Skip a browser that is not installed.
 | 7   | Edge    | click **Fullscreen + keyboard lock**      | 1 to 6  | [ ]  |
 
 Run 4 was done in Zen, a Firefox fork (Gecko engine, reports itself as Firefox 159), on Windows
-with an AZERTY keyboard. The other runs were not done; see `docs/phase0-report.md`.
+with an AZERTY keyboard. The other runs were not done; see `docs/phase0-report.md`. They are open
+to any tester: a run in another browser or with another keyboard is a welcome contribution.
 
 Between two runs in the same browser, click **Back to step 1**. Do not click **Clear report**:
 the report keeps every run and marks each line with `window`, `fullscreen` or `fullscreen+lock`.

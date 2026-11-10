@@ -97,16 +97,17 @@ insertcoin.example/daily
 | 2 — Word motions | Beginner | `w b e W B E`, `0 ^ $`, counts |
 | 3 — Grammar | Intermediate | `d c y` + motions, `p P`, `.` |
 | 4 — Line jumps | Intermediate | `f t F T ; ,`, `gg G`, `{n}G`, `%` |
-| 5 — Text objects | Advanced | `iw aw i" a" i( a( it at ip ap` |
+| 5 — Text objects | Advanced | `iw aw i" a" i( a( ip ap` |
 | 6 — Search | Advanced | `/ ? n N * #`, `cgn` |
 | 7 — Visual | Advanced | `v V <C-v>`*, block insert |
-| 8 — Registers & marks | Advanced | `"a`–`"z`, `"0`, `"+`, `m` `'` `` ` `` |
+| 8 — Registers & marks | Advanced | `"a`–`"z`, `"0`, `m` `'` `` ` `` |
 | 9 — Macros | Expert | `q`, `@`, `@@`, counts on macros |
 | 10 — Ex power | Expert | `:s` with regex, ranges, `:g`, `:norm` |
 | 11 — Golf | Expert | Combined optimization puzzles |
 
 \* Subject to Phase 0 browser-shortcut findings (section 12).
 Final chapter contents depend on what the Vim emulation supports reliably.
+Removed after Phase 0 (`docs/phase0-report.md`): `it`, `at` (chapter 5) and `"+` (chapter 8). Chapter 10 regex levels use only patterns that mean the same in Vim and in JavaScript.
 
 **MVP: 20 levels** covering chapters 0–3.
 
@@ -195,7 +196,7 @@ Desktop/laptop with physical keyboard only. Mobile/tablet: title screen + "Requi
 ### 9.1 Stack
 - **TypeScript**, **Vite**.
 - **CodeMirror 6** + **`@replit/codemirror-vim`** (MIT).
-- UI framework: lightweight (vanilla TS or Preact/Svelte) — decided after Phase 0.
+- UI framework: none, vanilla TypeScript (decided after Phase 0, see `docs/phase0-report.md`).
 - Tests: Vitest (unit), Playwright (E2E + keyboard).
 - Lint/format: ESLint + Prettier.
 
@@ -284,5 +285,5 @@ Global leaderboard (e.g. Supabase free tier), Neovim plugin mode for features th
 
 - [ ] Fictional corporation name and lore tone.
 - [ ] Final display/editor fonts.
-- [ ] UI framework (after Phase 0).
-- [ ] Name availability check: GitHub, itch.io, domain.
+- [x] UI framework: vanilla TypeScript.
+- [ ] Name availability check: GitHub (free on 2026-11-10, checked by the maintainer), itch.io, domain.
