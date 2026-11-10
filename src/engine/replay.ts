@@ -1,5 +1,6 @@
 import { getCM, vim } from '@replit/codemirror-vim';
-import { EditorView } from 'codemirror';
+import { EditorState } from '@codemirror/state';
+import { EditorView, minimalSetup } from 'codemirror';
 import { parseKeys } from '../scoring/keys';
 import { createRecorder } from './recorder';
 
@@ -49,7 +50,12 @@ export function replay(
 ): { buffer: string; keys: number } {
   const view = new EditorView({
     doc: level.start,
-    extensions: [vim()],
+    // "u" needs the history from minimalSetup; "<C-v>" blocks need multiple selections.
+    extensions: [
+      vim(),
+      minimalSetup,
+      EditorState.allowMultipleSelections.of(true),
+    ],
     parent: document.body,
   });
   if (level.cursor) {
