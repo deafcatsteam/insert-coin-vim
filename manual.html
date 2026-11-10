@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Insert Coin — Phase 0 manual checks</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 1rem;
+        background: #fff;
+        color: #000;
+      }
+      #app,
+      #want,
+      #report {
+        border: 1px solid #888;
+        padding: 0.25rem;
+      }
+      #want {
+        min-height: 1.2em;
+      }
+      #report {
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="title"></h1>
+    <ol id="how"></ol>
+    <div id="app"></div>
+    <p>Expected text:</p>
+    <pre id="want"></pre>
+    <p id="paste-row" hidden>
+      <label
+        >Paste box:<br />
+        <textarea id="paste" rows="2" cols="40"></textarea>
+      </label>
+    </p>
+    <p>Status: <strong id="status"></strong></p>
+    <p>Keys seen: <span id="keys"></span></p>
+    <p>
+      <button id="next" type="button">Next step</button>
+      <button id="redo" type="button">Redo this step</button>
+      <button id="restart" type="button">Back to step 1</button>
+      <button id="full" type="button">Fullscreen</button>
+      <button id="lock" type="button">Fullscreen + keyboard lock</button>
+    </p>
+    <p>
+      Report (one line per finished step):
+      <button id="copy" type="button">Copy report</button>
+      <button id="clear" type="button">Clear report</button>
+    </p>
+    <pre id="report"></pre>
+    <script type="module" src="/src/manual.ts"></script>
+  </body>
+</html>
