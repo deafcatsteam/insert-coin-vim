@@ -145,6 +145,9 @@ Rules:
 - All player-facing strings are **i18n keys**, never raw text.
 - `solutions` use Vim key notation and are replayed by tests (section 10).
 - `optimal` MUST equal the keystroke count of the shortest listed solution (CI-checked).
+- A solution ends on the key that completes the level: the level completes as soon as the buffer equals `target`, so a final `<Esc>` is not part of it (CI-checked).
+- Optional `exit` (`"w"`, `"q"`, `"wq"` or `"q!"`), for chapter 0: the level completes when the player runs that Ex command while the buffer equals `target`.
+- The reference is `levels/level.schema.json`; `npm run validate:levels` checks every level.
 
 ---
 

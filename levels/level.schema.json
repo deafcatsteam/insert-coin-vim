@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Insert Coin level",
+  "description": "One level (SPEC section 7). Checked by `npm run validate:levels`.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "chapter",
+    "title",
+    "concepts",
+    "start",
+    "target",
+    "par",
+    "optimal",
+    "solutions",
+    "hints",
+    "author",
+    "license"
+  ],
+  "definitions": {
+    "text": {
+      "description": "A key of locales/en.json. Never raw text.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key"],
+      "properties": { "key": { "type": "string", "minLength": 1 } }
+    }
+  },
+  "properties": {
+    "id": {
+      "description": "Same as the file name without `.json`.",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "chapter": { "type": "integer", "minimum": 0, "maximum": 11 },
+    "title": { "$ref": "#/definitions/text" },
+    "concepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }
+    },
+    "start": { "type": "string" },
+    "target": { "type": "string" },
+    "cursor": {
+      "description": "Start position, both zero-based. Default: first character.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["line", "ch"],
+      "properties": {
+        "line": { "type": "integer", "minimum": 0 },
+        "ch": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "language": { "type": "string" },
+    "forbiddenKeys": {
+      "description": "Single keys in Vim notation, for example `x` or `<Del>`.",
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "par": { "type": "integer", "minimum": 1 },
+    "optimal": {
+      "description": "Key count of the shortest entry of `solutions`.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "solutions": {
+      "description": "Vim notation. Each one must end on the key that completes the level.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "hints": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/text" }
+    },
+    "match": { "enum": ["exact"] },
+    "exit": {
+      "description": "The level ends when the player runs this Ex command while the buffer equals `target`. Without it, the level ends as soon as the buffer equals `target`.",
+      "enum": ["w", "q", "wq", "q!"]
+    },
+    "author": { "type": "string", "minLength": 1 },
+    "license": { "const": "CC-BY-4.0" }
+  }
+}

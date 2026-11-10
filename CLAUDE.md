@@ -34,9 +34,10 @@ npm run lint         # ESLint + Prettier check
 npm run format       # Prettier write
 npm run typecheck
 npm test             # unit tests (Vitest, jsdom)
+npm run validate:levels   # schema, i18n keys, replay of every solution
 npm run build
 ```
-Not defined yet: `npm run test:e2e` (Playwright, Phase 1), `npm run validate:levels`.
+Not defined yet: `npm run test:e2e` (Playwright, Phase 1).
 
 ## Do not
 - Push, force-push, tag, or deploy without explicit approval.

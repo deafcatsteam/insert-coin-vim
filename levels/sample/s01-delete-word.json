@@ -1,6 +1,7 @@
 {
   "id": "s01-delete-word",
   "chapter": 3,
+  "title": { "key": "levels.s01-delete-word.title" },
   "concepts": ["operator-d", "motion-w", "dot-repeat"],
   "start": "const a = 1;\nconst b = 2;\n",
   "target": "a = 1;\nb = 2;\n",
@@ -8,5 +9,8 @@
   "par": 8,
   "optimal": 5,
   "solutions": ["dwj0.", "dwjdw"],
-  "match": "exact"
+  "hints": [],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
 }

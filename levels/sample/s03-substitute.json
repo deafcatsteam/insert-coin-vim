@@ -1,6 +1,7 @@
 {
   "id": "s03-substitute",
   "chapter": 10,
+  "title": { "key": "levels.s03-substitute.title" },
   "concepts": ["ex-substitute", "ex-range"],
   "start": "red\nred\nred\n",
   "target": "blue\nblue\nblue\n",
@@ -8,5 +9,8 @@
   "par": 20,
   "optimal": 14,
   "solutions": [":%s/red/blue/<CR>"],
-  "match": "exact"
+  "hints": [],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
 }

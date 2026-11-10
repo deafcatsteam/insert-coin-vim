@@ -1,4 +1,5 @@
 import { getCM } from '@replit/codemirror-vim';
+import { EditorView } from 'codemirror';
 import { parseKeys } from '../scoring/keys';
 import { createEditor, type EditorLevel } from './editor';
 import { createRecorder } from './recorder';
@@ -35,16 +36,8 @@ const toEventInit = (token: string): KeyboardEventInit & { key: string } => {
   };
 };
 
-/**
- * Plays a solution on a fresh editor through the same keydown path as a player.
- * Returns the final buffer and the number of keys the recorder counted.
- */
-export function replay(
-  level: ReplayLevel,
-  solution: string,
-): { buffer: string; keys: number } {
-  const view = createEditor(level, document.body);
-  const recorder = createRecorder(view);
+/** Types keys in Vim notation into an editor through the same keydown path as a player. */
+export function press(view: EditorView, solution: string): void {
   const cm = getCM(view);
   // jsdom has no layout, so the plugin's pixel-based check in "j"/"k" jumps to the last line.
   // shortcut: display-line motions (gj, gk) do nothing here; replay those in a real browser.
@@ -60,13 +53,27 @@ export function replay(
     // A browser types an unhandled printable key into the focused element; jsdom does not.
     if (unhandled && init.key.length === 1 && !init.ctrlKey && !init.metaKey) {
       if (target instanceof HTMLInputElement) target.value += init.key;
-      else
+      // A frozen editor takes no text.
+      else if (view.state.facet(EditorView.editable))
         view.dispatch(view.state.replaceSelection(init.key), {
           userEvent: 'input.type',
         });
     }
     target.dispatchEvent(new KeyboardEvent('keyup', init));
   }
+}
+
+/**
+ * Plays a solution on a fresh editor.
+ * Returns the final buffer and the number of keys the recorder counted.
+ */
+export function replay(
+  level: ReplayLevel,
+  solution: string,
+): { buffer: string; keys: number } {
+  const view = createEditor(level, document.body);
+  const recorder = createRecorder(view);
+  press(view, solution);
 
   const result = {
     buffer: view.state.doc.toString(),

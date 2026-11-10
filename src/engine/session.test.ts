@@ -1,4 +1,5 @@
 import { expect, test } from 'vitest';
+import { press as notation } from './replay';
 import { createSession, type SessionLevel } from './session';
 
 const play = (level: SessionLevel) => {
@@ -61,6 +62,41 @@ test('a new session does not inherit Vim state from the last one', () => {
   press('q'); // would stop the recording if it were still running
   press('x'); // so this "x" would delete; in a fresh Vim it names the register of "q"
   expect(buffer(session)).toBe('abc');
+});
+
+// SPEC §6 chapter 0: ":w" and ":q" change no text, so the level names its exit command.
+test.each(['w', 'q', 'wq', 'q!', 'quit!'])(
+  'an exit level ends on its ":%s"',
+  (command) => {
+    const exit = command === 'quit!' ? 'q!' : (command as 'w');
+    const { session } = play({ start: 'abc', target: 'abc', exit });
+    for (const other of ['w', 'q', 'wq', 'q!'].filter((c) => c !== exit))
+      notation(session.view, `:${other}<CR>`);
+    expect(session.done).toBe(false);
+
+    notation(session.view, `:${command}<CR>`);
+    expect(session.done).toBe(true);
+    expect(buffer(session)).toBe('abc');
+  },
+);
+
+test('an exit level needs the target text before its exit command', () => {
+  const { session } = play({ start: 'abc', target: 'bc', exit: 'wq' });
+  notation(session.view, ':wq<CR>');
+  expect(session.done).toBe(false);
+  notation(session.view, 'x');
+  expect(session.done).toBe(false);
+  notation(session.view, ':wq<CR>');
+  expect(session.done).toBe(true);
+  expect(session.keys).toHaveLength(9);
+});
+
+test('":w" and ":q" do nothing in a level without an exit', () => {
+  const { session } = play({ start: 'abc', target: 'bc' });
+  notation(session.view, ':w<CR>:q<CR>:wq<CR>:q!<CR>');
+  expect(session.done).toBe(false);
+  expect(buffer(session)).toBe('abc');
+  expect(session.view.dom.textContent).not.toContain('Not an editor command');
 });
 
 // Seen in Gecko on AZERTY: dead key "^" then "x" is one keydown with key "^x".
