@@ -1,5 +1,6 @@
 import { getCM, vim } from '@replit/codemirror-vim';
 import { basicSetup, EditorView } from 'codemirror';
+import { matches } from './engine/match';
 import { createRecorder } from './engine/recorder';
 import { parseKeys } from './scoring/keys';
 
@@ -10,7 +11,11 @@ const countEl = document.querySelector('#count');
 const keysEl = document.querySelector('#keys');
 const resetEl = document.querySelector('#reset');
 const forbiddenEl = document.querySelector<HTMLInputElement>('#forbidden');
+const targetEl = document.querySelector<HTMLTextAreaElement>('#target');
+const statusEl = document.querySelector('#status');
 if (
+  !targetEl ||
+  !statusEl ||
   !parent ||
   !logEl ||
   !modeEl ||
@@ -24,9 +29,16 @@ if (
 const view = new EditorView({
   doc: 'const a = 1;\nconst b = 2;',
   // vim() must come before basicSetup so its keymap takes precedence.
-  extensions: [vim(), basicSetup],
+  extensions: [
+    vim(),
+    basicSetup,
+    EditorView.updateListener.of((update) => {
+      if (update.docChanged) showStatus();
+    }),
+  ],
   parent,
 });
+targetEl.value = 'const b = 2;\n';
 
 const cm = getCM(view);
 if (!cm) throw new Error('vim adapter not attached');
@@ -53,9 +65,17 @@ window.addEventListener(
   true,
 );
 
+// Checked on every buffer change and every key, so completion shows in any mode.
+const showStatus = (): void => {
+  statusEl.textContent = matches(view.state.doc.toString(), targetEl.value)
+    ? `complete in ${String(recorder.keys.length)} keys`
+    : 'no match';
+};
+
 const showKeys = (): void => {
   countEl.textContent = String(recorder.keys.length);
   keysEl.textContent = recorder.keys.join('');
+  showStatus();
 };
 
 // Every key the Vim layer receives, in Vim notation (also in insert mode).
@@ -80,5 +100,8 @@ cm.on('vim-keypress', (key: string) => log('handled', key));
 cm.on('vim-mode-change', (e: { mode: string; subMode?: string }) => {
   modeEl.textContent = e.subMode ? `${e.mode} (${e.subMode})` : e.mode;
 });
+
+targetEl.addEventListener('input', showStatus);
+showStatus();
 
 view.focus();
