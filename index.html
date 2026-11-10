@@ -4,9 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Insert Coin — Phase 0 playground</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 1rem;
+      }
+      #app {
+        border: 1px solid #888;
+      }
+      #log {
+        height: 20rem;
+        overflow: auto;
+        border: 1px solid #888;
+        padding: 0.5rem;
+      }
+    </style>
   </head>
   <body>
     <div id="app"></div>
+    <p>Mode: <strong id="mode">normal</strong></p>
+    <p>Key log (newest first):</p>
+    <pre id="log"></pre>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
