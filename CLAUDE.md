@@ -26,17 +26,17 @@ Reference spec: `SPEC.md`. Read it before any task. If a request conflicts with 
 - No external network resources at runtime (fonts self-hosted, no CDN, no analytics, no cookies).
 - Levels: one JSON per level in `levels/<chapter>/`, must pass schema + solution replay.
 
-## Commands (update once the project is scaffolded)
+## Commands
 ```bash
 npm install
 npm run dev          # local dev server
-npm run lint
+npm run lint         # ESLint + Prettier check
+npm run format       # Prettier write
 npm run typecheck
-npm test             # unit tests (Vitest)
-npm run test:e2e     # Playwright
-npm run validate:levels
+npm test             # unit tests (Vitest, jsdom)
 npm run build
 ```
+Not defined yet: `npm run test:e2e` (Playwright, Phase 1), `npm run validate:levels`.
 
 ## Do not
 - Push, force-push, tag, or deploy without explicit approval.
