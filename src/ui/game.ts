@@ -2,7 +2,7 @@ import { getCM } from '@replit/codemirror-vim';
 import { diffHighlight, diffSpan } from '../engine/diff';
 import { createSession } from '../engine/session';
 import { t, type TextKey } from '../i18n/i18n';
-import type { Level } from '../levels/levels';
+import { shortest, type Level } from '../levels/levels';
 import { h } from './h';
 
 export interface Attempt {
@@ -10,17 +10,38 @@ export interface Attempt {
   faults: number;
   /** From the first key to the completion. */
   ms: number;
+  /** The player looked at the solution before completing. */
+  shown: boolean;
+}
+
+/** What the player did on a level since they opened it. Lives across resets. */
+export interface Visit {
+  resets: number;
+  /** The player stayed 60 s without a key. */
+  idle: boolean;
+  /** The player asked for the solution. */
+  shown: boolean;
+}
+
+export interface GameActions {
+  done: (attempt: Attempt) => void;
+  reset: () => void;
+  skip: () => void;
+  menu: () => void;
 }
 
 /** Time the player sees the finished buffer before the results replace it. */
 const DONE_DELAY_MS = 600;
+/** Resets that reveal hint 1 and hint 2; the second also offers the solution (SPEC §5.3). */
+const HINT_RESETS = [2, 4] as const;
+const IDLE_MS = 60_000;
 
 /** Shows one attempt at a level in `root`. Returns the function that removes it. */
 export function showGame(
   root: HTMLElement,
   level: Level,
-  onDone: (attempt: Attempt) => void,
-  onReset: () => void,
+  visit: Visit,
+  actions: GameActions,
 ): () => void {
   const editorEl = h('div', { className: 'ic-editor' });
   const targetEl = h('pre', { className: 'ic-target' });
@@ -28,20 +49,63 @@ export function showGame(
   const keysEl = h('span');
   const faultsEl = h('span');
   const deniedEl = h('p', { className: 'ic-denied', role: 'status' });
-  const resetEl = h('button', { type: 'button' }, t('game.reset'));
+  const helpEl = h('div', { role: 'status' });
+  const button = (key: TextKey, action: () => void): HTMLButtonElement => {
+    const el = h('button', { type: 'button' }, t(key));
+    el.addEventListener('click', action);
+    return el;
+  };
+  const solutionEl = button('game.solution', () => {
+    visit.shown = true;
+    showHelp();
+    session.view.focus();
+  });
   root.replaceChildren(
     h('h1', {}, t(level.title.key as TextKey)),
     h('h2', {}, t('game.buffer')),
     editorEl,
-    h('p', {}, modeEl, ' ', keysEl, ' ', faultsEl, ' ', resetEl),
+    h('p', {}, modeEl, ' ', keysEl, ' ', faultsEl),
     deniedEl,
     h('h2', {}, t('game.target')),
     targetEl,
+    helpEl,
+    h(
+      'p',
+      {},
+      button('game.reset', actions.reset),
+      ' ',
+      solutionEl,
+      ' ',
+      button('game.skip', actions.skip),
+      ' ',
+      button('nav.levels', actions.menu),
+    ),
   );
 
   let startedAt: number | undefined;
   let faults = 0;
   let timer: ReturnType<typeof setTimeout> | undefined;
+  let idleTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const showHelp = (): void => {
+    const count =
+      HINT_RESETS.filter((n) => visit.resets >= n).length || Number(visit.idle);
+    helpEl.replaceChildren(
+      ...level.hints
+        .slice(0, count)
+        .map((hint, i) =>
+          h(
+            'p',
+            {},
+            t('game.hint', { n: i + 1, text: t(hint.key as TextKey) }),
+          ),
+        ),
+      ...(visit.shown
+        ? [h('p', {}, t('game.solutionKeys', { keys: shortest(level) }))]
+        : []),
+    );
+    solutionEl.hidden = visit.shown || visit.resets < HINT_RESETS[1];
+  };
 
   const show = (): void => {
     const { from, toB } = diffSpan(
@@ -59,16 +123,24 @@ export function showGame(
     deniedEl.textContent = session.faults > faults ? t('game.denied') : '';
     faults = session.faults;
 
+    clearTimeout(idleTimer);
+    if (!session.done)
+      idleTimer = setTimeout(() => {
+        visit.idle = true;
+        showHelp();
+      }, IDLE_MS);
+
     if (session.keys.length > 0) startedAt ??= performance.now();
     if (!session.done || timer !== undefined) return;
     const attempt: Attempt = {
       keys: [...session.keys],
       faults: session.faults,
       ms: performance.now() - (startedAt ?? performance.now()),
+      shown: visit.shown,
     };
     // Not now: this runs inside an editor update, and the results remove the editor.
     timer = setTimeout(() => {
-      onDone(attempt);
+      actions.done(attempt);
     }, DONE_DELAY_MS);
   };
 
@@ -81,12 +153,13 @@ export function showGame(
   getCM(session.view)?.on('vim-mode-change', (e: { mode: string }) => {
     modeEl.textContent = t(`mode.${e.mode}` as TextKey);
   });
-  resetEl.addEventListener('click', onReset);
   show();
+  showHelp();
   session.view.focus();
 
   return () => {
     clearTimeout(timer);
+    clearTimeout(idleTimer);
     session.destroy();
   };
 }

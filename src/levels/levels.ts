@@ -1,4 +1,5 @@
 import type { SessionLevel } from '../engine/session';
+import { parseKeys } from '../scoring/keys';
 
 /** A key of `locales/en.json`. */
 export interface TextRef {
@@ -20,6 +21,12 @@ export interface Level extends SessionLevel {
   author: string;
   license: string;
 }
+
+/** The solution with the fewest keys. */
+export const shortest = (level: Level): string =>
+  level.solutions.reduce((a, b) =>
+    parseKeys(b).length < parseKeys(a).length ? b : a,
+  );
 
 /** Level files by path. `npm run validate:levels` checks each one. */
 export const levelFiles = import.meta.glob<Level>('../../levels/*/*.json', {

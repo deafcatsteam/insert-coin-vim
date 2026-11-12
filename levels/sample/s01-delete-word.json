@@ -9,7 +9,10 @@
   "par": 8,
   "optimal": 5,
   "solutions": ["dwj0.", "dwjdw"],
-  "hints": [],
+  "hints": [
+    { "key": "levels.s01-delete-word.hint1" },
+    { "key": "levels.s01-delete-word.hint2" }
+  ],
   "match": "exact",
   "author": "deafcatsteam",
   "license": "CC-BY-4.0"
