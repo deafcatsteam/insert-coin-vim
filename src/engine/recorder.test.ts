@@ -71,6 +71,25 @@ test('allows forbidden keys in insert mode', () => {
   expect(recorder.keys).toEqual(['i', 'x']);
 });
 
+test('ignores the repeat of a key held before the editor had focus', () => {
+  const { view, recorder, press } = setup();
+  const repeat = (): void => {
+    view.contentDOM.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Enter',
+        repeat: true,
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
+  };
+  repeat();
+  expect(recorder.keys).toEqual([]);
+  press('j');
+  repeat();
+  expect(recorder.keys).toEqual(['j', '<CR>']);
+});
+
 test('reset clears the count', () => {
   const { recorder, press } = setup();
   press('j');

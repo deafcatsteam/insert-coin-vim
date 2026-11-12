@@ -35,12 +35,22 @@ export function createRecorder(
   };
   cm.on('inputEvent', onInput);
 
+  /** A keydown that is not a repeat has reached the editor. */
+  let fresh = false;
   const onKeydown = (e: KeyboardEvent): void => {
     if (recorder.frozen) {
       // No preventDefault: browser keys such as Tab and F5 must keep working.
       e.stopPropagation();
       return;
     }
+    // A key held since before the editor had focus (Enter on the level button)
+    // repeats into the editor. It is not a player's key.
+    if (e.repeat && !fresh) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    fresh = true;
     const onCommandLine =
       e.target instanceof Element && !!e.target.closest('.cm-vim-panel');
     // A dead key followed by a letter it cannot accent arrives as one keydown ("^x",
