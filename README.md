@@ -5,6 +5,8 @@ Change the text into the target with as few keys as possible.
 
 **Play:** https://deafcatsteam.github.io/insert-coin-vim/
 
+![Demo: boot, title, first level, results](docs/demo.gif)
+
 Status: early version (v0.1 in progress). 20 levels teach the basics: modes, moving, deleting,
 operators, copy and paste, repeat. You do not need to know Vim to start.
 
