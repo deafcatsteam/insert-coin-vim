@@ -265,15 +265,104 @@ fieldset label {
   background: var(--accent);
   color: var(--bg);
 }
+/* The game screen (SPEC §8.2): the editor fills the glass, the casing shrinks. */
+.ic-device:has(.ic-game) > :is(.ic-top, .ic-bottom) {
+  display: none;
+}
+#app:has(.ic-game) {
+  display: flex;
+}
+.ic-game {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+.ic-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.ic-head h1 {
+  margin: 0;
+  font-size: 2.2rem;
+}
+.ic-tab {
+  padding: 0 0.6rem;
+  background: var(--fg);
+  color: var(--bg);
+  font: 1.3rem/1.2 var(--display);
+  text-transform: uppercase;
+  text-shadow: none;
+}
+.ic-panes {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 0.5rem;
+}
+/* A framed panel: its title sits in a notch of the top border. */
+.ic-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 9rem;
+  padding: 1rem 0.75rem 0.5rem;
+  border: 1px solid var(--fg);
+}
+.ic-panel > h2 {
+  position: absolute;
+  top: -0.55em;
+  left: 0.75rem;
+  margin: 0;
+  padding: 0 0.4rem;
+  background: var(--bg);
+  font-size: 1.3rem;
+}
+.ic-panel > :is(.ic-editor, .ic-target) {
+  flex: 1;
+  border: 0;
+}
+.ic-panel > .ic-editor {
+  display: flex;
+  flex-direction: column;
+}
+.ic-panel .cm-editor {
+  flex: 1;
+}
+.ic-status {
+  margin: 0.25rem 0 0;
+}
+.ic-status strong {
+  padding: 0 0.5rem;
+  background: var(--fg);
+  color: var(--bg);
+  text-shadow: none;
+}
+.ic-actions button {
+  font-size: 1.1rem;
+}
+/* A popup over the lower half of the editor panel; the text sits at its top. */
 .ic-denied {
-  min-height: 1.5em;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  z-index: 1;
+  margin: 0;
+  transform: translate(-50%, -50%);
   color: var(--danger);
-  font-weight: 700;
+  font: 2rem/1.6 var(--display);
+  white-space: nowrap;
+  text-shadow: none;
 }
 .ic-denied:not(:empty) {
-  display: inline-block;
-  padding: 0 0.75rem;
-  border: 2px solid var(--danger);
+  padding: 0 1.25rem;
+  background: var(--bg);
+  border: 3px double var(--danger);
+  box-shadow: 0 0 1.5rem rgb(255 59 48 / 40%);
 }
 .ic-stars {
   margin: 0;
