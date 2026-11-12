@@ -24,7 +24,8 @@ Status: early version (v0.1). You do not need to know Vim to start.
 1. Each level shows a text and a target. The differences are highlighted.
 2. You change the text into the target with real Vim keys.
 3. The level ends as soon as the text matches the target. Any solution is accepted.
-4. You get one star for finishing, two for reaching par, three for the shortest solution.
+4. You get one star for finishing, two for reaching par, three for matching the reference
+   solution: the shortest one we know with the keys taught so far. A shorter one also gets three.
    Keys are counted like on [VimGolf](https://www.vimgolf.com/): `Esc` and `Enter` count as one key each.
 
 ## What you learn
@@ -43,7 +44,7 @@ Status: early version (v0.1). You do not need to know Vim to start.
 
 - A real Vim engine ([CodeMirror 6](https://codemirror.net/) with its Vim mode), not a simulation of a few keys.
 - Two hints per level, a **Show solution** button, and a **Skip level** button. Nobody stays stuck.
-- A results screen that replays the shortest solution key by key.
+- A results screen that replays the reference solution key by key.
 - Works with any keyboard layout (AZERTY, QWERTZ, QWERTY…).
 - Progress saved in your browser, with export and import to a file.
 - A CRT look you can tune: scanlines, glow, flicker and screen curve each have a switch.

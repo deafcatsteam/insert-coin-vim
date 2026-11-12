@@ -138,7 +138,7 @@ test('the results screen shows stars and replays the shortest solution', () => {
   expect(root.querySelector('.ic-stars')?.textContent).toBe('★★☆');
   expect(root.textContent).toContain('3 keys (par 3)');
   expect(root.textContent).toContain('Time: 01:15');
-  expect(root.textContent).toContain('Optimal solution (2 keys)');
+  expect(root.textContent).toContain('Reference solution (2 keys)');
 
   expect(document.activeElement).toBe(button('Next level'));
   button('Watch it').click();

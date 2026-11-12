@@ -168,7 +168,7 @@
   "results.end": "No more levels yet.",
   "results.keys": "{keys} keys (par {par})",
   "results.next": "Next level",
-  "results.optimal": "Optimal solution ({count} keys)",
+  "results.optimal": "Reference solution ({count} keys)",
   "results.retry": "Retry (F2)",
   "results.score": "Evaluation",
   "results.stamp": "KCP certified",

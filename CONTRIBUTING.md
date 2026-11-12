@@ -50,8 +50,10 @@ npm run build
    - `start`: the text the player gets. `target`: the text to reach.
    - `solutions`: one or more key sequences that change `start` into `target`. Write special
      keys like Vim does: `<Esc>`, `<CR>`, `<C-r>`.
-   - `optimal`: the number of keys of the shortest solution. Keys are counted like VimGolf:
-     `<Esc>` is one key, `<C-r>` is one key, a capital letter is one key.
+   - `optimal`: the number of keys of the shortest solution that uses only keys taught up to
+     this level. Look for shorter ones with those keys (counts, `.`, `D`, `C`) before you send
+     the level. Keys are counted like VimGolf: `<Esc>` is one key, `<C-r>` is one key, a capital
+     letter is one key.
    - `par`: the number of keys for a good, not perfect, answer.
    - `author`: your name or handle. `license`: `CC-BY-4.0`.
 3. Add the texts to `locales/en.json`: `levels.<id>.title`, `levels.<id>.brief`,
