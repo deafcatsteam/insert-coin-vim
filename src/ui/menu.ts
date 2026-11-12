@@ -8,10 +8,23 @@ import { h, starRow } from './h';
 export function showTitle(root: HTMLElement, onStart: () => void): void {
   const startEl = h('button', { type: 'button' }, t('title.start'));
   root.replaceChildren(
-    h('h1', { className: 'ic-coin' }, t('title.name')),
-    h('p', {}, t('title.keyboard')),
-    h('p', {}, startEl),
-    displaySettings(),
+    h(
+      'div',
+      { className: 'ic-title' },
+      h(
+        'p',
+        { className: 'ic-corp' },
+        h('span', { className: 'ic-logo', ariaHidden: 'true' }),
+        ' ',
+        t('corp.name'),
+      ),
+      h('p', {}, t('title.program')),
+      h('h1', { className: 'ic-coin' }, t('title.name')),
+      h('p', { className: 'ic-menu' }, startEl),
+      h('p', {}, t('title.keyboard')),
+      displaySettings(),
+      h('p', { className: 'ic-small' }, t('title.footnote')),
+    ),
   );
   startEl.addEventListener('click', onStart);
   // Enter starts, without the mouse.

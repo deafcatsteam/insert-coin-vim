@@ -1,3 +1,4 @@
+import { t, type TextKey } from './i18n/i18n';
 import { levels } from './levels/levels';
 import { recordResult } from './progress/save';
 import './style.css';
@@ -81,6 +82,10 @@ window.addEventListener(
   },
   true,
 );
+
+// The casing texts of index.html come from the locale file too.
+for (const el of document.querySelectorAll<HTMLElement>('[data-t]'))
+  el.textContent = t(el.dataset.t as TextKey);
 
 applyDisplay();
 showTitle(root, menu);

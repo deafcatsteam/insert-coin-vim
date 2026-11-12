@@ -21,23 +21,158 @@
 
 body {
   margin: 0;
-  min-height: 100vh;
-  background: var(--casing);
+  padding: 1rem;
+  background: #ecebe7;
   font: 1rem/1.5 var(--mono);
 }
 
-/* The screen of the device. The body is its casing. */
+/* The casing of the device (SPEC §8.2): plastic shell, bezel, lens, grille, LED. */
+.ic-device {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-sizing: border-box;
+  max-width: 64rem;
+  /* Fixed to the window: long screens scroll inside the glass. */
+  height: calc(100vh - 2rem);
+  min-height: 30rem;
+  margin: 0 auto;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(160deg, #e8e8e5, var(--casing) 40%, #bcbcb8);
+  border-radius: 1.75rem;
+  box-shadow:
+    inset 0 2px 1px #fff,
+    inset 0 -3px 4px rgb(0 0 0 / 25%),
+    0 1.5rem 3rem rgb(0 0 0 / 35%);
+  color: #4a4a45;
+  font-size: 0.65rem;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.ic-device > div > p {
+  margin: 0;
+  white-space: pre-line;
+}
+.ic-top,
+.ic-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 0.5rem;
+}
+.ic-pills span {
+  display: inline-block;
+  width: 1.6rem;
+  height: 0.45rem;
+  margin-left: 0.3rem;
+  background: #2a2a28;
+  border-radius: 1rem;
+  box-shadow: 0 1px 0 #fff;
+}
+.ic-bezel {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  padding: 1rem;
+  background: #171614;
+  border-radius: 2rem;
+  box-shadow:
+    inset 0 0 0 2px #000,
+    inset 0 0.5rem 1rem rgb(255 255 255 / 7%),
+    0 1px 0 #fff;
+}
+.ic-lens {
+  width: 3.5rem;
+  height: 3.5rem;
+  background: radial-gradient(
+    circle at 35% 30%,
+    #a9c8ff 0 6%,
+    #1d3a6b 22%,
+    #060a14 60%,
+    #000
+  );
+  border: 0.4rem solid #1c1c1a;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2px #8f8f8a,
+    0 2px 3px rgb(0 0 0 / 40%);
+}
+.ic-speaker {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+.ic-grille {
+  width: min(14rem, 100%);
+  height: 2.2rem;
+  background: repeating-linear-gradient(
+    to bottom,
+    #2a2a28 0 3px,
+    transparent 3px 8px
+  );
+}
+.ic-led {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--danger);
+  border-radius: 50%;
+  box-shadow: 0 0 0.5rem var(--danger);
+}
+.ic-knobs span {
+  display: inline-block;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-left: 0.5rem;
+  background: radial-gradient(circle at 35% 30%, #4a4a47, #111 60%);
+  border-radius: 50%;
+  box-shadow:
+    0 2px 3px rgb(0 0 0 / 50%),
+    inset 0 1px 1px rgb(255 255 255 / 20%);
+}
+/* The brand plate looks pressed into the plastic. */
+.ic-plate {
+  color: #8a8a85;
+  font: 1.6rem/1 var(--display);
+  text-shadow: 0 1px 0 #fff;
+}
+/* The corporation logo: a striped keystone. */
+.ic-logo {
+  display: inline-block;
+  width: 1.2em;
+  height: 0.9em;
+  vertical-align: -0.05em;
+  background: repeating-linear-gradient(
+    to bottom,
+    currentcolor 0 2px,
+    transparent 2px 4px
+  );
+  clip-path: polygon(0 0, 100% 0, 78% 100%, 22% 100%);
+}
+
+/* The screen of the device. */
 #app {
   position: relative;
   box-sizing: border-box;
-  max-width: 60rem;
-  min-height: calc(100vh - 2rem);
-  margin: 1rem auto;
+  flex: 1;
+  min-width: 0;
   padding: 1.5rem 2rem;
-  overflow: hidden;
+  overflow: hidden auto;
+  scrollbar-color: var(--fg) var(--bg);
+  scrollbar-width: thin;
   background: var(--bg);
   color: var(--fg);
   border: 2px solid #000;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-transform: none;
+  letter-spacing: normal;
 }
 
 h1,
@@ -146,11 +281,42 @@ fieldset label {
   font-size: 2.5rem;
   line-height: 1.2;
 }
-.ic-coin {
-  margin: 4rem 0 2rem;
-  font-size: 6rem;
+.ic-title {
   text-align: center;
+}
+#app:has(.ic-title) {
+  display: grid;
+  align-content: safe center;
+}
+.ic-corp {
+  margin-top: 1.5rem;
+  font: 1.6rem/1 var(--display);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+.ic-coin {
+  margin: 2.5rem 0 1.5rem;
+  font-size: clamp(3rem, 11vw, 6rem);
   animation: ic-blink 1.2s steps(1) infinite;
+}
+.ic-menu button {
+  font-size: 2rem;
+}
+.ic-menu button::before {
+  content: '> ';
+}
+.ic-title fieldset {
+  display: inline-block;
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+}
+.ic-title fieldset label {
+  display: inline-block;
+  margin: 0 0.6rem;
+}
+.ic-small {
+  margin-top: 1.5rem;
+  font-size: 0.75rem;
 }
 
 /* CodeMirror ships a light theme: these selectors are more specific than its own. */
@@ -189,10 +355,31 @@ fieldset label {
   border-radius: 1.5rem;
   box-shadow: inset 0 0 5rem #000;
 }
-.fx-scanlines #app::after {
+/* Light streaks on the glass, at the top of the screen. They sit on the bezel,
+   over the screen, so they do not scroll with its content. */
+.fx-curve .ic-bezel::before {
   content: '';
   position: absolute;
-  inset: 0;
+  z-index: 1;
+  inset: 1rem 1rem 60%;
+  border-radius: 1.5rem 1.5rem 0 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 0 10%,
+    rgb(255 255 255 / 6%) 10% 17%,
+    transparent 17% 20%,
+    rgb(255 255 255 / 4%) 20% 23%,
+    transparent 23%
+  );
+  mask-image: linear-gradient(#000, transparent);
+}
+.fx-scanlines .ic-bezel::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  inset: 1rem;
+  border-radius: 1.5rem;
   pointer-events: none;
   background: repeating-linear-gradient(
     to bottom,

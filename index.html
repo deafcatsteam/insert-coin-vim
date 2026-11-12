@@ -6,7 +6,30 @@
     <title>Insert Coin</title>
   </head>
   <body>
-    <main id="app"></main>
+    <!-- The casing of the device. Texts come from locales/en.json through data-t. -->
+    <div class="ic-device">
+      <div class="ic-top">
+        <p data-t="device.property"></p>
+        <div class="ic-pills" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="ic-bezel"><main id="app"></main></div>
+      <div class="ic-bottom">
+        <span class="ic-lens" aria-hidden="true"></span>
+        <p data-t="device.lens"></p>
+        <div class="ic-speaker" aria-hidden="true">
+          <span class="ic-grille"></span><span class="ic-led"></span>
+        </div>
+        <div class="ic-knobs" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <p class="ic-plate">
+          <span class="ic-logo" aria-hidden="true"></span>
+          <span data-t="corp.short"></span>
+        </p>
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

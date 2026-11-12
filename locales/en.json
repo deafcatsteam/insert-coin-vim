@@ -1,4 +1,8 @@
 {
+  "corp.name": "Keystone Consolidated Products",
+  "corp.short": "KCP",
+  "device.lens": "KCP optical sensor\n1:2.8 f 35mm Series 0420",
+  "device.property": "Property of\nKeystone Consolidated Products",
   "display.curve": "Curved screen",
   "display.flicker": "Flicker",
   "display.glow": "Glow",
@@ -116,6 +120,8 @@
   "select.imported": "Save imported.",
   "select.title": "Select a level",
   "title.keyboard": "This game needs a physical keyboard.",
+  "title.footnote": "© 1987 KCP. All keystrokes are monitored for quality purposes.",
   "title.name": "INSERT COIN",
+  "title.program": "Operator training terminal · V.I.M. — Verified Input Mastery",
   "title.start": "Start"
 }
