@@ -42,6 +42,26 @@ export function createEditor(
     ],
     parent,
   });
+  // The plugin throws on p or P over a backward visual selection, after the paste: it
+  // reads the old selection end in the shorter text, and the key then types a "p".
+  // A paste covers the same text both ways, so turn the selection forward first.
+  // Capture phase on the editor root: runs before the plugin's own keydown handler.
+  view.dom.addEventListener(
+    'keydown',
+    (e) => {
+      const state = getCM(view)?.state.vim;
+      if ((e.key !== 'p' && e.key !== 'P') || !state?.visualMode) return;
+      // "fp", "rp", '"p': here p is the argument of another key.
+      if (state.inputState.keyBuffer.length) return;
+      const { anchor, head } = state.sel;
+      if (
+        head.line < anchor.line ||
+        (head.line === anchor.line && head.ch < anchor.ch)
+      )
+        state.sel = { anchor: head, head: anchor };
+    },
+    true,
+  );
   if (level.cursor) {
     const line = view.state.doc.line(level.cursor.line + 1);
     view.dispatch({ selection: { anchor: line.from + level.cursor.ch } });

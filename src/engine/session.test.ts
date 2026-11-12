@@ -141,3 +141,13 @@ test('a click at the end of the line stays there in insert mode', () => {
   });
   expect(session.view.state.selection.main.head).toBe(3);
 });
+
+test('p pastes over a backward visual selection', () => {
+  // A target the paste does not reach: a finished level would hide the stray "p".
+  const { session } = play({
+    start: 'mode = safe\nspeed = 3\nmode = fast\nmode = turbo',
+    target: '',
+  });
+  notation(session.view, 'yyGVkp');
+  expect(buffer(session)).toBe('mode = safe\nspeed = 3\nmode = safe');
+});
