@@ -1,5 +1,5 @@
 import { EditorState, type Extension } from '@codemirror/state';
-import { Vim, vim } from '@replit/codemirror-vim';
+import { getCM, Vim, vim } from '@replit/codemirror-vim';
 import { EditorView, minimalSetup } from 'codemirror';
 
 /** The level fields (SPEC §7) that an editor needs. */
@@ -19,7 +19,17 @@ export function createEditor(
 ): EditorView {
   // Vim keeps macro recording, registers and the last search across editors.
   Vim.resetVimGlobalState_();
-  const view = new EditorView({
+  // A click right of the text puts the cursor after the last character. Vim never
+  // does that in normal mode, and the plugin leaves it there, so "x" deletes nothing.
+  const clipClick = EditorState.transactionFilter.of((tr) => {
+    const head = tr.newSelection.main;
+    if (!tr.isUserEvent('select.pointer') || !head.empty) return tr;
+    if (getCM(view)?.state.vim?.insertMode) return tr;
+    const line = tr.newDoc.lineAt(head.head);
+    if (head.head < line.to || line.length === 0) return tr;
+    return [tr, { selection: { anchor: head.head - 1 } }];
+  });
+  const view: EditorView = new EditorView({
     doc: level.start,
     // "u" needs the history from minimalSetup; "<C-v>" blocks need multiple selections.
     // No basicSetup: its bracket closing and completion change what a keystroke does.
@@ -27,6 +37,7 @@ export function createEditor(
       vim(),
       minimalSetup,
       EditorState.allowMultipleSelections.of(true),
+      clipClick,
       extensions,
     ],
     parent,

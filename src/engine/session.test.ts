@@ -118,3 +118,26 @@ test('a dead-key pair cannot smuggle a forbidden key', () => {
   expect(session.faults).toBe(1);
   expect(buffer(session)).toBe('  abc');
 });
+
+test('a click right of the text lands on the last character in normal mode', () => {
+  const { session, press } = play({ start: 'abc\nde', target: 'ab\nde' });
+  const click = (at: number): void =>
+    session.view.dispatch({
+      selection: { anchor: at },
+      userEvent: 'select.pointer',
+    });
+  click(3);
+  expect(session.view.state.selection.main.head).toBe(2);
+  press('x');
+  expect(session.done).toBe(true);
+});
+
+test('a click at the end of the line stays there in insert mode', () => {
+  const { session, press } = play({ start: 'abc', target: 'abc!' });
+  press('i');
+  session.view.dispatch({
+    selection: { anchor: 3 },
+    userEvent: 'select.pointer',
+  });
+  expect(session.view.state.selection.main.head).toBe(3);
+});
