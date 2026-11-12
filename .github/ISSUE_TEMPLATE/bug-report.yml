@@ -1,0 +1,29 @@
+name: Bug report
+description: Something in the game does not work as it should.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Name the level, and list the keys you pressed if you can.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser, version and operating system
+      placeholder: Firefox 145, Windows 11
+    validations:
+      required: true
+  - type: input
+    id: layout
+    attributes:
+      label: Keyboard layout
+      placeholder: AZERTY (French)

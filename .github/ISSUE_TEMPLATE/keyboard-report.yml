@@ -1,0 +1,55 @@
+name: Keyboard and browser report
+description: Tell us how the game works with your keyboard and browser. No Vim knowledge needed.
+labels: [keyboard]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        1. Open https://deafcatsteam.github.io/insert-coin-vim/manual.html
+        2. Press the keys the page lists. Do not click in the editor.
+        3. If a step still shows `not yet` after all its keys, click **Next step** anyway. A failed step is a useful result.
+        4. At the end, click **Copy report** and paste it below.
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Chrome 142
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: Windows 11
+    validations:
+      required: true
+  - type: input
+    id: layout
+    attributes:
+      label: Keyboard layout
+      placeholder: QWERTZ (German)
+    validations:
+      required: true
+  - type: dropdown
+    id: display
+    attributes:
+      label: Display mode during the run
+      options:
+        - Normal window
+        - Fullscreen
+        - Fullscreen + keyboard lock
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Report
+      description: Paste the text from the Copy report button.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: For example, a key that opened a browser menu or closed the tab.
