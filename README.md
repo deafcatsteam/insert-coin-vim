@@ -17,7 +17,7 @@ _All keystrokes are monitored for quality purposes._
 
 </div>
 
-Status: early version (v0.1 in progress). You do not need to know Vim to start.
+Status: early version (v0.1). You do not need to know Vim to start.
 
 ## How it works
 
