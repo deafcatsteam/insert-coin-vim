@@ -24,10 +24,12 @@ npm run lint
 npm run typecheck
 npm test
 npm run validate:levels
+npm run test:browser
 npm run build
 ```
 
-`npm run format` fixes the formatting.
+`npm run format` fixes the formatting. `npm run test:browser` plays every solution in Chromium
+with real key presses. It needs Chromium once: `npx playwright install chromium`.
 
 ## Rules
 

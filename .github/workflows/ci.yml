@@ -29,6 +29,9 @@ jobs:
       # kept as its own step so a broken level is easy to spot.
       - run: npm run validate:levels
       - run: npm run build
+      # Every solution with real key presses in Chromium, Ctrl+V included.
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
       - if: github.event_name == 'push'
         uses: actions/upload-pages-artifact@v4
         with:

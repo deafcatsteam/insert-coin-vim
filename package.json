@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "validate:levels": "vitest run src/levels",
+    "test:browser": "node scripts/browser-levels.mjs",
     "matrix": "vitest run src/matrix -u",
     "demo": "npm run build && node scripts/demo-gif.mjs"
   },

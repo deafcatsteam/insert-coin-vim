@@ -82,6 +82,7 @@ npm run lint
 npm run typecheck
 npm test
 npm run validate:levels
+npm run test:browser # every solution in Chromium (once: npx playwright install chromium)
 npm run build
 ```
 
