@@ -1,15 +1,17 @@
 import { t, type TextKey } from '../i18n/i18n';
 import type { Level } from '../levels/levels';
 import { exportSave, importSave, loadSave } from '../progress/save';
+import { displaySettings } from './display';
 import { h, starRow } from './h';
 
 /** Shows the title screen in `root`. */
 export function showTitle(root: HTMLElement, onStart: () => void): void {
   const startEl = h('button', { type: 'button' }, t('title.start'));
   root.replaceChildren(
-    h('h1', {}, t('title.name')),
+    h('h1', { className: 'ic-coin' }, t('title.name')),
     h('p', {}, t('title.keyboard')),
     h('p', {}, startEl),
+    displaySettings(),
   );
   startEl.addEventListener('click', onStart);
   // Enter starts, without the mouse.

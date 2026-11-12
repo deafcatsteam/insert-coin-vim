@@ -1,5 +1,7 @@
 import { levels } from './levels/levels';
 import { recordResult } from './progress/save';
+import './style.css';
+import { applyDisplay } from './ui/display';
 import { showGame, type Visit } from './ui/game';
 import { showSelect, showTitle } from './ui/menu';
 import { rating, showResults } from './ui/results';
@@ -80,4 +82,5 @@ window.addEventListener(
   true,
 );
 
+applyDisplay();
 showTitle(root, menu);

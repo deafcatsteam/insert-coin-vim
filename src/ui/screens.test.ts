@@ -4,6 +4,7 @@ import { press } from '../engine/replay';
 import type { Level } from '../levels/levels';
 import { recordResult } from '../progress/save';
 import { showGame, type Attempt, type GameActions, type Visit } from './game';
+import { applyDisplay } from './display';
 import { showSelect, showTitle } from './menu';
 import { showResults } from './results';
 
@@ -170,4 +171,19 @@ test('the title screen starts and the level list shows the saved stars', () => {
   expect(document.activeElement).toBe(open);
   (open as HTMLButtonElement).click();
   expect(pick).toHaveBeenCalledWith(1);
+});
+
+test('a display setting turns its effect off and stays off', () => {
+  applyDisplay();
+  expect(document.documentElement.classList).toContain('fx-glow');
+
+  showTitle(root, () => undefined);
+  const boxes = [...root.querySelectorAll('input')];
+  expect(boxes.map((b) => b.checked)).toEqual([true, true, true, true]);
+  boxes[1]?.click();
+  expect(document.documentElement.classList).not.toContain('fx-glow');
+  expect(document.documentElement.classList).toContain('fx-scanlines');
+
+  showTitle(root, () => undefined);
+  expect(root.querySelectorAll('input')[1]?.checked).toBe(false);
 });

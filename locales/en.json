@@ -1,4 +1,9 @@
 {
+  "display.curve": "Curved screen",
+  "display.flicker": "Flicker",
+  "display.glow": "Glow",
+  "display.scanlines": "Scanlines",
+  "display.title": "Display settings",
   "game.buffer": "Your text",
   "game.denied": "⚠ ACCESS DENIED",
   "game.faults": "Blocked: {count}",
