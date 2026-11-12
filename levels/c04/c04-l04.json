@@ -1,0 +1,31 @@
+{
+  "id": "c04-l04",
+  "chapter": 4,
+  "title": {
+    "key": "levels.c04-l04.title"
+  },
+  "brief": {
+    "key": "levels.c04-l04.brief"
+  },
+  "concepts": ["line-jump"],
+  "start": "TEST PAGE - DELETE\nshift 1: Ana\nTEST PAGE - DELETE\nshift 2: Ben\nshift 3: Cleo\nshift 4: Dev\nTEST PAGE - DELETE",
+  "target": "shift 1: Ana\nshift 2: Ben\nshift 3: Cleo\nshift 4: Dev",
+  "cursor": {
+    "line": 4,
+    "ch": 0
+  },
+  "par": 13,
+  "optimal": 10,
+  "solutions": ["ggddjddGdd", "3GddggddGdd"],
+  "hints": [
+    {
+      "key": "levels.c04-l04.hint1"
+    },
+    {
+      "key": "levels.c04-l04.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "c04-l01",
+  "chapter": 4,
+  "title": {
+    "key": "levels.c04-l01.title"
+  },
+  "brief": {
+    "key": "levels.c04-l01.brief"
+  },
+  "concepts": ["find-char"],
+  "start": "load the cargo? now\nship! the crates at dawn",
+  "target": "load the cargo now\nship the crates at dawn",
+  "par": 10,
+  "optimal": 7,
+  "solutions": ["f?xjF!x"],
+  "hints": [
+    {
+      "key": "levels.c04-l01.hint1"
+    },
+    {
+      "key": "levels.c04-l01.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "c04-l02",
+  "chapter": 4,
+  "title": {
+    "key": "levels.c04-l02.title"
+  },
+  "brief": {
+    "key": "levels.c04-l02.brief"
+  },
+  "concepts": ["till-char"],
+  "start": "print(keep, old, stale)",
+  "target": "print(keep)",
+  "par": 8,
+  "optimal": 5,
+  "solutions": ["f,dt)", "$d2F,"],
+  "hints": [
+    {
+      "key": "levels.c04-l02.hint1"
+    },
+    {
+      "key": "levels.c04-l02.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

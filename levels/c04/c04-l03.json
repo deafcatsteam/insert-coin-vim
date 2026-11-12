@@ -1,0 +1,27 @@
+{
+  "id": "c04-l03",
+  "chapter": 4,
+  "title": {
+    "key": "levels.c04-l03.title"
+  },
+  "brief": {
+    "key": "levels.c04-l03.brief"
+  },
+  "concepts": ["repeat-find"],
+  "start": "serial: KCP-0420-A-77",
+  "target": "serial: KCP0420A77",
+  "par": 10,
+  "optimal": 7,
+  "solutions": ["f-x;x;x"],
+  "hints": [
+    {
+      "key": "levels.c04-l03.hint1"
+    },
+    {
+      "key": "levels.c04-l03.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}
