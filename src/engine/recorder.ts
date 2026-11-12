@@ -55,8 +55,8 @@ export function createRecorder(
       e.target instanceof Element && !!e.target.closest('.cm-vim-panel');
     // A dead key followed by a letter it cannot accent arrives as one keydown ("^x",
     // seen in Gecko on AZERTY). Vim needs two keys.
-    // shortcut: a composed letter ("à" from "`" then "a") is not split; upgrade when
-    // levels use "`" marks (chapter 8).
+    // shortcut: a composed letter ("à" from "`" then "a") is not split; level solutions
+    // avoid those pairs (src/levels/levels.test.ts). Upgrade if a level needs one.
     if (
       /^[\^`~¨].$/u.test(e.key) &&
       !onCommandLine &&

@@ -52,6 +52,15 @@ describe.each(Object.entries(levelFiles))('%s', (path, level) => {
     });
   });
 
+  // On AZERTY, "`" then "a" types one letter, "à", and the recorder cannot split it
+  // (src/engine/recorder.ts). The same goes for ^, ~ and ¨ before the letters they accent.
+  test.each(level.solutions)(
+    '%s has no dead key before a letter it accents',
+    (solution) => {
+      expect(solution).not.toMatch(/[\^`~¨][aeiouyAEIOUYnN]/u);
+    },
+  );
+
   test('optimal is the length of the shortest solution', () => {
     const lengths = level.solutions.map((s) => parseKeys(s).length);
     expect(level.optimal).toBe(Math.min(...lengths));
