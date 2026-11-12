@@ -1,0 +1,31 @@
+{
+  "id": "c06-l04",
+  "chapter": 6,
+  "title": {
+    "key": "levels.c06-l04.title"
+  },
+  "brief": {
+    "key": "levels.c06-l04.brief"
+  },
+  "concepts": ["search-backward"],
+  "start": "door 1: locked\ndoor 2: not locked\ndoor 3: locked\ndoor 4: locked",
+  "target": "door 1: locked\ndoor 2: locked\ndoor 3: locked\ndoor 4: locked",
+  "cursor": {
+    "line": 3,
+    "ch": 0
+  },
+  "par": 8,
+  "optimal": 5,
+  "solutions": ["?n<CR>dw"],
+  "hints": [
+    {
+      "key": "levels.c06-l04.hint1"
+    },
+    {
+      "key": "levels.c06-l04.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "c06-l02",
+  "chapter": 6,
+  "title": {
+    "key": "levels.c06-l02.title"
+  },
+  "brief": {
+    "key": "levels.c06-l02.brief"
+  },
+  "concepts": ["search-next"],
+  "start": "start engine\nload xx map\nrun xx physics\ndraw xx frame",
+  "target": "start engine\nload map\nrun physics\ndraw frame",
+  "par": 12,
+  "optimal": 9,
+  "solutions": ["/x<CR>dwn.n."],
+  "hints": [
+    {
+      "key": "levels.c06-l02.hint1"
+    },
+    {
+      "key": "levels.c06-l02.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

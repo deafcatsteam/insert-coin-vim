@@ -1,0 +1,27 @@
+{
+  "id": "c06-l03",
+  "chapter": 6,
+  "title": {
+    "key": "levels.c06-l03.title"
+  },
+  "brief": {
+    "key": "levels.c06-l03.brief"
+  },
+  "concepts": ["search-word"],
+  "start": "count = 0\nname = 7\nsize = 4\nprint(name)\ndebug(count)\nprint(size)",
+  "target": "count = 0\nname = 7\nsize = 4\nprint(name)\nprint(size)",
+  "par": 5,
+  "optimal": 3,
+  "solutions": ["*dd", "#dd"],
+  "hints": [
+    {
+      "key": "levels.c06-l03.hint1"
+    },
+    {
+      "key": "levels.c06-l03.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

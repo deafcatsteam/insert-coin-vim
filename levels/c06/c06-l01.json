@@ -1,0 +1,27 @@
+{
+  "id": "c06-l01",
+  "chapter": 6,
+  "title": {
+    "key": "levels.c06-l01.title"
+  },
+  "brief": {
+    "key": "levels.c06-l01.brief"
+  },
+  "concepts": ["search"],
+  "start": "valve 1: open\nvalve 2: open\nvalve 3: jammed open\nvalve 4: open",
+  "target": "valve 1: open\nvalve 2: open\nvalve 3: open\nvalve 4: open",
+  "par": 10,
+  "optimal": 5,
+  "solutions": ["/j<CR>dw", "/jammed<CR>dw"],
+  "hints": [
+    {
+      "key": "levels.c06-l01.hint1"
+    },
+    {
+      "key": "levels.c06-l01.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

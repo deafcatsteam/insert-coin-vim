@@ -1,0 +1,27 @@
+{
+  "id": "c06-l05",
+  "chapter": 6,
+  "title": {
+    "key": "levels.c06-l05.title"
+  },
+  "brief": {
+    "key": "levels.c06-l05.brief"
+  },
+  "concepts": ["gn"],
+  "start": "temp = read()\nprint(temp)\nsave(temp, 2)",
+  "target": "heat = read()\nprint(heat)\nsave(heat, 2)",
+  "par": 15,
+  "optimal": 11,
+  "solutions": ["*cgnheat<Esc>.."],
+  "hints": [
+    {
+      "key": "levels.c06-l05.hint1"
+    },
+    {
+      "key": "levels.c06-l05.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}
