@@ -1,0 +1,31 @@
+{
+  "id": "c05-l04",
+  "chapter": 5,
+  "title": {
+    "key": "levels.c05-l04.title"
+  },
+  "brief": {
+    "key": "levels.c05-l04.brief"
+  },
+  "concepts": ["inner-paren"],
+  "start": "move(left, 3 steps)",
+  "target": "move(right)",
+  "cursor": {
+    "line": 0,
+    "ch": 13
+  },
+  "par": 11,
+  "optimal": 8,
+  "solutions": ["ci(right", "F(lct)right"],
+  "hints": [
+    {
+      "key": "levels.c05-l04.hint1"
+    },
+    {
+      "key": "levels.c05-l04.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

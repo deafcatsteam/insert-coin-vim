@@ -1,0 +1,31 @@
+{
+  "id": "c05-l02",
+  "chapter": 5,
+  "title": {
+    "key": "levels.c05-l02.title"
+  },
+  "brief": {
+    "key": "levels.c05-l02.brief"
+  },
+  "concepts": ["a-word"],
+  "start": "ship the the crate now",
+  "target": "ship the crate now",
+  "cursor": {
+    "line": 0,
+    "ch": 10
+  },
+  "par": 5,
+  "optimal": 3,
+  "solutions": ["daw"],
+  "hints": [
+    {
+      "key": "levels.c05-l02.hint1"
+    },
+    {
+      "key": "levels.c05-l02.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

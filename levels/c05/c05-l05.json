@@ -1,0 +1,27 @@
+{
+  "id": "c05-l05",
+  "chapter": 5,
+  "title": {
+    "key": "levels.c05-l05.title"
+  },
+  "brief": {
+    "key": "levels.c05-l05.brief"
+  },
+  "concepts": ["paragraph"],
+  "start": "This paragraph is a draft.\nRemove it completely.\n\nDear operator,\nyour shift starts at nine.",
+  "target": "Dear operator,\nyour shift starts at nine.",
+  "par": 5,
+  "optimal": 3,
+  "solutions": ["dap", "3dd"],
+  "hints": [
+    {
+      "key": "levels.c05-l05.hint1"
+    },
+    {
+      "key": "levels.c05-l05.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

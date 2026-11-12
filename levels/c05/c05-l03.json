@@ -1,0 +1,27 @@
+{
+  "id": "c05-l03",
+  "chapter": 5,
+  "title": {
+    "key": "levels.c05-l03.title"
+  },
+  "brief": {
+    "key": "levels.c05-l03.brief"
+  },
+  "concepts": ["inner-quote"],
+  "start": "greeting = \"bad text\"",
+  "target": "greeting = \"hello\"",
+  "par": 11,
+  "optimal": 8,
+  "solutions": ["ci\"hello", "f\"lct\"hello"],
+  "hints": [
+    {
+      "key": "levels.c05-l03.hint1"
+    },
+    {
+      "key": "levels.c05-l03.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

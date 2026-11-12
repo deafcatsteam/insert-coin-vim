@@ -1,0 +1,31 @@
+{
+  "id": "c05-l01",
+  "chapter": 5,
+  "title": {
+    "key": "levels.c05-l01.title"
+  },
+  "brief": {
+    "key": "levels.c05-l01.brief"
+  },
+  "concepts": ["inner-word"],
+  "start": "set volume to quiet",
+  "target": "set volume to loud",
+  "cursor": {
+    "line": 0,
+    "ch": 16
+  },
+  "par": 9,
+  "optimal": 7,
+  "solutions": ["ciwloud"],
+  "hints": [
+    {
+      "key": "levels.c05-l01.hint1"
+    },
+    {
+      "key": "levels.c05-l01.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}
