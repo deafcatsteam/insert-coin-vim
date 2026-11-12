@@ -35,6 +35,9 @@ Status: early version (v0.1). You do not need to know Vim to start.
 | 1 — Basic edits  | 6      | `x` `dd` `a` `A` `I` `o` `O` `u` `Ctrl+R`      |
 | 2 — Word motions | 4      | `w` `b` `e` `W` `B` `E` `0` `^` `$` and counts |
 | 3 — Grammar      | 5      | `dw` `D` `cw` `yy` `p` `P` `.`                 |
+| 4 — Line jumps   | 5      | `f` `t` `F` `T` `;` `,` `gg` `G` `%`           |
+| 5 — Text objects | 5      | `iw` `aw` `i"` `a"` `i(` `a(` `ip` `ap`        |
+| 6 — Search       | 5      | `/` `?` `n` `N` `*` `#` `cgn`                  |
 
 ## Features
 
@@ -89,8 +92,9 @@ The full design is in [SPEC.md](SPEC.md).
 ## Roadmap
 
 - **v0.1 (now):** 20 levels in chapters 0–3, scoring, results with replay, save export and import.
-- **v1.0:** chapters 4–8 (line jumps, text objects, search, visual mode, registers and marks),
-  a daily challenge, a review mode, a result text to share, sound.
+- **v1.0 (in progress):** chapters 4–6 are in (line jumps, text objects, search). Still to come:
+  chapters 7–8 (visual mode, registers and marks), a daily challenge, a review mode, a result
+  text to share, sound.
 - **v1.x:** chapters 9–11 (macros, Ex commands, golf puzzles), speedrun mode, more languages
   (French first).
 
