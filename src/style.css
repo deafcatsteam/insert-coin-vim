@@ -488,7 +488,7 @@ fieldset label {
   content: '> ';
 }
 .ic-menu button::after {
-  content: ' 88';
+  content: ' \2588';
   animation: ic-blink 1s steps(1) infinite;
 }
 .ic-title fieldset {
