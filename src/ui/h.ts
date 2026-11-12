@@ -18,3 +18,13 @@ export const starRow = (count: number): HTMLElement =>
     { role: 'img', ariaLabel: t('results.stars', { count }) },
     '★'.repeat(count) + '☆'.repeat(3 - count),
   );
+
+/** The status strip at the top of the dashboard screens. Decoration only. */
+export const strip = (): HTMLElement =>
+  h(
+    'p',
+    { className: 'ic-strip', ariaHidden: 'true' },
+    h('span', {}, t('strip.sys')),
+    h('span', {}, t('strip.operator')),
+    h('span', {}, t('strip.mem')),
+  );

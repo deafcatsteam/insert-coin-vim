@@ -5,7 +5,7 @@ import type { Level } from '../levels/levels';
 import { recordResult } from '../progress/save';
 import { showGame, type Attempt, type GameActions, type Visit } from './game';
 import { applyDisplay } from './display';
-import { showSelect, showTitle } from './menu';
+import { showBoot, showSelect, showTitle } from './menu';
 import { showResults } from './results';
 
 const level: Level = {
@@ -186,4 +186,18 @@ test('a display setting turns its effect off and stays off', () => {
 
   showTitle(root, () => undefined);
   expect(root.querySelectorAll('input')[1]?.checked).toBe(false);
+});
+
+test('the boot text ends alone or on the first key, one time only', () => {
+  const done = vi.fn();
+  showBoot(root, done);
+  expect(root.textContent).toContain('Ready.');
+  vi.runAllTimers();
+  expect(done).toHaveBeenCalledTimes(1);
+
+  showBoot(root, done);
+  window.dispatchEvent(new KeyboardEvent('keydown', { key: 'x' }));
+  vi.runAllTimers();
+  window.dispatchEvent(new KeyboardEvent('keydown', { key: 'x' }));
+  expect(done).toHaveBeenCalledTimes(2);
 });

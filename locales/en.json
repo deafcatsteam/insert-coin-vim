@@ -1,4 +1,6 @@
 {
+  "boot.lines": "KCP BIOS v2.04 — (c) 1987 Keystone Consolidated Products\nMemory test: 64K OK\nKeyboard: detected\nOptical sensor: online\nLoading V.I.M. operator training program...\nReady.",
+  "boot.skip": "Press any key to skip.",
   "corp.name": "Keystone Consolidated Products",
   "corp.short": "KCP",
   "device.lens": "KCP optical sensor\n1:2.8 f 35mm Series 0420",
@@ -121,6 +123,9 @@
   "select.import": "Import save:",
   "select.imported": "Save imported.",
   "select.title": "Select a level",
+  "strip.mem": "Mem 64K",
+  "strip.operator": "Operator 0420",
+  "strip.sys": "Sys OK",
   "title.keyboard": "This game needs a physical keyboard.",
   "title.footnote": "© 1987 KCP. All keystrokes are monitored for quality purposes.",
   "title.name": "INSERT COIN",

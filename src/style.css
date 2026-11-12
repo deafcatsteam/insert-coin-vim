@@ -463,6 +463,31 @@ fieldset label {
   /* It lands after the last star. */
   animation: ic-stamp 0.3s 0.9s ease-in backwards;
 }
+/* The status strip of the dashboard screens. */
+.ic-strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 1rem;
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--fg);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.ic-strip span:first-child {
+  color: var(--accent);
+}
+.ic-strip span:first-child::before {
+  content: '\25CF  ';
+  animation: ic-pulse 2.4s ease-in-out infinite;
+}
+/* The boot text: one line after the other. */
+.ic-boot p {
+  margin: 0;
+  animation: ic-line 1ms steps(1) backwards;
+}
 .ic-title {
   text-align: center;
 }
@@ -636,6 +661,11 @@ fieldset label {
       0 0;
   }
 }
+@keyframes ic-line {
+  0% {
+    visibility: hidden;
+  }
+}
 @keyframes ic-pulse {
   50% {
     opacity: 0.45;
@@ -670,6 +700,7 @@ fieldset label {
   .ic-led,
   .ic-stamp,
   .ic-stars span,
+  .ic-strip span:first-child::before,
   .ic-denied:not(:empty),
   .ic-menu button::after,
   .fx-scanlines .ic-bezel::after,

@@ -2,7 +2,38 @@ import { t, type TextKey } from '../i18n/i18n';
 import type { Level } from '../levels/levels';
 import { exportSave, importSave, loadSave } from '../progress/save';
 import { displaySettings } from './display';
-import { h, starRow } from './h';
+import { h, starRow, strip } from './h';
+
+/** Pause between two lines of the boot text. */
+const BOOT_LINE_MS = 350;
+
+/** Shows the boot text in `root`, then calls `onDone`. Any key or click skips it. */
+export function showBoot(root: HTMLElement, onDone: () => void): void {
+  const lines = t('boot.lines').split('\n');
+  root.replaceChildren(
+    h(
+      'div',
+      { className: 'ic-boot' },
+      ...lines.map((line, i) => {
+        const el = h('p', {}, line);
+        el.style.animationDelay = `${i * BOOT_LINE_MS}ms`;
+        return el;
+      }),
+      h('p', { className: 'ic-small' }, t('boot.skip')),
+    ),
+  );
+  const end = (e?: Event): void => {
+    // The key that skips must not also press a button of the next screen.
+    e?.preventDefault();
+    clearTimeout(timer);
+    window.removeEventListener('keydown', end);
+    window.removeEventListener('pointerdown', end);
+    onDone();
+  };
+  const timer = setTimeout(end, (lines.length + 2) * BOOT_LINE_MS);
+  window.addEventListener('keydown', end);
+  window.addEventListener('pointerdown', end);
+}
 
 /** Shows the title screen in `root`. */
 export function showTitle(root: HTMLElement, onStart: () => void): void {
@@ -96,6 +127,7 @@ export function showSelect(
     h(
       'div',
       { className: 'ic-select' },
+      strip(),
       h('header', { className: 'ic-head' }, h('h1', {}, t('select.title'))),
       ...nodes,
       h(

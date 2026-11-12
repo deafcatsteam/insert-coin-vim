@@ -4,7 +4,7 @@ import { recordResult } from './progress/save';
 import './style.css';
 import { applyDisplay } from './ui/display';
 import { showGame, type Visit } from './ui/game';
-import { showSelect, showTitle } from './ui/menu';
+import { showBoot, showSelect, showTitle } from './ui/menu';
 import { rating, showResults } from './ui/results';
 
 const root = document.querySelector<HTMLElement>('#app');
@@ -88,4 +88,9 @@ for (const el of document.querySelectorAll<HTMLElement>('[data-t]'))
   el.textContent = t(el.dataset.t as TextKey);
 
 applyDisplay();
-showTitle(root, menu);
+const title = (): void => {
+  showTitle(root, menu);
+};
+// No boot animation for players who ask for less motion (SPEC §8.5).
+if (matchMedia('(prefers-reduced-motion: reduce)').matches) title();
+else showBoot(root, title);

@@ -5,7 +5,7 @@ import { shortest, type Level } from '../levels/levels';
 import { parseKeys } from '../scoring/keys';
 import { stars } from '../scoring/stars';
 import type { Attempt } from './game';
-import { h, starRow } from './h';
+import { h, starRow, strip } from './h';
 
 /** Pause between two keys of the replayed solution. */
 const REPLAY_STEP_MS = 500;
@@ -43,6 +43,7 @@ export function showResults(
     h(
       'div',
       { className: 'ic-results' },
+      strip(),
       h(
         'header',
         { className: 'ic-head' },
