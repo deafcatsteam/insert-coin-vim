@@ -8,8 +8,8 @@
     "key": "levels.c05-l01.brief"
   },
   "concepts": ["inner-word"],
-  "start": "set volume to quiet",
-  "target": "set volume to loud",
+  "start": "set volume to quiet mode",
+  "target": "set volume to loud mode",
   "cursor": {
     "line": 0,
     "ch": 16

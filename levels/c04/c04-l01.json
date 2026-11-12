@@ -8,11 +8,15 @@
     "key": "levels.c04-l01.brief"
   },
   "concepts": ["find-char"],
-  "start": "load the cargo? now\nship! the crates at dawn",
-  "target": "load the cargo now\nship the crates at dawn",
-  "par": 10,
-  "optimal": 7,
-  "solutions": ["f?xjF!x"],
+  "start": "pack the cr!ates and load the car?go now",
+  "target": "pack the crates and load the cargo now",
+  "cursor": {
+    "line": 0,
+    "ch": 17
+  },
+  "par": 9,
+  "optimal": 6,
+  "solutions": ["f?xF!x", "F!xf?x"],
   "hints": [
     {
       "key": "levels.c04-l01.hint1"

@@ -8,7 +8,7 @@
     "key": "levels.c05-l02.brief"
   },
   "concepts": ["a-word"],
-  "start": "ship the the crate now",
+  "start": "ship the old crate now",
   "target": "ship the crate now",
   "cursor": {
     "line": 0,

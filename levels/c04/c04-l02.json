@@ -8,11 +8,11 @@
     "key": "levels.c04-l02.brief"
   },
   "concepts": ["till-char"],
-  "start": "print(keep, old, stale)",
-  "target": "print(keep)",
+  "start": "print(keep, old, stale);",
+  "target": "print(keep);",
   "par": 8,
   "optimal": 5,
-  "solutions": ["f,dt)", "$d2F,"],
+  "solutions": ["f,dt)"],
   "hints": [
     {
       "key": "levels.c04-l02.hint1"

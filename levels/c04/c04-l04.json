@@ -8,15 +8,15 @@
     "key": "levels.c04-l04.brief"
   },
   "concepts": ["line-jump"],
-  "start": "TEST PAGE - DELETE\nshift 1: Ana\nTEST PAGE - DELETE\nshift 2: Ben\nshift 3: Cleo\nshift 4: Dev\nTEST PAGE - DELETE",
-  "target": "shift 1: Ana\nshift 2: Ben\nshift 3: Cleo\nshift 4: Dev",
+  "start": "TEST PAGE - DELETE\nshift 1: Ana\nshift 2: Ben\n\nshift 3: Cleo\nshift 4: Dev\nTEST PAGE - DELETE",
+  "target": "shift 1: Ana\nshift 2: Ben\n\nshift 3: Cleo\nshift 4: Dev",
   "cursor": {
     "line": 4,
     "ch": 0
   },
-  "par": 13,
-  "optimal": 10,
-  "solutions": ["ggddjddGdd", "3GddggddGdd"],
+  "par": 9,
+  "optimal": 6,
+  "solutions": ["ggddG.", "ggddGdd"],
   "hints": [
     {
       "key": "levels.c04-l04.hint1"
