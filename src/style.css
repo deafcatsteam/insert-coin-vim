@@ -123,6 +123,7 @@ body {
   background: var(--danger);
   border-radius: 50%;
   box-shadow: 0 0 0.5rem var(--danger);
+  animation: ic-pulse 2.4s ease-in-out infinite;
 }
 .ic-knobs span {
   display: inline-block;
@@ -363,14 +364,23 @@ fieldset label {
 .ic-denied:not(:empty) {
   padding: 0 1.25rem;
   background: var(--bg);
-  border: 3px double var(--danger);
+  /* Hazard tape around the message. */
+  border: 6px solid;
+  border-image: repeating-linear-gradient(-45deg, #f5c400 0 8px, #000 8px 16px)
+    6;
   box-shadow: 0 0 1.5rem rgb(255 59 48 / 40%);
+  animation: ic-alarm 0.4s steps(1);
 }
 .ic-stars {
   margin: 0;
   color: var(--accent);
   font-size: 2.5rem;
   line-height: 1.2;
+}
+/* The stars light up one by one. */
+.ic-stars span {
+  display: inline-block;
+  animation: ic-reveal 0.9s steps(3);
 }
 /* The level select: each chapter is a row of numbered nodes joined by a line. */
 .ic-select h2 {
@@ -450,6 +460,8 @@ fieldset label {
   font: 1.5rem/1.4 var(--display);
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  /* It lands after the last star. */
+  animation: ic-stamp 0.3s 0.9s ease-in backwards;
 }
 .ic-title {
   text-align: center;
@@ -474,6 +486,10 @@ fieldset label {
 }
 .ic-menu button::before {
   content: '> ';
+}
+.ic-menu button::after {
+  content: ' 88';
+  animation: ic-blink 1s steps(1) infinite;
 }
 .ic-title fieldset {
   display: inline-block;
@@ -519,7 +535,9 @@ fieldset label {
 
 /* Effects (SPEC §8.5). Each one is a class on <html>, set by the display settings. */
 .fx-glow #app {
-  text-shadow: 0 0 0.4em rgb(255 138 31 / 45%);
+  text-shadow:
+    0 0 0.15em rgb(255 138 31 / 60%),
+    0 0 0.7em rgb(255 138 31 / 35%);
 }
 .fx-curve #app {
   border-radius: 1.5rem;
@@ -551,16 +569,78 @@ fieldset label {
   inset: 1rem;
   border-radius: 1.5rem;
   pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0 2px,
-    rgb(0 0 0 / 18%) 2px 3px
-  );
+  /* A faint band of light goes down the screen, over the scanlines. */
+  background:
+    linear-gradient(#0000, rgb(255 255 255 / 4%), #0000) 0 -8rem / 100% 8rem
+      no-repeat,
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 2px,
+      rgb(0 0 0 / 18%) 2px 3px
+    );
+  animation: ic-sweep 9s linear infinite;
 }
 .fx-flicker #app {
   animation: ic-flicker 6s steps(1) infinite;
 }
+/* The screen switches on at each change of screen. Not on the game screen:
+   a reset shows it again, and the player wants to type at once. */
+#app > :not(.ic-game) {
+  animation: ic-power 0.35s ease-out;
+}
 
+@keyframes ic-power {
+  0% {
+    clip-path: inset(49.5% 0);
+    filter: brightness(4);
+  }
+  60% {
+    clip-path: inset(0);
+    filter: brightness(1.6);
+  }
+  100% {
+    clip-path: inset(0);
+    filter: none;
+  }
+}
+@keyframes ic-stamp {
+  0% {
+    transform: rotate(-6deg) scale(2.5);
+    opacity: 0;
+  }
+}
+@keyframes ic-alarm {
+  0%,
+  50% {
+    background: var(--danger);
+    color: var(--bg);
+  }
+  25%,
+  75% {
+    background: var(--bg);
+    color: var(--danger);
+  }
+}
+@keyframes ic-reveal {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    clip-path: inset(0);
+  }
+}
+@keyframes ic-sweep {
+  100% {
+    background-position:
+      0 calc(100% + 8rem),
+      0 0;
+  }
+}
+@keyframes ic-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
 @keyframes ic-blink {
   50% {
     opacity: 0;
@@ -587,6 +667,13 @@ fieldset label {
 
 @media (prefers-reduced-motion: reduce) {
   .ic-coin,
+  .ic-led,
+  .ic-stamp,
+  .ic-stars span,
+  .ic-denied:not(:empty),
+  .ic-menu button::after,
+  .fx-scanlines .ic-bezel::after,
+  #app > :not(.ic-game),
   .fx-flicker #app {
     animation: none;
   }
