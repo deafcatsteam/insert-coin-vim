@@ -370,6 +370,44 @@ fieldset label {
   font-size: 2.5rem;
   line-height: 1.2;
 }
+/* The results screen: numbered report panels with a double border. */
+.ic-results {
+  counter-reset: panel;
+}
+.ic-results .ic-panel {
+  border: 3px double var(--fg);
+}
+/* Three narrow panels: a title on two lines would cover the panel text. */
+.ic-results .ic-panel > h2 {
+  max-width: calc(100% - 1.5rem);
+  overflow: hidden;
+  font-size: 1.1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ic-results .ic-panel > h2::before {
+  content: counter(panel, decimal-leading-zero) ' · ';
+  counter-increment: panel;
+}
+.ic-results .ic-keys {
+  padding: 0;
+  border: 0;
+  font-size: 1.25rem;
+}
+.ic-results .ic-panel > .ic-editor {
+  flex: none;
+}
+.ic-stamp {
+  align-self: flex-end;
+  margin: auto 0 0.25rem;
+  padding: 0 0.6rem;
+  transform: rotate(-6deg);
+  color: var(--accent);
+  border: 3px double var(--accent);
+  font: 1.5rem/1.4 var(--display);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
 .ic-title {
   text-align: center;
 }

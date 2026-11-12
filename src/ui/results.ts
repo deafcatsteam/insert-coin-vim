@@ -40,22 +40,49 @@ export function showResults(
     : h('span', {}, t('results.end'));
   const menuEl = h('button', { type: 'button' }, t('nav.levels'));
   root.replaceChildren(
-    h('h1', {}, t('results.title')),
-    h('p', { className: 'ic-stars' }, starRow(rating(attempt, level))),
     h(
-      'p',
-      {},
-      t('results.keys', { keys: attempt.keys.length, par: level.par }),
+      'div',
+      { className: 'ic-results' },
+      h(
+        'header',
+        { className: 'ic-head' },
+        h('h1', {}, t('results.title')),
+        h('span', { className: 'ic-tab' }, level.id),
+      ),
+      h(
+        'div',
+        { className: 'ic-panes' },
+        h(
+          'section',
+          { className: 'ic-panel' },
+          h('h2', {}, t('results.score')),
+          h('p', { className: 'ic-stars' }, starRow(rating(attempt, level))),
+          h(
+            'p',
+            {},
+            t('results.keys', { keys: attempt.keys.length, par: level.par }),
+          ),
+          h('p', {}, t('results.time', { time: clock(attempt.ms) })),
+          h('p', { className: 'ic-stamp' }, t('results.stamp')),
+        ),
+        h(
+          'section',
+          { className: 'ic-panel' },
+          h('h2', {}, t('results.yours')),
+          h('pre', { className: 'ic-keys' }, attempt.keys.join('')),
+        ),
+        h(
+          'section',
+          { className: 'ic-panel' },
+          h('h2', {}, t('results.optimal', { count: steps.length })),
+          h('pre', { className: 'ic-keys' }, optimal),
+          h('p', {}, watchEl),
+          replayEl,
+          playedEl,
+        ),
+      ),
+      h('p', {}, retryEl, ' ', nextEl, ' ', menuEl),
     ),
-    h('p', {}, t('results.time', { time: clock(attempt.ms) })),
-    h('h2', {}, t('results.yours')),
-    h('pre', { className: 'ic-keys' }, attempt.keys.join('')),
-    h('h2', {}, t('results.optimal', { count: steps.length })),
-    h('pre', { className: 'ic-keys' }, optimal),
-    h('p', {}, watchEl),
-    replayEl,
-    playedEl,
-    h('p', {}, retryEl, ' ', nextEl, ' ', menuEl),
   );
 
   let replay: Session | undefined;

@@ -108,6 +108,8 @@
   "results.next": "Next level",
   "results.optimal": "Optimal solution ({count} keys)",
   "results.retry": "Retry (F2)",
+  "results.score": "Evaluation",
+  "results.stamp": "KCP certified",
   "results.stars": "{count} of 3 stars",
   "results.time": "Time: {time}",
   "results.title": "Level complete",
