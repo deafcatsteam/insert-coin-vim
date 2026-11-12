@@ -1,0 +1,27 @@
+{
+  "id": "c03-l01",
+  "chapter": 3,
+  "title": {
+    "key": "levels.c03-l01.title"
+  },
+  "brief": {
+    "key": "levels.c03-l01.brief"
+  },
+  "concepts": ["operator-d", "motion-w"],
+  "start": "delete the the extra word",
+  "target": "delete the extra word",
+  "par": 5,
+  "optimal": 3,
+  "solutions": ["wdw"],
+  "hints": [
+    {
+      "key": "levels.c03-l01.hint1"
+    },
+    {
+      "key": "levels.c03-l01.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

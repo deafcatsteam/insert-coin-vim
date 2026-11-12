@@ -10,7 +10,8 @@ import { showResults } from './results';
 const level: Level = {
   id: 't',
   chapter: 1,
-  title: { key: 'levels.s01-delete-word.title' },
+  title: { key: 'levels.c03-l01.title' },
+  brief: { key: 'levels.c03-l01.brief' },
   concepts: ['delete-char'],
   start: 'xab\n',
   target: 'b\n',
@@ -18,10 +19,7 @@ const level: Level = {
   par: 3,
   optimal: 2,
   solutions: ['lxx', 'xx'],
-  hints: [
-    { key: 'levels.s01-delete-word.hint1' },
-    { key: 'levels.s01-delete-word.hint2' },
-  ],
+  hints: [{ key: 'levels.c03-l01.hint1' }, { key: 'levels.c03-l01.hint2' }],
   author: 'test',
   license: 'CC-BY-4.0',
 };
@@ -64,6 +62,7 @@ test('the game screen shows the level, the fault and the end of the attempt', ()
     actions((a) => (attempt = a)),
   );
   expect(root.querySelector('h1')?.textContent).toBe('Delete a word');
+  expect(root.querySelector('.ic-brief')?.textContent).toContain('dw deletes');
   expect(root.querySelector('.ic-target')?.textContent).toBe('b\n');
   expect(root.querySelector('.cm-content .ic-diff')?.textContent).toBe('xa');
   expect(root.textContent).not.toContain('Hint');

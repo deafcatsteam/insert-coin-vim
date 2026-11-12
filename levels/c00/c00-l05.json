@@ -1,0 +1,32 @@
+{
+  "id": "c00-l05",
+  "chapter": 0,
+  "title": {
+    "key": "levels.c00-l05.title"
+  },
+  "brief": {
+    "key": "levels.c00-l05.brief"
+  },
+  "concepts": ["ex-write", "ex-quit"],
+  "start": "status = k",
+  "target": "status = ok",
+  "cursor": {
+    "line": 0,
+    "ch": 9
+  },
+  "exit": "wq",
+  "par": 8,
+  "optimal": 7,
+  "solutions": ["io<Esc>:wq<CR>"],
+  "hints": [
+    {
+      "key": "levels.c00-l05.hint1"
+    },
+    {
+      "key": "levels.c00-l05.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

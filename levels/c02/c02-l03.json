@@ -1,0 +1,27 @@
+{
+  "id": "c02-l03",
+  "chapter": 2,
+  "title": {
+    "key": "levels.c02-l03.title"
+  },
+  "brief": {
+    "key": "levels.c02-l03.brief"
+  },
+  "concepts": ["motion-big-w", "motion-big-e"],
+  "start": "srv.host=10.0.0.1; xsrv.port=8080",
+  "target": "srv.host=10.0.0.1 srv.port=8080",
+  "par": 6,
+  "optimal": 4,
+  "solutions": ["ExWx"],
+  "hints": [
+    {
+      "key": "levels.c02-l03.hint1"
+    },
+    {
+      "key": "levels.c02-l03.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

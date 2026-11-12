@@ -1,0 +1,31 @@
+{
+  "id": "c02-l02",
+  "chapter": 2,
+  "title": {
+    "key": "levels.c02-l02.title"
+  },
+  "brief": {
+    "key": "levels.c02-l02.brief"
+  },
+  "concepts": ["motion-line-start", "motion-first-char", "motion-line-end"],
+  "start": "    xvalue = 42;;\nxreturn value",
+  "target": "    value = 42;\nreturn value",
+  "cursor": {
+    "line": 0,
+    "ch": 9
+  },
+  "par": 10,
+  "optimal": 7,
+  "solutions": ["$x^xj0x"],
+  "hints": [
+    {
+      "key": "levels.c02-l02.hint1"
+    },
+    {
+      "key": "levels.c02-l02.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

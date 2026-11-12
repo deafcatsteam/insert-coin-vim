@@ -11,6 +11,8 @@ export interface Level extends SessionLevel {
   id: string;
   chapter: number;
   title: TextRef;
+  /** What to do, shown from the start. */
+  brief?: TextRef;
   concepts: string[];
   language?: string;
   par: number;

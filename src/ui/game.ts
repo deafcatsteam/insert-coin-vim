@@ -62,6 +62,11 @@ export function showGame(
   });
   root.replaceChildren(
     h('h1', {}, t(level.title.key as TextKey)),
+    h(
+      'p',
+      { className: 'ic-brief' },
+      level.brief ? t(level.brief.key as TextKey) : '',
+    ),
     h('h2', {}, t('game.buffer')),
     editorEl,
     h('p', {}, modeEl, ' ', keysEl, ' ', faultsEl),

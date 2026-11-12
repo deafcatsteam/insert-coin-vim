@@ -1,0 +1,27 @@
+{
+  "id": "c01-l06",
+  "chapter": 1,
+  "title": {
+    "key": "levels.c01-l06.title"
+  },
+  "brief": {
+    "key": "levels.c01-l06.brief"
+  },
+  "concepts": ["undo", "redo"],
+  "start": "do not delete\ndelete me",
+  "target": "do not delete",
+  "par": 6,
+  "optimal": 3,
+  "solutions": ["jdd", "ddujdd"],
+  "hints": [
+    {
+      "key": "levels.c01-l06.hint1"
+    },
+    {
+      "key": "levels.c01-l06.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

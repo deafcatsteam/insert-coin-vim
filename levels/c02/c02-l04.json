@@ -1,0 +1,27 @@
+{
+  "id": "c02-l04",
+  "chapter": 2,
+  "title": {
+    "key": "levels.c02-l04.title"
+  },
+  "brief": {
+    "key": "levels.c02-l04.brief"
+  },
+  "concepts": ["count"],
+  "start": "skip skip skip skip ###here\njunk\njunk\njunk\nend",
+  "target": "skip skip skip skip here\nend",
+  "par": 12,
+  "optimal": 8,
+  "solutions": ["4w3xj3dd"],
+  "hints": [
+    {
+      "key": "levels.c02-l04.hint1"
+    },
+    {
+      "key": "levels.c02-l04.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

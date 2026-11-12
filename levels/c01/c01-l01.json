@@ -1,0 +1,27 @@
+{
+  "id": "c01-l01",
+  "chapter": 1,
+  "title": {
+    "key": "levels.c01-l01.title"
+  },
+  "brief": {
+    "key": "levels.c01-l01.brief"
+  },
+  "concepts": ["delete-char"],
+  "start": "Innsert\ncoiin",
+  "target": "Insert\ncoin",
+  "par": 7,
+  "optimal": 5,
+  "solutions": ["lxjlx"],
+  "hints": [
+    {
+      "key": "levels.c01-l01.hint1"
+    },
+    {
+      "key": "levels.c01-l01.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

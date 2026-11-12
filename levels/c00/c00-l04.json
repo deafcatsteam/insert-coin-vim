@@ -1,0 +1,32 @@
+{
+  "id": "c00-l04",
+  "chapter": 0,
+  "title": {
+    "key": "levels.c00-l04.title"
+  },
+  "brief": {
+    "key": "levels.c00-l04.brief"
+  },
+  "concepts": ["motion-h", "motion-j", "motion-k", "motion-l"],
+  "start": "sstem\ncheck\nmemry",
+  "target": "system\ncheck\nmemory",
+  "cursor": {
+    "line": 1,
+    "ch": 2
+  },
+  "forbiddenKeys": ["<Left>", "<Right>", "<Up>", "<Down>"],
+  "par": 14,
+  "optimal": 11,
+  "solutions": ["khiy<Esc>jjllio"],
+  "hints": [
+    {
+      "key": "levels.c00-l04.hint1"
+    },
+    {
+      "key": "levels.c00-l04.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

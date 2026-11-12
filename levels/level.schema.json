@@ -35,6 +35,10 @@
     },
     "chapter": { "type": "integer", "minimum": 0, "maximum": 11 },
     "title": { "$ref": "#/definitions/text" },
+    "brief": {
+      "description": "What to do, shown above the buffer from the start.",
+      "$ref": "#/definitions/text"
+    },
     "concepts": {
       "type": "array",
       "minItems": 1,

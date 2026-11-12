@@ -1,0 +1,27 @@
+{
+  "id": "c03-l05",
+  "chapter": 3,
+  "title": {
+    "key": "levels.c03-l05.title"
+  },
+  "brief": {
+    "key": "levels.c03-l05.brief"
+  },
+  "concepts": ["dot-repeat", "operator-d"],
+  "start": "TODO fix parser\nTODO fix lexer\nTODO ship it",
+  "target": "fix parser\nfix lexer\nship it",
+  "par": 8,
+  "optimal": 6,
+  "solutions": ["dwj.j."],
+  "hints": [
+    {
+      "key": "levels.c03-l05.hint1"
+    },
+    {
+      "key": "levels.c03-l05.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

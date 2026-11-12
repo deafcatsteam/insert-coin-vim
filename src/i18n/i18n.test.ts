@@ -3,7 +3,7 @@ import en from '../../locales/en.json';
 import { t, type TextKey } from './i18n';
 
 test('returns the text of a key', () => {
-  expect(t('levels.s01-delete-word.title')).toBe('Delete a word');
+  expect(t('levels.c03-l01.title')).toBe('Delete a word');
 });
 
 test('shows the key itself when the text is missing', () => {

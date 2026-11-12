@@ -1,0 +1,28 @@
+{
+  "id": "c00-l03",
+  "chapter": 0,
+  "title": {
+    "key": "levels.c00-l03.title"
+  },
+  "brief": {
+    "key": "levels.c00-l03.brief"
+  },
+  "concepts": ["escape", "motion-j", "insert-i"],
+  "start": "oot sequence\noad kernel",
+  "target": "Boot sequence\nLoad kernel",
+  "forbiddenKeys": ["<Left>", "<Right>", "<Up>", "<Down>"],
+  "par": 8,
+  "optimal": 6,
+  "solutions": ["iB<Esc>jiL"],
+  "hints": [
+    {
+      "key": "levels.c00-l03.hint1"
+    },
+    {
+      "key": "levels.c00-l03.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

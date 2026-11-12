@@ -1,0 +1,27 @@
+{
+  "id": "c03-l02",
+  "chapter": 3,
+  "title": {
+    "key": "levels.c03-l02.title"
+  },
+  "brief": {
+    "key": "levels.c03-l02.brief"
+  },
+  "concepts": ["operator-d", "motion-line-end"],
+  "start": "color: red !important",
+  "target": "color: red",
+  "par": 7,
+  "optimal": 4,
+  "solutions": ["WelD", "Weld$"],
+  "hints": [
+    {
+      "key": "levels.c03-l02.hint1"
+    },
+    {
+      "key": "levels.c03-l02.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

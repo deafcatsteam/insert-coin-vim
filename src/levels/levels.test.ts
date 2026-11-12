@@ -28,7 +28,8 @@ describe.each(Object.entries(levelFiles))('%s', (path, level) => {
   });
 
   test('every text key exists in locales/en.json', () => {
-    for (const { key } of [level.title, ...level.hints])
+    const brief = level.brief ? [level.brief] : [];
+    for (const { key } of [level.title, ...brief, ...level.hints])
       expect(en, key).toHaveProperty([key]);
   });
 

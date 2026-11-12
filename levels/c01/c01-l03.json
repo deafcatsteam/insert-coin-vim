@@ -1,0 +1,31 @@
+{
+  "id": "c01-l03",
+  "chapter": 1,
+  "title": {
+    "key": "levels.c01-l03.title"
+  },
+  "brief": {
+    "key": "levels.c01-l03.brief"
+  },
+  "concepts": ["append-a", "append-line-end"],
+  "start": "ech hello\nexit",
+  "target": "echo hello\nexit 0",
+  "cursor": {
+    "line": 0,
+    "ch": 2
+  },
+  "par": 9,
+  "optimal": 7,
+  "solutions": ["ao<Esc>jA 0"],
+  "hints": [
+    {
+      "key": "levels.c01-l03.hint1"
+    },
+    {
+      "key": "levels.c01-l03.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

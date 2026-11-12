@@ -1,0 +1,27 @@
+{
+  "id": "c01-l02",
+  "chapter": 1,
+  "title": {
+    "key": "levels.c01-l02.title"
+  },
+  "brief": {
+    "key": "levels.c01-l02.brief"
+  },
+  "concepts": ["delete-line"],
+  "start": "load kernel\nload virus\nmount disk",
+  "target": "load kernel\nmount disk",
+  "par": 4,
+  "optimal": 3,
+  "solutions": ["jdd"],
+  "hints": [
+    {
+      "key": "levels.c01-l02.hint1"
+    },
+    {
+      "key": "levels.c01-l02.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

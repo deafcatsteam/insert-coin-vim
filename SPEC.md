@@ -143,6 +143,7 @@ One JSON file per level: `levels/<chapter>/<id>.json`, validated by JSON Schema 
 
 Rules:
 - All player-facing strings are **i18n keys**, never raw text.
+- Optional `brief` (an i18n key, like `title`): one or two sentences that say what to do, shown above the buffer from the start. Beginner levels need it; hints only come after failed attempts.
 - `solutions` use Vim key notation and are replayed by tests (section 10).
 - `optimal` MUST equal the keystroke count of the shortest listed solution (CI-checked).
 - A solution ends on the key that completes the level: the level completes as soon as the buffer equals `target`, so a final `<Esc>` is not part of it (CI-checked).

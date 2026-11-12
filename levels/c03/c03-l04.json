@@ -1,0 +1,27 @@
+{
+  "id": "c03-l04",
+  "chapter": 3,
+  "title": {
+    "key": "levels.c03-l04.title"
+  },
+  "brief": {
+    "key": "levels.c03-l04.brief"
+  },
+  "concepts": ["operator-y", "put"],
+  "start": "coin();\nsave();\nplay();",
+  "target": "coin();\ncoin();\nplay();\nsave();",
+  "par": 9,
+  "optimal": 7,
+  "solutions": ["yypjddp"],
+  "hints": [
+    {
+      "key": "levels.c03-l04.hint1"
+    },
+    {
+      "key": "levels.c03-l04.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "c01-l05",
+  "chapter": 1,
+  "title": {
+    "key": "levels.c01-l05.title"
+  },
+  "brief": {
+    "key": "levels.c01-l05.brief"
+  },
+  "concepts": ["open-line-below", "open-line-above"],
+  "start": "set",
+  "target": "ready\nset\ngo",
+  "par": 13,
+  "optimal": 11,
+  "solutions": ["Oready<Esc>jogo"],
+  "hints": [
+    {
+      "key": "levels.c01-l05.hint1"
+    },
+    {
+      "key": "levels.c01-l05.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

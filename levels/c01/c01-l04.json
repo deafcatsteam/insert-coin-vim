@@ -1,0 +1,31 @@
+{
+  "id": "c01-l04",
+  "chapter": 1,
+  "title": {
+    "key": "levels.c01-l04.title"
+  },
+  "brief": {
+    "key": "levels.c01-l04.brief"
+  },
+  "concepts": ["insert-line-start"],
+  "start": "  count = 0",
+  "target": "  let count = 0",
+  "cursor": {
+    "line": 0,
+    "ch": 10
+  },
+  "par": 7,
+  "optimal": 5,
+  "solutions": ["Ilet "],
+  "hints": [
+    {
+      "key": "levels.c01-l04.hint1"
+    },
+    {
+      "key": "levels.c01-l04.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

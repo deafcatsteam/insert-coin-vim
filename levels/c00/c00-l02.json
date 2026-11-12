@@ -1,0 +1,28 @@
+{
+  "id": "c00-l02",
+  "chapter": 0,
+  "title": {
+    "key": "levels.c00-l02.title"
+  },
+  "brief": {
+    "key": "levels.c00-l02.brief"
+  },
+  "concepts": ["motion-l", "insert-i"],
+  "start": "Hllo operator",
+  "target": "Hello operator",
+  "forbiddenKeys": ["<Left>", "<Right>", "<Up>", "<Down>"],
+  "par": 4,
+  "optimal": 3,
+  "solutions": ["lie"],
+  "hints": [
+    {
+      "key": "levels.c00-l02.hint1"
+    },
+    {
+      "key": "levels.c00-l02.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "c03-l03",
+  "chapter": 3,
+  "title": {
+    "key": "levels.c03-l03.title"
+  },
+  "brief": {
+    "key": "levels.c03-l03.brief"
+  },
+  "concepts": ["operator-c", "motion-w"],
+  "start": "set mode = slow now",
+  "target": "set mode = fast now",
+  "par": 10,
+  "optimal": 8,
+  "solutions": ["3wcwfast", "wwwcwfast"],
+  "hints": [
+    {
+      "key": "levels.c03-l03.hint1"
+    },
+    {
+      "key": "levels.c03-l03.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}
