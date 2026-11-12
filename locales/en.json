@@ -1,5 +1,25 @@
 {
+  "game.buffer": "Your text",
+  "game.denied": "⚠ ACCESS DENIED",
+  "game.faults": "Blocked: {count}",
+  "game.keys": "Keys: {count}",
+  "game.reset": "Reset (F2)",
+  "game.target": "Target",
   "levels.s01-delete-word.title": "Delete a word",
   "levels.s02-change-word.title": "Change a word",
-  "levels.s03-substitute.title": "Substitute everywhere"
+  "levels.s03-substitute.title": "Substitute everywhere",
+  "mode.insert": "INSERT",
+  "mode.normal": "NORMAL",
+  "mode.replace": "REPLACE",
+  "mode.visual": "VISUAL",
+  "results.end": "No more levels yet.",
+  "results.keys": "{keys} keys (par {par})",
+  "results.next": "Next level",
+  "results.optimal": "Optimal solution ({count} keys)",
+  "results.retry": "Retry (F2)",
+  "results.stars": "{count} of 3 stars",
+  "results.time": "Time: {time}",
+  "results.title": "Level complete",
+  "results.watch": "Watch it",
+  "results.yours": "Your keys"
 }

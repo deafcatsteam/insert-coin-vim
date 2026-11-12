@@ -36,31 +36,34 @@ const toEventInit = (token: string): KeyboardEventInit & { key: string } => {
   };
 };
 
-/** Types keys in Vim notation into an editor through the same keydown path as a player. */
+/** Types one key in Vim notation into an editor through the same keydown path as a player. */
+export function pressKey(view: EditorView, token: string): void {
+  const init = { ...toEventInit(token), bubbles: true, cancelable: true };
+  // The ":" and "/" command line is a separate input inside the editor.
+  const target =
+    view.dom.querySelector<HTMLInputElement>('.cm-vim-panel input') ??
+    view.contentDOM;
+  const unhandled = target.dispatchEvent(new KeyboardEvent('keydown', init));
+  // A real key press types an unhandled printable key into the focused element;
+  // a scripted one does not.
+  if (unhandled && init.key.length === 1 && !init.ctrlKey && !init.metaKey) {
+    if (target instanceof HTMLInputElement) target.value += init.key;
+    // A frozen editor takes no text.
+    else if (view.state.facet(EditorView.editable))
+      view.dispatch(view.state.replaceSelection(init.key), {
+        userEvent: 'input.type',
+      });
+  }
+  target.dispatchEvent(new KeyboardEvent('keyup', init));
+}
+
+/** Types a whole solution at once, for tests. */
 export function press(view: EditorView, solution: string): void {
   const cm = getCM(view);
   // jsdom has no layout, so the plugin's pixel-based check in "j"/"k" jumps to the last line.
   // shortcut: display-line motions (gj, gk) do nothing here; replay those in a real browser.
   if (cm) cm.findPosV = (start) => start;
-
-  for (const token of parseKeys(solution)) {
-    const init = { ...toEventInit(token), bubbles: true, cancelable: true };
-    // The ":" and "/" command line is a separate input inside the editor.
-    const target =
-      view.dom.querySelector<HTMLInputElement>('.cm-vim-panel input') ??
-      view.contentDOM;
-    const unhandled = target.dispatchEvent(new KeyboardEvent('keydown', init));
-    // A browser types an unhandled printable key into the focused element; jsdom does not.
-    if (unhandled && init.key.length === 1 && !init.ctrlKey && !init.metaKey) {
-      if (target instanceof HTMLInputElement) target.value += init.key;
-      // A frozen editor takes no text.
-      else if (view.state.facet(EditorView.editable))
-        view.dispatch(view.state.replaceSelection(init.key), {
-          userEvent: 'input.type',
-        });
-    }
-    target.dispatchEvent(new KeyboardEvent('keyup', init));
-  }
+  for (const token of parseKeys(solution)) pressKey(view, token);
 }
 
 /**

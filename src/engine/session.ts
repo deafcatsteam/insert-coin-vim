@@ -1,4 +1,4 @@
-import { Compartment } from '@codemirror/state';
+import { Compartment, type Extension } from '@codemirror/state';
 import { Vim } from '@replit/codemirror-vim';
 import { EditorView } from 'codemirror';
 import { createEditor, type EditorLevel } from './editor';
@@ -46,6 +46,7 @@ export function createSession(
   parent: Element,
   level: SessionLevel,
   onChange: () => void = () => undefined,
+  extensions: Extension = [],
 ): Session {
   let faults = 0;
   let done = false;
@@ -71,6 +72,7 @@ export function createSession(
         finish();
       onChange();
     }),
+    extensions,
   ]);
   const recorder = createRecorder(view, (_key, blocked) => {
     if (blocked) faults++;
