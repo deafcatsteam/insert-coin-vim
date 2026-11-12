@@ -137,7 +137,8 @@ body {
 }
 /* The brand plate looks pressed into the plastic. */
 .ic-plate {
-  color: #8a8a85;
+  /* 3:1 on the casing, the minimum for large text. */
+  color: #72726d;
   font: 1.6rem/1 var(--display);
   text-shadow: 0 1px 0 #fff;
 }
@@ -280,9 +281,10 @@ fieldset label {
 }
 .ic-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0 1rem;
 }
 .ic-head h1 {
   margin: 0;
@@ -299,7 +301,7 @@ fieldset label {
 .ic-panes {
   display: grid;
   flex: 1;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
   gap: 1rem;
   margin: 1rem 0 0.5rem;
 }
@@ -587,5 +589,30 @@ fieldset label {
   .ic-coin,
   .fx-flicker #app {
     animation: none;
+  }
+}
+
+/* Narrow windows: the casing gives its space to the screen. */
+@media (max-width: 40rem) {
+  body {
+    padding: 0.5rem;
+  }
+  .ic-device {
+    height: calc(100vh - 1rem);
+    padding: 0.5rem;
+    border-radius: 1.25rem;
+  }
+  .ic-bezel {
+    padding: 0.5rem;
+    border-radius: 1rem;
+  }
+  .fx-curve .ic-bezel::before {
+    inset: 0.5rem 0.5rem 60%;
+  }
+  .fx-scanlines .ic-bezel::after {
+    inset: 0.5rem;
+  }
+  #app {
+    padding: 1rem;
   }
 }
