@@ -15,7 +15,7 @@ const gif = GIFEncoder();
 const FRAME_MS = 120;
 /** Captures frames for `ms` milliseconds. */
 const record = async (ms) => {
-  for (const end = Date.now() + ms; Date.now() < end; ) {
+  for (const end = Date.now() + ms; Date.now() < end;) {
     const { data, width, height } = PNG.sync.read(await page.screenshot());
     const palette = quantize(data, 256);
     gif.writeFrame(applyPalette(data, palette), width, height, {
