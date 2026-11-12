@@ -93,16 +93,20 @@ export function showSelect(
   });
 
   root.replaceChildren(
-    h('h1', {}, t('select.title')),
-    ...nodes,
     h(
-      'p',
-      {},
-      exportEl,
-      ' ',
-      h('label', {}, t('select.import'), ' ', importEl),
+      'div',
+      { className: 'ic-select' },
+      h('header', { className: 'ic-head' }, h('h1', {}, t('select.title'))),
+      ...nodes,
+      h(
+        'p',
+        { className: 'ic-actions' },
+        exportEl,
+        ' ',
+        h('label', {}, t('select.import'), ' ', importEl),
+      ),
+      h('p', { role: 'status' }, message),
     ),
-    h('p', { role: 'status' }, message),
   );
   // Enter plays the first level the player has not finished.
   (firstOpen ?? buttons[0])?.focus();
