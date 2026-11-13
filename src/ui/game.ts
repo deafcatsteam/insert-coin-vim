@@ -37,12 +37,16 @@ const DONE_DELAY_MS = 600;
 const HINT_RESETS = [2, 4] as const;
 const IDLE_MS = 60_000;
 
-/** Shows one attempt at a level in `root`. Returns the function that removes it. */
+/**
+ * Shows one attempt at a level in `root`. Returns the function that removes it.
+ * `run`: a Speedrun level, with no hints, no solution and no skip (SPEC §5.4).
+ */
 export function showGame(
   root: HTMLElement,
   level: Level,
   visit: Visit,
   actions: GameActions,
+  run = false,
 ): () => void {
   const editorEl = h('div', { className: 'ic-editor' });
   const targetEl = h('pre', { className: 'ic-target' });
@@ -112,10 +116,9 @@ export function showGame(
         { className: 'ic-actions' },
         button('game.reset', actions.reset),
         ' ',
-        solutionEl,
-        ' ',
-        button('game.skip', actions.skip),
-        ' ',
+        ...(run
+          ? []
+          : [solutionEl, ' ', button('game.skip', actions.skip), ' ']),
         button('nav.levels', actions.menu),
       ),
     ),
@@ -127,6 +130,7 @@ export function showGame(
   let idleTimer: ReturnType<typeof setTimeout> | undefined;
 
   const showHelp = (): void => {
+    if (run) return;
     const count =
       HINT_RESETS.filter((n) => visit.resets >= n).length || Number(visit.idle);
     helpEl.replaceChildren(

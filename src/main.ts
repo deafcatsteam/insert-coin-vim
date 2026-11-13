@@ -1,13 +1,18 @@
 import { dailyIndex, dailyNumber } from './daily/daily';
 import { lang, t, type TextKey } from './i18n/i18n';
 import { levels, type Level } from './levels/levels';
-import { loadSave, recordResult, recordReview } from './progress/save';
+import {
+  loadSave,
+  recordResult,
+  recordReview,
+  recordRun,
+} from './progress/save';
 import { dueLevels } from './review/review';
 import './style.css';
 import { applyDisplay, campaignCleared } from './ui/display';
 import { showGame, type Visit } from './ui/game';
 import { showBoot, showSelect, showTitle } from './ui/menu';
-import { rating, showResults } from './ui/results';
+import { rating, showResults, showRun } from './ui/results';
 
 const root = document.querySelector<HTMLElement>('#app');
 if (!root) throw new Error('page markup missing: app');
@@ -25,12 +30,18 @@ let reviewing = false;
 let remembered = false;
 let visit = newVisit();
 let close = none;
+/**
+ * The Speedrun on screen (SPEC §5.4). `start`: time of its first key.
+ * `splits`: time from `start` to the end of each level done.
+ */
+let run: { chapter: number; start?: number; splits: number[] } | undefined;
 
 const menu = (message?: string): void => {
   close();
   close = none;
   index = -1;
-  showSelect(root, levels, start, title, message);
+  run = undefined;
+  showSelect(root, levels, start, title, message, startRun);
 };
 
 /** `today` is set for a daily challenge. It stays the same past midnight. */
@@ -41,6 +52,35 @@ const start = (to: number, today?: number, review = false): void => {
   remembered = false;
   visit = newVisit();
   play();
+};
+
+/** Starts the Speedrun of a chapter again from its first level. */
+const startRun = (chapter: number): void => {
+  run = { chapter, splits: [] };
+  start(levels.findIndex((level) => level.chapter === chapter));
+};
+
+/** A Speedrun gives no stars and no review: it chains the levels, then shows the time. */
+const runDone = (level: Level, ms: number): void => {
+  if (!run) return;
+  // `done` comes DONE_DELAY_MS after each end, the first level included, so the
+  // delay cancels out of every split.
+  const now = performance.now();
+  run.start ??= now - ms;
+  run.splits.push(now - run.start);
+  if (levels[index + 1]?.chapter === level.chapter) {
+    start(index + 1);
+    return;
+  }
+  const result = { ms: now - run.start, splits: run.splits };
+  const { chapter } = run;
+  showRun(
+    root,
+    levels.filter((l) => l.chapter === chapter),
+    result,
+    recordRun(chapter, result),
+    { retry: reset, menu: () => menu() },
+  );
 };
 
 const daily = (): void => {
@@ -76,50 +116,68 @@ const play = (): void => {
     menu();
     return;
   }
-  close = showGame(root, level, visit, {
-    done: (attempt) => {
-      close();
-      const stars = rating(attempt, level);
-      const cleared = campaignCleared();
-      // A daily challenge is saved as a campaign result of the same level.
-      recordResult(level.id, { stars, keys: attempt.keys.length });
-      remember(level, stars <= 1);
-      // At the end of the queue, review() shows the level list and says so.
-      const next = reviewing
-        ? review
-        : day === undefined && levels[index + 1]
-          ? () => {
-              start(index + 1);
-            }
-          : undefined;
-      close = showResults(
-        root,
-        level,
-        attempt,
-        { retry: play, next, menu: () => menu() },
-        day,
-        // The last level of a chapter in the campaign (SPEC §11).
-        day === undefined &&
-          !reviewing &&
-          levels[index + 1]?.chapter !== level.chapter,
-        !cleared && campaignCleared(),
-      );
+  close = showGame(
+    root,
+    level,
+    visit,
+    {
+      done: (attempt) => {
+        close();
+        if (run) {
+          close = none;
+          runDone(level, attempt.ms);
+          return;
+        }
+        const stars = rating(attempt, level);
+        const cleared = campaignCleared();
+        // A daily challenge is saved as a campaign result of the same level.
+        recordResult(level.id, { stars, keys: attempt.keys.length });
+        remember(level, stars <= 1);
+        // At the end of the queue, review() shows the level list and says so.
+        const next = reviewing
+          ? review
+          : day === undefined && levels[index + 1]
+            ? () => {
+                start(index + 1);
+              }
+            : undefined;
+        close = showResults(
+          root,
+          level,
+          attempt,
+          { retry: play, next, menu: () => menu() },
+          day,
+          // The last level of a chapter in the campaign (SPEC §11).
+          day === undefined &&
+            !reviewing &&
+            levels[index + 1]?.chapter !== level.chapter,
+          !cleared && campaignCleared(),
+        );
+      },
+      reset,
+      skip: () => {
+        remember(level, true);
+        // Skipping the daily challenge leads to the level list.
+        if (reviewing) review();
+        else if (day === undefined) start(index + 1);
+        else menu();
+      },
+      menu: () => menu(),
     },
-    reset,
-    skip: () => {
-      remember(level, true);
-      // Skipping the daily challenge leads to the level list.
-      if (reviewing) review();
-      else if (day === undefined) start(index + 1);
-      else menu();
-    },
-    menu: () => menu(),
-  });
+    run !== undefined,
+  );
 };
 
 // shortcut: every reset counts as a failed attempt for the hints, even with no
 // key typed; count typed attempts only if hints show up too early in play tests.
+// In a Speedrun, a reset starts the whole run again.
 const reset = (): void => {
+  if (run) {
+    close();
+    close = none;
+    startRun(run.chapter);
+    return;
+  }
   visit.resets++;
   play();
 };

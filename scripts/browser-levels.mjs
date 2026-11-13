@@ -46,7 +46,7 @@ const server = await createServer({
 });
 await server.listen();
 const browser = await chromium.launch();
-const page = await browser.newPage();
+const page = await browser.newPage({ locale: 'en-US' });
 const errors = [];
 page.on('pageerror', (e) => errors.push(e.message));
 page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
@@ -70,7 +70,10 @@ for (const { id, solutions } of await page.evaluate(() => window.levels)) {
 }
 // Review mode in the real game: skip a level, it comes back the next day, a pass
 // moves it to box 1, and a retry after the pass cannot undo it.
-const game = await browser.newPage({ reducedMotion: 'reduce' });
+const game = await browser.newPage({
+  reducedMotion: 'reduce',
+  locale: 'en-US',
+});
 game.on('pageerror', (e) => errors.push(e.message));
 const check = (name, ok) => {
   count++;
@@ -125,6 +128,66 @@ await game.getByRole('button', { name: 'Title' }).click();
 check(
   'the level list leads back to the title',
   await game.getByRole('button', { name: 'Start' }).isVisible(),
+);
+
+// Speedrun of chapter 0 in the real game: F2 starts the run again, the levels
+// chain without results, the run is saved, the stars are not.
+const chapter0 = (await page.evaluate(() => window.levels)).filter((l) =>
+  l.id.startsWith('c00-'),
+);
+const seeded = Object.fromEntries(
+  chapter0.map((l) => [l.id, { stars: 1, keys: 99 }]),
+);
+await game.evaluate((levels) => {
+  localStorage.setItem(
+    'insert-coin-save',
+    JSON.stringify({ version: 1, levels }),
+  );
+}, seeded);
+await game.reload();
+await game.getByRole('button', { name: 'Start' }).click();
+await game.getByRole('button', { name: 'Speedrun' }).click();
+await game.locator('.cm-content').focus();
+await game.keyboard.press(toPlaywright(chapter0[0].solutions[0][0]));
+await game.keyboard.press('F2');
+check(
+  'F2 starts the run again',
+  (await game.locator('.ic-tab').textContent()) === chapter0[0].id &&
+    (await game.locator('.ic-status').textContent()).includes('Keys: 0'),
+);
+check(
+  'a run level has no skip',
+  (await game.getByRole('button', { name: 'Skip level' }).count()) === 0,
+);
+for (const { id, solutions } of chapter0) {
+  await game.waitForFunction(
+    (want) => document.querySelector('.ic-tab')?.textContent === want,
+    id,
+  );
+  await game.locator('.cm-content').focus();
+  for (const key of solutions[0]) await game.keyboard.press(toPlaywright(key));
+}
+await game.waitForSelector('text=NEW RECORD');
+const saved = JSON.parse(
+  await game.evaluate(() => localStorage.getItem('insert-coin-save')),
+);
+const run = saved.speedrun?.['0'];
+check(
+  'the run is saved with one split per level',
+  run?.splits.length === chapter0.length &&
+    run.splits.every((s, i) => i === 0 || s > run.splits[i - 1]) &&
+    run.ms === run.splits.at(-1),
+);
+check(
+  'a run gives no stars',
+  JSON.stringify(saved.levels) === JSON.stringify(seeded),
+);
+await game.getByRole('button', { name: 'Levels' }).click();
+check(
+  'the level list shows the record',
+  /^Speedrun · record \d\d:\d\d\.\d$/.test(
+    await game.getByRole('button', { name: 'Speedrun' }).textContent(),
+  ),
 );
 
 for (const e of errors) console.log(`PAGE ERROR ${e}`);

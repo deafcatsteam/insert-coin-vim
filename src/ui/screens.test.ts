@@ -2,11 +2,11 @@ import { EditorView } from 'codemirror';
 import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { press } from '../engine/replay';
 import { levels, type Level } from '../levels/levels';
-import { recordResult } from '../progress/save';
+import { recordResult, recordRun } from '../progress/save';
 import { showGame, type Attempt, type GameActions, type Visit } from './game';
 import { applyDisplay, campaignCleared } from './display';
 import { showBoot, showSelect, showTitle } from './menu';
-import { shareText, showResults } from './results';
+import { clock, shareText, showResults, showRun } from './results';
 
 const level: Level = {
   id: 't',
@@ -345,4 +345,66 @@ test('the boot text ends alone or on the first key, one time only', () => {
   vi.runAllTimers();
   window.dispatchEvent(new KeyboardEvent('keydown', { key: 'x' }));
   expect(done).toHaveBeenCalledTimes(2);
+});
+
+test('a Speedrun level has no hints, no solution and no skip', () => {
+  const close = showGame(root, level, visit(4), actions(), true);
+  expect(root.textContent).not.toContain('Hint');
+  expect(root.textContent).not.toContain('Show solution');
+  expect(root.textContent).not.toContain('Skip');
+  vi.advanceTimersByTime(60_000);
+  expect(root.textContent).not.toContain('Hint');
+  close();
+});
+
+test('the level list offers the Speedrun of a finished chapter only', () => {
+  const other = { ...level, id: 'u', chapter: 2 };
+  const onRun = vi.fn();
+  recordResult('t', { stars: 1, keys: 9 });
+  showSelect(root, [level, other], vi.fn(), vi.fn(), '', onRun);
+  expect(button('Speedrun').textContent).toBe('Speedrun');
+  expect(
+    [...root.querySelectorAll('button')].filter((b) =>
+      b.textContent.startsWith('Speedrun'),
+    ),
+  ).toHaveLength(1);
+  button('Speedrun').click();
+  expect(onRun).toHaveBeenCalledWith(1);
+
+  recordRun(1, { ms: 83_400, splits: [83_400] });
+  showSelect(root, [level, other], vi.fn(), vi.fn(), '', onRun);
+  expect(button('Speedrun').textContent).toBe('Speedrun · record 01:23.4');
+});
+
+test('the end of a Speedrun shows the time, the record and the splits', () => {
+  const two = [level, { ...level, id: 'u' }];
+  const retry = vi.fn();
+  const old = { ms: 20_000, splits: [9_000, 20_000] };
+  showRun(root, two, { ms: 18_000, splits: [9_500, 18_000] }, old, {
+    retry,
+    menu: vi.fn(),
+  });
+  expect(root.querySelector('h1')?.textContent).toBe('Speedrun — chapter 1');
+  expect(root.textContent).toContain('Time: 00:18.0');
+  expect(root.textContent).toContain('NEW RECORD');
+  expect([...root.querySelectorAll('li')].map((e) => e.textContent)).toEqual([
+    'Delete a word 00:09.5 +0.5',
+    'Delete a word 00:18.0 −2.0',
+  ]);
+  expect(document.activeElement).toBe(button('Retry'));
+  button('Retry').click();
+  expect(retry).toHaveBeenCalledOnce();
+
+  showRun(root, two, { ms: 25_000, splits: [10_000, 25_000] }, old, {
+    retry,
+    menu: vi.fn(),
+  });
+  expect(root.textContent).not.toContain('NEW RECORD');
+  expect(root.textContent).toContain('Record: 00:20.0');
+});
+
+test('the clock rounds to seconds, or to tenths for Speedruns', () => {
+  expect(clock(83_449)).toBe('01:23');
+  expect(clock(83_449, true)).toBe('01:23.4');
+  expect(clock(59_960, true)).toBe('01:00.0');
 });

@@ -78,6 +78,8 @@ A free, open-source, browser-based game that teaches Vim from absolute beginner 
 | Speedrun | Chain of levels against the clock | v1.x |
 | Free Golf | Expert puzzles, VimGolf style | v1.x |
 
+**Speedrun rules.** One run per chapter, offered once every level of it is done. The clock starts at the first key of the first level and stops when the last level is solved; time between levels counts. No hints, no solution, no skip. Reset (F2) starts the whole run again; leaving the run drops it. A run gives no stars and no review. The best time per chapter is saved with its splits.
+
 ### 5.5 Sharing
 Wordle-style copyable text, e.g.:
 ```

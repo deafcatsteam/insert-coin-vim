@@ -6,6 +6,7 @@ import {
   loadSave,
   recordResult,
   recordReview,
+  recordRun,
 } from './save';
 
 beforeEach(() => {
@@ -121,4 +122,50 @@ test('a bad stored review queue is dropped, the level results stay', () => {
 test('a damaged stored save reads as empty', () => {
   localStorage.setItem('insert-coin-save', '{');
   expect(loadSave()).toEqual({ version: 1, levels: {} });
+});
+
+test('keeps the fastest run of a chapter and returns the record before it', () => {
+  const slow = { ms: 9000, splits: [4000, 9000] };
+  const fast = { ms: 7000, splits: [3000, 7000] };
+  expect(recordRun(2, slow)).toBeUndefined();
+  expect(recordRun(2, fast)).toEqual(slow);
+  expect(recordRun(2, slow)).toEqual(fast);
+  expect(loadSave().speedrun).toEqual({ 2: fast });
+});
+
+test('an import keeps the fastest run per chapter', () => {
+  recordRun(1, { ms: 5000, splits: [5000] });
+  recordRun(2, { ms: 8000, splits: [8000] });
+  const file = exportSave();
+  localStorage.clear();
+  recordRun(1, { ms: 6000, splits: [6000] });
+  recordRun(2, { ms: 7000, splits: [7000] });
+
+  importSave(file);
+  expect(loadSave().speedrun).toEqual({
+    1: { ms: 5000, splits: [5000] },
+    2: { ms: 7000, splits: [7000] },
+  });
+});
+
+test.each([
+  '{"version":1,"levels":{},"speedrun":null}',
+  '{"version":1,"levels":{},"speedrun":{"1":{"ms":-1,"splits":[1]}}}',
+  '{"version":1,"levels":{},"speedrun":{"1":{"ms":5,"splits":[]}}}',
+  '{"version":1,"levels":{},"speedrun":{"1":{"ms":5,"splits":["a"]}}}',
+])('refuses the runs in %s', (file) => {
+  expect(() => {
+    importSave(file);
+  }).toThrow();
+});
+
+test('bad stored runs are dropped, the level results stay', () => {
+  localStorage.setItem(
+    'insert-coin-save',
+    '{"version":1,"levels":{"a":{"stars":2,"keys":4}},"speedrun":{"1":{"ms":"x"}}}',
+  );
+  expect(loadSave()).toEqual({
+    version: 1,
+    levels: { a: { stars: 2, keys: 4 } },
+  });
 });

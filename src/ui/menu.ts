@@ -4,6 +4,7 @@ import { exportSave, importSave, loadSave } from '../progress/save';
 import { displaySettings } from './display';
 import { h, starRow, strip } from './h';
 import { languageSetting } from './language';
+import { clock } from './results';
 import { soundSetting } from './sound';
 
 /** Pause between two lines of the boot text. */
@@ -80,13 +81,17 @@ export function showTitle(
   startEl.focus();
 }
 
-/** Shows the level list with the saved stars in `root`. `onBack`: Title button and Escape. */
+/**
+ * Shows the level list with the saved stars in `root`. `onBack`: Title button and Escape.
+ * `onRun` starts the Speedrun of a chapter, offered once every level of it is done.
+ */
 export function showSelect(
   root: HTMLElement,
   levels: readonly Level[],
   onPick: (index: number) => void,
   onBack: () => void,
   message = '',
+  onRun?: (chapter: number) => void,
 ): void {
   const save = loadSave();
   const nodes: HTMLElement[] = [];
@@ -96,9 +101,27 @@ export function showSelect(
   let firstOpen: HTMLButtonElement | undefined;
   levels.forEach((level, index) => {
     if (level.chapter !== chapter) {
-      chapter = level.chapter;
+      const current = (chapter = level.chapter);
       list = h('ol');
-      nodes.push(h('h2', {}, t('select.chapter', { chapter })), list);
+      nodes.push(h('h2', {}, t('select.chapter', { chapter })));
+      const done = levels
+        .filter((l) => l.chapter === current)
+        .every((l) => save.levels[l.id]);
+      if (onRun && done) {
+        const best = save.speedrun?.[current];
+        const runEl = h(
+          'button',
+          { type: 'button' },
+          best
+            ? t('select.speedrunBest', { time: clock(best.ms, true) })
+            : t('select.speedrun'),
+        );
+        runEl.addEventListener('click', () => {
+          onRun(current);
+        });
+        nodes.push(h('p', {}, runEl));
+      }
+      nodes.push(list);
     }
     const best = save.levels[level.id];
     const button = h(
@@ -127,7 +150,7 @@ export function showSelect(
   const importEl = h('input', { type: 'file', accept: '.json' });
   importEl.addEventListener('change', () => {
     const again = (key: TextKey): void => {
-      showSelect(root, levels, onPick, onBack, t(key));
+      showSelect(root, levels, onPick, onBack, t(key), onRun);
     };
     importEl.files?.[0]
       ?.text()

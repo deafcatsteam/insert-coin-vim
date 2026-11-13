@@ -18,6 +18,15 @@ export interface Save {
    * from before review mode stay version 1.
    */
   review?: Record<string, Card>;
+  /** Best Speedrun of each chapter, by chapter number. Optional like `review`. */
+  speedrun?: Record<string, Run>;
+}
+
+/** A Speedrun of one chapter (SPEC §5.4). Times in ms from the first key of the run. */
+export interface Run {
+  ms: number;
+  /** Time at the end of each level. The last one is `ms`. */
+  splits: number[];
 }
 
 const STORE = 'insert-coin-save';
@@ -25,11 +34,29 @@ const STORE = 'insert-coin-save';
 const isCount = (value: unknown): value is number =>
   Number.isInteger(value) && (value as number) > 0;
 
+const isTime = (value: unknown): value is number =>
+  typeof value === 'number' && Number.isFinite(value) && value >= 0;
+
+const isRun = (value: unknown): value is Run => {
+  const run = value as Partial<Run> | null;
+  return (
+    isTime(run?.ms) &&
+    Array.isArray(run.splits) &&
+    run.splits.length > 0 &&
+    run.splits.every(isTime)
+  );
+};
+
+/** An optional part of the save is bad when present but not a record of `valid` values. */
+const isBad = (part: unknown, valid: (value: unknown) => boolean): boolean =>
+  part !== undefined &&
+  (!part || typeof part !== 'object' || !Object.values(part).every(valid));
+
 /**
  * Reads a save from text nobody checked: storage, or a file the player picked.
- * `dropBadReview` keeps the level results of a save whose review queue is bad.
+ * `dropBad` keeps the level results of a save whose review queue or Speedruns are bad.
  */
-const parse = (json: string, dropBadReview = false): Save => {
+const parse = (json: string, dropBad = false): Save => {
   const data = JSON.parse(json) as Partial<Save> | null;
   const results =
     data?.version === 1 && data.levels && typeof data.levels === 'object'
@@ -37,26 +64,23 @@ const parse = (json: string, dropBadReview = false): Save => {
           data.levels as Record<string, Partial<LevelResult> | null>,
         )
       : undefined;
-  const review = data?.review;
-  const badReview =
-    review !== undefined &&
-    (!review ||
-      typeof review !== 'object' ||
-      !Object.values(review).every(isCard));
+  const badReview = isBad(data?.review, isCard);
+  const badSpeedrun = isBad(data?.speedrun, isRun);
   if (
     !results?.every(
       (r) => isCount(r?.keys) && isCount(r.stars) && r.stars <= 3,
     ) ||
-    (badReview && !dropBadReview)
+    ((badReview || badSpeedrun) && !dropBad)
   )
     throw new Error('not an Insert Coin save');
   if (badReview) delete (data as Save).review;
+  if (badSpeedrun) delete (data as Save).speedrun;
   return data as Save;
 };
 
 /**
  * An empty save when nothing is stored, or when storage is blocked or damaged.
- * A bad review queue alone is dropped: the next write would erase the levels too.
+ * A bad review queue or bad Speedruns alone are dropped: the next write would erase the levels too.
  */
 export function loadSave(): Save {
   try {
@@ -97,11 +121,21 @@ export function recordReview(
   store(save);
 }
 
+/** Keeps the run if it beats the stored one. Returns the record before this run. */
+export function recordRun(chapter: number, run: Run): Run | undefined {
+  const save = loadSave();
+  const runs = (save.speedrun ??= {});
+  const old = runs[chapter];
+  if (!old || run.ms < old.ms) runs[chapter] = run;
+  store(save);
+  return old;
+}
+
 export const exportSave = (): string => JSON.stringify(loadSave(), null, 2);
 
 /**
- * Merges a save file into the stored one: best result per level, and per concept
- * the card that comes back first. Throws on a bad file.
+ * Merges a save file into the stored one: best result per level, per concept
+ * the card that comes back first, and the fastest run per chapter. Throws on a bad file.
  */
 export function importSave(json: string): void {
   const incoming = parse(json);
@@ -112,6 +146,13 @@ export function importSave(json: string): void {
     const review = (save.review ??= {});
     for (const [concept, card] of Object.entries(incoming.review))
       review[concept] = sooner(card, review[concept]);
+  }
+  if (incoming.speedrun) {
+    const runs = (save.speedrun ??= {});
+    for (const [chapter, run] of Object.entries(incoming.speedrun)) {
+      const old = runs[chapter];
+      if (!old || run.ms < old.ms) runs[chapter] = run;
+    }
   }
   store(save);
 }

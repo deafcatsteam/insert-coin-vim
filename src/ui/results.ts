@@ -1,7 +1,8 @@
 import { pressKey } from '../engine/replay';
 import { createSession, type Session } from '../engine/session';
-import { t } from '../i18n/i18n';
+import { t, type TextKey } from '../i18n/i18n';
 import { shortest, type Level } from '../levels/levels';
+import type { Run } from '../progress/save';
 import { parseKeys } from '../scoring/keys';
 import { stars } from '../scoring/stars';
 import type { Attempt } from './game';
@@ -10,10 +11,13 @@ import { h, starRow, starText, strip, support } from './h';
 /** Pause between two keys of the replayed solution. */
 const REPLAY_STEP_MS = 500;
 
-const clock = (ms: number): string => {
-  const seconds = Math.round(ms / 1000);
+/** `mm:ss`, or `mm:ss.t` with `tenths` for Speedruns. */
+export const clock = (ms: number, tenths = false): string => {
+  const tens = Math.round(ms / 100);
+  const seconds = tenths ? Math.floor(tens / 10) : Math.round(ms / 1000);
   const pad = (n: number): string => String(n).padStart(2, '0');
-  return `${pad(Math.floor(seconds / 60))}:${pad(seconds % 60)}`;
+  const time = `${pad(Math.floor(seconds / 60))}:${pad(seconds % 60)}`;
+  return tenths ? `${time}.${tens % 10}` : time;
 };
 
 /** Stars of an attempt. A shown solution gives one star at most (SPEC §5.3). */
@@ -180,4 +184,62 @@ export function showResults(
   (actions.next ? nextEl : menuEl).focus({ preventScroll: true });
 
   return stop;
+}
+
+/** `+1.2` or `−0.4` seconds against the record. */
+const gap = (ms: number): string =>
+  `${ms < 0 ? '−' : '+'}${(Math.abs(ms) / 1000).toFixed(1)}`;
+
+/**
+ * Shows the end of a Speedrun in `root`: the time, and each split against `old`,
+ * the record before this run. `levels`: the levels of the run, in order.
+ */
+export function showRun(
+  root: HTMLElement,
+  levels: readonly Level[],
+  run: Run,
+  old: Run | undefined,
+  actions: { retry: () => void; menu: () => void },
+): void {
+  const retryEl = h('button', { type: 'button' }, t('results.retry'));
+  const menuEl = h('button', { type: 'button' }, t('nav.levels'));
+  root.replaceChildren(
+    h(
+      'div',
+      { className: 'ic-results' },
+      strip(),
+      h(
+        'header',
+        { className: 'ic-head' },
+        h('h1', {}, t('run.title', { chapter: levels[0]?.chapter ?? 0 })),
+      ),
+      h(
+        'section',
+        { className: 'ic-panel' },
+        h('p', {}, t('results.time', { time: clock(run.ms, true) })),
+        !old || run.ms < old.ms
+          ? h('p', { className: 'ic-stamp' }, t('run.record'))
+          : h('p', {}, t('run.best', { time: clock(old.ms, true) })),
+        h('h2', {}, t('run.splits')),
+        h(
+          'ol',
+          {},
+          ...levels.map((level, i) => {
+            const split = run.splits[i] ?? 0;
+            const before = old?.splits[i];
+            return h(
+              'li',
+              {},
+              `${t(level.title.key as TextKey)} ${clock(split, true)}`,
+              before === undefined ? '' : ` ${gap(split - before)}`,
+            );
+          }),
+        ),
+      ),
+      h('p', {}, retryEl, ' ', menuEl),
+    ),
+  );
+  retryEl.addEventListener('click', actions.retry);
+  menuEl.addEventListener('click', actions.menu);
+  retryEl.focus({ preventScroll: true });
 }
