@@ -15,7 +15,7 @@ Reference spec: `SPEC.md`. Read it before any task. If a request conflicts with 
 - If unsure about state (branch, files, config), check first instead of assuming.
 
 ## Current phase
-**Phase 2 — v1.0** (SPEC §12). Phase 1 shipped as `v0.1.0`. Phase 0 findings in `docs/phase0-report.md` are rules for levels and engine (no `Ctrl+N`/`Ctrl+T`/`Ctrl+W` in levels, shared editor setup, Vim state reset per level).
+**Phase 3 — v1.x** (SPEC §12). Phase 1 shipped as `v0.1.0`, Phase 2 as `v1.0.0`. Phase 0 findings in `docs/phase0-report.md` are rules for levels and engine (no `Ctrl+N`/`Ctrl+T`/`Ctrl+W` in levels, shared editor setup, Vim state reset per level).
 
 ## Conventions
 - TypeScript strict mode. No `any` without a comment explaining why.
