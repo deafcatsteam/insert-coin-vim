@@ -347,11 +347,15 @@ test('the results screen tells the player about the unlocked themes', () => {
     'Unlocked: LCD olive screen. Pick it in the display settings.';
   showResults(root, level, attempt, noActions)();
   expect(root.textContent).not.toContain('Unlocked');
-  showResults(root, level, attempt, noActions, undefined, false, ['olive'])();
+  showResults(root, level, attempt, noActions, undefined, false, {
+    themes: ['olive'],
+    badges: ['stars'],
+  })();
   expect(root.textContent).toContain(unlocked);
+  expect(root.querySelector('.ic-new')?.textContent).toBe('New badge: Perfect');
 });
 
-test('the title screen shows the badges earned', () => {
+test('the title screen shows every badge, the earned ones lit, the goals readable', () => {
   const title = (): void => {
     showTitle(
       root,
@@ -361,18 +365,23 @@ test('the title screen shows the badges earned', () => {
       0,
     );
   };
+  const plates = (): HTMLElement[] => [
+    ...root.querySelectorAll<HTMLElement>('.ic-badges li'),
+  ];
   title();
-  expect(root.querySelector('.ic-badges')).toBeNull();
+  expect(root.querySelector('.ic-badges h2')?.textContent).toBe('Badges 0/6');
+  expect(plates()).toHaveLength(6);
+  expect(plates()[0]?.textContent).toBe('???LockedClear the whole campaign');
   for (const { id } of levels)
     recordResult(id, { stars: 3, keys: 9, noArrows: true });
   title();
+  expect(root.querySelector('.ic-badges h2')?.textContent).toBe('Badges 3/6');
   expect(
-    [...root.querySelectorAll('.ic-badges li')].map((e) => e.textContent),
-  ).toEqual([
-    'Campaign cleared',
-    '★★★ everywhere',
-    'A chapter with no arrow keys',
-  ]);
+    plates()
+      .filter((p) => p.classList.contains('ic-won'))
+      .map((p) => p.querySelector('.ic-goal')?.previousSibling?.textContent),
+  ).toEqual(['Finisher', 'Perfect', 'Purist']);
+  expect(plates().every((p) => p.tabIndex === 0)).toBe(true);
 });
 
 test('the support links show at the end of a chapter only', () => {
@@ -553,7 +562,7 @@ test('the end of a Free Golf level shows the keys against the record, no stars',
     ms: 3000,
     shown: false,
   };
-  showResults(root, level, attempt, noActions, undefined, false, [], {
+  showResults(root, level, attempt, noActions, undefined, false, undefined, {
     old: 3,
   })();
   expect(root.textContent).toContain('Keys: 2');
@@ -563,7 +572,7 @@ test('the end of a Free Golf level shows the keys against the record, no stars',
   expect(() => button('Copy result')).toThrow();
   expect(root.textContent).not.toContain('No more levels');
 
-  showResults(root, level, attempt, noActions, undefined, false, [], {
+  showResults(root, level, attempt, noActions, undefined, false, undefined, {
     old: 2,
   })();
   expect(root.textContent).not.toContain('NEW RECORD');
@@ -578,7 +587,7 @@ test('the initials of an earlier record fill the field, and the level list shows
     { ms: 8_000, splits: [8_000] },
     undefined,
     { retry: vi.fn(), menu: vi.fn(), sign: vi.fn() },
-    ['ice'],
+    { themes: ['ice'], badges: [] },
   );
   expect(root.querySelector<HTMLInputElement>('.ic-sign input')?.value).toBe(
     'ZED',

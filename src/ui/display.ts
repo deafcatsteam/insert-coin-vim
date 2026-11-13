@@ -17,8 +17,7 @@ const loadTheme = (): string => {
   }
 };
 
-/** The themes the save unlocks now. */
-export const unlockedThemes = (): Theme[] => themes(loadSave());
+const unlockedThemes = (): Theme[] => themes(loadSave());
 
 const store = (key: string, value: string): void => {
   try {

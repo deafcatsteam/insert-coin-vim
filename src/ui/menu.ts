@@ -1,6 +1,6 @@
 import { t, type TextKey } from '../i18n/i18n';
 import { shortest, type Level } from '../levels/levels';
-import { badges } from '../progress/feats';
+import { badges, BADGES, type Badge } from '../progress/feats';
 import { exportSave, importSave, loadSave } from '../progress/save';
 import { displaySettings } from './display';
 import { h, starRow, strip } from './h';
@@ -8,6 +8,61 @@ import { languageSetting } from './language';
 import { parseKeys } from '../scoring/keys';
 import { clock } from './results';
 import { soundSetting } from './sound';
+
+/** The picture of each badge. Glyphs, the same in every language. */
+const BADGE_ICONS: Record<Badge, string> = {
+  campaign: '⚑',
+  stars: '★',
+  speedrun: '»',
+  golf: '◎',
+  noHints: '∅',
+  noArrows: 'hjkl',
+};
+
+/**
+ * The badge showcase (SPEC §5.6): every badge, earned or locked. A locked one
+ * hides its name; its goal shows on hover or focus, and a screen reader reads it.
+ */
+const showcase = (): HTMLElement => {
+  const earned = badges(loadSave());
+  return h(
+    'section',
+    { className: 'ic-badges' },
+    h(
+      'h2',
+      {},
+      t('title.badges', { count: earned.length, total: BADGES.length }),
+    ),
+    h(
+      'ul',
+      {},
+      ...BADGES.map((badge) => {
+        const won = earned.includes(badge);
+        return h(
+          'li',
+          // Focus shows the goal to keyboard players, as hover does.
+          { className: won ? 'ic-won' : '', tabIndex: 0 },
+          won
+            ? h(
+                'span',
+                { className: 'ic-badge-icon', ariaHidden: 'true' },
+                BADGE_ICONS[badge],
+              )
+            : '',
+          won
+            ? h('span', {}, t(`badge.${badge}`))
+            : h(
+                'span',
+                {},
+                h('span', { ariaHidden: 'true' }, '???'),
+                h('span', { className: 'ic-sr' }, t('badge.locked')),
+              ),
+          h('span', { className: 'ic-goal' }, t(`badge.${badge}.goal`)),
+        );
+      }),
+    ),
+  );
+};
 
 /** Pause between two lines of the boot text. */
 const BOOT_LINE_MS = 350;
@@ -60,7 +115,6 @@ export function showTitle(
     t('title.review', { count: toReview }),
   );
   const golfEl = h('button', { type: 'button' }, t('golf.title'));
-  const earned = badges(loadSave());
   root.replaceChildren(
     h(
       'div',
@@ -84,13 +138,7 @@ export function showTitle(
         reviewEl,
         ...(onGolf ? [' ', golfEl] : []),
       ),
-      earned.length > 0
-        ? h(
-            'ul',
-            { className: 'ic-badges', ariaLabel: t('title.badges') },
-            ...earned.map((badge) => h('li', {}, t(`badge.${badge}`))),
-          )
-        : '',
+      showcase(),
       h('p', {}, t('title.keyboard')),
       displaySettings(),
       soundSetting(),

@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 import { golfPack, levels, shortest } from '../levels/levels';
 import { parseKeys } from '../scoring/keys';
-import { badges, themes } from './feats';
+import { badges, gained, themes } from './feats';
 import type { LevelResult, Save } from './save';
 
 const save = (
@@ -75,4 +75,14 @@ test('each badge has its own feat', () => {
   expect(badges(save(() => undefined, { golf: { [puzzle.id]: ref } }))).toEqual(
     ['golf'],
   );
+});
+
+test('gained lists what the second save adds only', () => {
+  const before = save((c) => (c === 0 ? { stars: 3, keys: 1 } : undefined));
+  const after = save(() => ({ stars: 3, keys: 1 }));
+  expect(gained(before, after)).toEqual({
+    themes: ['olive', 'paper'],
+    badges: ['campaign', 'stars'],
+  });
+  expect(gained(after, after)).toEqual({ themes: [], badges: [] });
 });

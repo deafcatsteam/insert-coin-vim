@@ -11,11 +11,11 @@ import {
   recordRun,
   type LevelResult,
 } from './progress/save';
-import type { Theme } from './progress/feats';
+import { gained, type Unlocks } from './progress/feats';
 import { dueLevels } from './review/review';
 import './style.css';
 import { attract } from './ui/attract';
-import { applyDisplay, unlockedThemes } from './ui/display';
+import { applyDisplay } from './ui/display';
 import { helped, showGame, type Visit } from './ui/game';
 import { showBoot, showGolf, showSelect, showTitle } from './ui/menu';
 import { rating, showResults, showRun } from './ui/results';
@@ -27,11 +27,11 @@ const none = (): void => undefined;
 /** An arrow key, with or without modifiers, in Vim notation. */
 const ARROW = /^<(?:[CSAMD]-)*(?:Up|Down|Left|Right)>$/;
 
-/** Runs `write`, then returns the themes it unlocked. */
-const unlocks = (write: () => void): Theme[] => {
-  const before = unlockedThemes();
+/** Runs `write`, then returns the themes and badges it unlocked. */
+const unlocks = (write: () => void): Unlocks => {
+  const before = loadSave();
   write();
-  return unlockedThemes().filter((theme) => !before.includes(theme));
+  return gained(before, loadSave());
 };
 const newVisit = (): Visit => ({ resets: 0, idle: false, shown: false });
 
@@ -184,6 +184,10 @@ const play = (): void => {
         }
         // Free Golf keeps its own record: no stars, no review.
         if (golfing) {
+          let old;
+          const unlocked = unlocks(
+            () => (old = recordGolf(level.id, attempt.keys.length)),
+          );
           close = showResults(
             root,
             level,
@@ -191,8 +195,8 @@ const play = (): void => {
             { retry: play, menu: golfMenu },
             undefined,
             false,
-            [],
-            { old: recordGolf(level.id, attempt.keys.length) },
+            unlocked,
+            { old },
           );
           return;
         }

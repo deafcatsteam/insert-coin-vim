@@ -2,7 +2,7 @@ import { pressKey } from '../engine/replay';
 import { createSession, type Session } from '../engine/session';
 import { t, type TextKey } from '../i18n/i18n';
 import { shortest, type Level } from '../levels/levels';
-import type { Theme } from '../progress/feats';
+import type { Unlocks } from '../progress/feats';
 import { isInitials, loadSave, type Run } from '../progress/save';
 import { parseKeys } from '../scoring/keys';
 import { stars } from '../scoring/stars';
@@ -21,11 +21,21 @@ export const clock = (ms: number, tenths = false): string => {
   return tenths ? `${time}.${tens % 10}` : time;
 };
 
-/** One line per theme just unlocked. */
-const unlockedText = (unlocked: readonly Theme[]): HTMLElement[] =>
-  unlocked.map((theme) =>
+const NOTHING: Unlocks = { themes: [], badges: [] };
+
+/** A stamp per badge, then a line per theme, just unlocked. */
+const unlockedText = (unlocked: Unlocks): HTMLElement[] => [
+  ...unlocked.badges.map((badge) =>
+    h(
+      'p',
+      { className: 'ic-stamp ic-new' },
+      t('results.badge', { name: t(`badge.${badge}`) }),
+    ),
+  ),
+  ...unlocked.themes.map((theme) =>
     h('p', {}, t('results.unlocked', { name: t(`display.${theme}`) })),
-  );
+  ),
+];
 
 /** Stars of an attempt. A shown solution gives one star at most (SPEC §5.3). */
 export const rating = (attempt: Attempt, level: Level): 1 | 2 | 3 =>
@@ -57,7 +67,7 @@ export const shareText = (
 /**
  * Shows the results of an attempt in `root`. Returns the function that removes it.
  * `day` is set for a daily challenge. `chapterEnd` adds the support links.
- * `unlocked`: the themes this attempt unlocked, now in the display settings.
+ * `unlocked`: the themes and badges this attempt unlocked.
  * `golf` is set in Free Golf: keys against the record before (`old`), no stars, no share.
  */
 export function showResults(
@@ -67,7 +77,7 @@ export function showResults(
   actions: { retry: () => void; next?: () => void; menu: () => void },
   day?: number,
   chapterEnd = false,
-  unlocked: readonly Theme[] = [],
+  unlocked = NOTHING,
   golf?: { old: number | undefined },
 ): () => void {
   const optimal = shortest(level);
@@ -226,7 +236,7 @@ const gap = (ms: number): string => {
  * Shows the end of a Speedrun in `root`: the time, and each split against `old`,
  * the record before this run. `levels`: the levels of the run, in order.
  * A new record asks for arcade initials and gives them to `actions.sign`.
- * `unlocked`: the themes this run unlocked.
+ * `unlocked`: the themes and badges this run unlocked.
  */
 export function showRun(
   root: HTMLElement,
@@ -238,7 +248,7 @@ export function showRun(
     menu: () => void;
     sign: (initials: string) => void;
   },
-  unlocked: readonly Theme[] = [],
+  unlocked = NOTHING,
 ): void {
   const retryEl = h('button', { type: 'button' }, t('results.retry'));
   const menuEl = h('button', { type: 'button' }, t('nav.levels'));

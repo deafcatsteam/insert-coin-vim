@@ -604,23 +604,89 @@ fieldset label {
   display: inline-block;
   margin: 0 0.6rem;
 }
-/* Badges (SPEC §5.6): small stamps under the menu. */
+/* Badges (SPEC §5.6): a showcase of 6 plates. Earned ones light up. */
 .ic-badges {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  margin: 1.5rem auto 0;
+  max-width: 34rem;
+}
+.ic-badges h2 {
+  margin: 0 0 0.5rem;
+  font: 1.1rem/1 var(--display);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+.ic-badges ul {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
-  margin: 1.5rem 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 .ic-badges li {
-  padding: 0 0.5rem;
-  color: var(--accent);
-  border: 2px double var(--accent);
-  font: 1.1rem/1.4 var(--display);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.4rem;
+  border: 2px dashed rgb(var(--glow) / 35%);
+  color: rgb(var(--glow) / 55%);
+  font: 1.25rem/1.2 var(--display);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+}
+.ic-badges li.ic-won {
+  border: 2px solid var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow:
+    0 0 0.6rem rgb(var(--glow) / 45%),
+    inset 0 0 0 2px var(--bg);
+}
+.ic-badge-icon {
+  font-size: 1.5rem;
+}
+/* The goal: a tag under the plate, on hover or focus. */
+.ic-goal {
+  position: absolute;
+  top: calc(100% + 0.3rem);
+  left: 50%;
+  z-index: 1;
+  width: max-content;
+  max-width: 14rem;
+  padding: 0.2rem 0.5rem;
+  transform: translateX(-50%);
+  border: 1px solid var(--fg);
+  background: var(--bg);
+  color: var(--fg);
+  font: 0.8rem/1.3 var(--mono);
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.ic-badges li:hover .ic-goal,
+.ic-badges li:focus-visible .ic-goal {
+  opacity: 1;
+}
+/* A new badge on the end screens: a second stamp, under the first. */
+.ic-stamp.ic-new {
+  margin: 0.25rem 0;
+}
+/* Read by screen readers, not shown. */
+.ic-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (max-width: 40rem) {
+  .ic-badges ul {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 /* Attract mode: the demo blinks its call to play. */
 .ic-demo {

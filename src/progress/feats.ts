@@ -68,3 +68,18 @@ export function badges(save: Save): Badge[] {
   };
   return BADGES.filter((badge) => won[badge]);
 }
+
+/** What a write to the save unlocked. */
+export interface Unlocks {
+  themes: Theme[];
+  badges: Badge[];
+}
+
+/** The themes and badges `after` has and `before` lacks. */
+export function gained(before: Save, after: Save): Unlocks {
+  const had = { themes: themes(before), badges: badges(before) };
+  return {
+    themes: themes(after).filter((theme) => !had.themes.includes(theme)),
+    badges: badges(after).filter((badge) => !had.badges.includes(badge)),
+  };
+}
