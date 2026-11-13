@@ -1,0 +1,20 @@
+{
+  "id": "g07",
+  "chapter": 11,
+  "title": {
+    "key": "levels.g07.title"
+  },
+  "brief": {
+    "key": "levels.g07.brief"
+  },
+  "concepts": ["macro", "till-char", "visual", "ex-regex"],
+  "start": "draw(10, 20)\ndraw(30, 40)\ndraw(50, 60)",
+  "target": "draw(20, 10)\ndraw(40, 30)\ndraw(60, 50)",
+  "par": 28,
+  "optimal": 23,
+  "solutions": ["qqf(ldt,llviwpF(pj0q2@q", ":%norm f(ldt,llviwpF(p<CR>"],
+  "hints": [],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

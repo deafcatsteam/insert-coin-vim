@@ -1,0 +1,20 @@
+{
+  "id": "g03",
+  "chapter": 11,
+  "title": {
+    "key": "levels.g03.title"
+  },
+  "brief": {
+    "key": "levels.g03.brief"
+  },
+  "concepts": ["search-word", "gn", "dot-repeat", "inner-word"],
+  "start": "tmp = 0\nfor x in tmpl:\n    tmp += x\nprint(tmp)",
+  "target": "sum = 0\nfor x in tmpl:\n    sum += x\nprint(sum)",
+  "par": 12,
+  "optimal": 10,
+  "solutions": ["*cgnsum<Esc>..", "*ciwsum<Esc>n.n."],
+  "hints": [],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

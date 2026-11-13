@@ -213,27 +213,24 @@ export function showSelect(
 }
 
 /**
- * Shows the Free Golf list in `root` (SPEC §5.4): the levels done, each with the
- * golf record and the keys of the reference solution. `onBack`: Title button and Escape.
+ * Shows the Free Golf list in `root` (SPEC §5.4): the levels done, then the expert
+ * pack, each with the golf record and the keys of the reference solution. `pack` is
+ * undefined while the pack is locked. `onPick` gets an index in `[...levels, ...pack]`.
+ * `onBack`: Title button and Escape.
  */
 export function showGolf(
   root: HTMLElement,
   levels: readonly Level[],
+  pack: readonly Level[] | undefined,
   onPick: (index: number) => void,
   onBack: () => void,
 ): void {
   const save = loadSave();
   const nodes: HTMLElement[] = [];
   const buttons: HTMLButtonElement[] = [];
-  let list: HTMLElement | undefined;
+  let list = h('ol');
   let chapter: number | undefined;
-  levels.forEach((level, index) => {
-    if (!save.levels[level.id]) return;
-    if (level.chapter !== chapter) {
-      chapter = level.chapter;
-      list = h('ol');
-      nodes.push(h('h2', {}, t('select.chapter', { chapter })), list);
-    }
+  const add = (level: Level, index: number): void => {
     const title = t(level.title.key as TextKey);
     const ref = parseKeys(shortest(level)).length;
     const keys = save.golf?.[level.id];
@@ -248,8 +245,25 @@ export function showGolf(
       onPick(index);
     });
     buttons.push(button);
-    list?.append(h('li', {}, button));
+    list.append(h('li', {}, button));
+  };
+  levels.forEach((level, index) => {
+    if (!save.levels[level.id]) return;
+    if (level.chapter !== chapter) {
+      chapter = level.chapter;
+      list = h('ol');
+      nodes.push(h('h2', {}, t('select.chapter', { chapter })), list);
+    }
+    add(level, index);
   });
+  nodes.push(h('h2', {}, t('golf.pack')));
+  if (pack) {
+    list = h('ol');
+    nodes.push(list);
+    pack.forEach((level, i) => {
+      add(level, levels.length + i);
+    });
+  } else nodes.push(h('p', {}, t('golf.packLocked')));
 
   const backEl = h('button', { type: 'button' }, t('nav.title'));
   backEl.addEventListener('click', onBack);

@@ -426,10 +426,14 @@ test('the Free Golf list shows the levels done, their record and the reference',
   recordGolf('u', 4);
   const pick = vi.fn();
   const back = vi.fn();
-  showGolf(root, [level, other, third], pick, back);
+  showGolf(root, [level, other, third], undefined, pick, back);
   expect([...root.querySelectorAll('h2')].map((e) => e.textContent)).toEqual([
     'Chapter 1',
+    'Expert pack',
   ]);
+  expect(root.textContent).toContain(
+    'Finish chapter 11 to unlock the expert pack.',
+  );
   const items = [...root.querySelectorAll('li button')];
   expect(items.map((e) => e.textContent)).toEqual([
     'Delete a word · reference 2',
@@ -442,6 +446,18 @@ test('the Free Golf list shows the levels done, their record and the reference',
     new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
   );
   expect(back).toHaveBeenCalledOnce();
+});
+
+test('the expert pack is listed once unlocked, after the campaign levels', () => {
+  const puzzle = { ...level, id: 'g' };
+  recordResult('t', { stars: 1, keys: 9 });
+  const pick = vi.fn();
+  showGolf(root, [level, { ...level, id: 'u' }], [puzzle], pick, vi.fn());
+  expect(root.textContent).not.toContain('unlock');
+  const items = [...root.querySelectorAll('li button')];
+  expect(items).toHaveLength(2);
+  (items[1] as HTMLButtonElement).click();
+  expect(pick).toHaveBeenCalledWith(2);
 });
 
 test('a Free Golf level shows the record to beat and no help', () => {

@@ -1,0 +1,20 @@
+{
+  "id": "g04",
+  "chapter": 11,
+  "title": {
+    "key": "levels.g04.title"
+  },
+  "brief": {
+    "key": "levels.g04.brief"
+  },
+  "concepts": ["match-bracket", "find-char", "operator-d", "delete-char"],
+  "start": "if (a && (b || (c && d))) {\n  run();\n}",
+  "target": "if (b || (c && d)) {\n  run();\n}",
+  "par": 11,
+  "optimal": 9,
+  "solutions": ["wwdf($2hx", "f(ldf(F(%lx", "2f(%x0f(ldf("],
+  "hints": [],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

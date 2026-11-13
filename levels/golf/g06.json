@@ -1,0 +1,23 @@
+{
+  "id": "g06",
+  "chapter": 11,
+  "title": {
+    "key": "levels.g06.title"
+  },
+  "brief": {
+    "key": "levels.g06.brief"
+  },
+  "concepts": ["ex-substitute", "ex-range", "count", "motion-line-end"],
+  "start": "red\ngreen\nblue",
+  "target": "[\"red\", \"green\", \"blue\"]",
+  "par": 25,
+  "optimal": 21,
+  "solutions": [
+    ":%s/.*/\"&\",<CR>gg3J$r]I[",
+    "<C-v>2jI\"<Esc><C-v>2j$A\",<Esc>3J$r]I["
+  ],
+  "hints": [],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

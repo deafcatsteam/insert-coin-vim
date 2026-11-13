@@ -1,0 +1,23 @@
+{
+  "id": "g08",
+  "chapter": 11,
+  "title": {
+    "key": "levels.g08.title"
+  },
+  "brief": {
+    "key": "levels.g08.brief"
+  },
+  "concepts": ["ex-regex", "ex-substitute", "macro", "put"],
+  "start": "name,age\nann,31\nbob,27",
+  "target": "age,name\n31,ann\n27,bob",
+  "par": 18,
+  "optimal": 15,
+  "solutions": [
+    "qqf,xDI,<Esc>Pjq2@q",
+    "f,xDI,<Esc>Pjf,xDI,<Esc>Pjf,xDI,<Esc>P"
+  ],
+  "hints": [],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

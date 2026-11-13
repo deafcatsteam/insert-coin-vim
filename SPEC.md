@@ -80,7 +80,7 @@ A free, open-source, browser-based game that teaches Vim from absolute beginner 
 
 **Speedrun rules.** One run per chapter, offered once every level of it is done. The clock starts at the first key of the first level and stops when the last level is solved; time between levels counts. No hints, no solution, no skip. Reset (F2) starts the whole run again; leaving the run drops it. A run gives no stars and no review. The best time per chapter is saved with its splits.
 
-**Free Golf rules.** Step 1: any level already done can be replayed from the title screen for keys alone. No hints, no solution, no skip, no stars, no review, no share. The record to beat is shown before the first key: the player's golf record, else the reference solution. The fewest keys per level are saved apart from the campaign result; a campaign attempt does not count. The results show the reference solution with its replay. Step 2 (later): a pack of expert puzzles.
+**Free Golf rules.** Step 1: any level already done can be replayed from the title screen for keys alone. No hints, no solution, no skip, no stars, no review, no share. The record to beat is shown before the first key: the player's golf record, else the reference solution. The fewest keys per level are saved apart from the campaign result; a campaign attempt does not count. The results show the reference solution with its replay. Step 2: an expert pack of 10 puzzles in `levels/golf/`, listed in Free Golf once every level of the last chapter is done. The pack is played only in Free Golf: never in the campaign, Speedrun, daily challenge or review. Its levels have a brief and no hints.
 
 ### 5.5 Sharing
 Wordle-style copyable text, e.g.:

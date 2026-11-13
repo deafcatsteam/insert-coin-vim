@@ -7,13 +7,14 @@ import { createServer } from 'vite';
 const PAGE = `<!doctype html><meta charset="utf-8"><div id="e"></div>
 <script type="module">
 import { createSession } from '/src/engine/session.ts';
-import { levels } from '/src/levels/levels.ts';
+import { golfPack, levels } from '/src/levels/levels.ts';
 import { parseKeys } from '/src/scoring/keys.ts';
 let session;
-window.levels = levels.map((l) => ({ id: l.id, solutions: l.solutions.map(parseKeys) }));
+const all = [...levels, ...golfPack];
+window.levels = all.map((l) => ({ id: l.id, solutions: l.solutions.map(parseKeys) }));
 window.start = (id) => {
   session?.destroy();
-  session = createSession(document.getElementById('e'), levels.find((l) => l.id === id));
+  session = createSession(document.getElementById('e'), all.find((l) => l.id === id));
   session.view.focus();
 };
 window.result = () => ({ done: session.done, faults: session.faults, keys: session.keys.length });
@@ -219,6 +220,35 @@ check(
   (await game.locator('li button').first().textContent()).includes(
     `record ${golfKeys.length}`,
   ),
+);
+
+// The expert pack opens once the last chapter is done, and keeps its own record.
+check(
+  'the expert pack is locked',
+  (await game.locator('body').textContent()).includes('Finish chapter 11'),
+);
+const all = await page.evaluate(() => window.levels);
+const puzzle = all.find((l) => l.id === 'g01');
+await game.evaluate(
+  (ids) => {
+    const save = JSON.parse(localStorage.getItem('insert-coin-save'));
+    for (const id of ids) save.levels[id] = { stars: 1, keys: 99 };
+    localStorage.setItem('insert-coin-save', JSON.stringify(save));
+  },
+  all.filter((l) => l.id.startsWith('c11-')).map((l) => l.id),
+);
+await game.reload();
+await game.getByRole('button', { name: 'Free Golf' }).click();
+await game.locator('li button', { hasText: 'Comment out' }).click();
+await game.locator('.cm-content').focus();
+for (const key of puzzle.solutions[0])
+  await game.keyboard.press(toPlaywright(key));
+await game.waitForSelector('text=NEW RECORD');
+check(
+  'the pack record is saved',
+  JSON.parse(
+    await game.evaluate(() => localStorage.getItem('insert-coin-save')),
+  ).golf?.g01 === puzzle.solutions[0].length,
 );
 
 for (const e of errors) console.log(`PAGE ERROR ${e}`);

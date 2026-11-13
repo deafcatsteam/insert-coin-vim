@@ -59,7 +59,8 @@ Status: v1.1, with the first v1.x modes live. You do not need to know Vim to sta
 - A Speedrun mode: once every level of a chapter is done, play the whole chapter in one timed
   run, with no help. The best time per chapter is saved with its splits.
 - Free Golf: replay any level you finished for the fewest keys, with no help. Your record is
-  saved apart from your stars. Open it from the title screen.
+  saved apart from your stars. Clear chapter 11 to open a pack of 10 expert puzzles. Open it
+  from the title screen.
 - An LCD olive theme, unlocked when you clear the campaign.
 - Works with any keyboard layout (AZERTY, QWERTZ, QWERTY…).
 - In 9 languages: English, French, Spanish, German, Portuguese (Brazil), Italian, Russian,
@@ -116,9 +117,9 @@ The full design is in [SPEC.md](SPEC.md).
 - **v1.0:** chapters 4–8 (line jumps, text objects, search, visual mode, registers), the
   daily challenge, the result text to share, the review mode, sound and the itch.io release.
 - **v1.1:** chapters 9–11 (macros, Ex commands, golf puzzles) and 8 more languages.
-- **v1.x (now):** done: Speedrun mode, Free Golf on finished levels, LCD olive theme.
-  Next: a pack of expert golf puzzles, then more unlockable themes, badges, arcade initials
-  on Speedrun records and an attract mode.
+- **v1.x (now):** done: Speedrun mode, Free Golf with a pack of expert puzzles, LCD olive
+  theme. Next: more unlockable themes, badges, arcade initials on Speedrun records and an
+  attract mode.
 
 Details are in [SPEC.md](SPEC.md), section 12. There are no dates.
 

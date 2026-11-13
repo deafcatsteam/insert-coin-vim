@@ -30,13 +30,24 @@ export const shortest = (level: Level): string =>
     parseKeys(b).length < parseKeys(a).length ? b : a,
   );
 
-/** Level files by path. `npm run validate:levels` checks each one. */
-export const levelFiles = import.meta.glob<Level>('../../levels/*/*.json', {
+const campaignFiles = import.meta.glob<Level>('../../levels/c*/*.json', {
+  eager: true,
+  import: 'default',
+});
+const golfFiles = import.meta.glob<Level>('../../levels/golf/*.json', {
   eager: true,
   import: 'default',
 });
 
-/** All levels, in playing order. */
-export const levels: Level[] = Object.values(levelFiles).sort(
+/** Level files by path, the golf pack included. `npm run validate:levels` checks each one. */
+export const levelFiles = { ...campaignFiles, ...golfFiles };
+
+/** All levels of the campaign, in playing order. */
+export const levels: Level[] = Object.values(campaignFiles).sort(
   (a, b) => a.chapter - b.chapter || a.id.localeCompare(b.id),
+);
+
+/** The expert puzzles of Free Golf (SPEC §5.4), only played there. */
+export const golfPack: Level[] = Object.values(golfFiles).sort((a, b) =>
+  a.id.localeCompare(b.id),
 );

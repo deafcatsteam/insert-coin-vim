@@ -1,0 +1,23 @@
+{
+  "id": "g05",
+  "chapter": 11,
+  "title": {
+    "key": "levels.g05.title"
+  },
+  "brief": {
+    "key": "levels.g05.brief"
+  },
+  "concepts": ["macro", "macro-repeat", "put", "insert-line-start"],
+  "start": "step",
+  "target": "1. step\n2. step\n3. step\n4. step\n5. step",
+  "par": 18,
+  "optimal": 15,
+  "solutions": [
+    "I1. <Esc>qqyyp<C-a>q3@q",
+    "I1. <Esc>yyp<C-a>yyp<C-a>yyp<C-a>yyp<C-a>"
+  ],
+  "hints": [],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

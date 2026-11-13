@@ -1,6 +1,6 @@
 import { dailyIndex, dailyNumber } from './daily/daily';
 import { lang, t, type TextKey } from './i18n/i18n';
-import { levels, shortest, type Level } from './levels/levels';
+import { golfPack, levels, shortest, type Level } from './levels/levels';
 import { parseKeys } from './scoring/keys';
 import {
   loadSave,
@@ -53,9 +53,15 @@ const golfMenu = (): void => {
   close();
   close = none;
   index = -1;
+  const done = loadSave().levels;
+  // The expert pack opens with the last chapter of the campaign.
+  const last = levels.at(-1)?.chapter;
   showGolf(
     root,
     levels,
+    levels.every((l) => l.chapter !== last || l.id in done)
+      ? golfPack
+      : undefined,
     (to) => {
       start(to, undefined, false, true);
     },
@@ -136,7 +142,8 @@ const remember = (level: Level, weak: boolean): void => {
 /** Starts the current level again from its start buffer. */
 const play = (): void => {
   close();
-  const level = levels[index];
+  // Free Golf indexes the campaign, then the expert pack.
+  const level = golfing ? [...levels, ...golfPack][index] : levels[index];
   if (!level) {
     menu();
     return;

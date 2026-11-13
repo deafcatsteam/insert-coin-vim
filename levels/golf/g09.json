@@ -1,0 +1,24 @@
+{
+  "id": "g09",
+  "chapter": 11,
+  "title": {
+    "key": "levels.g09.title"
+  },
+  "brief": {
+    "key": "levels.g09.brief"
+  },
+  "concepts": ["visual-block", "block-insert", "ex-substitute", "macro"],
+  "start": "a 1\nb 2\nc 3",
+  "target": "| a | 1 |\n| b | 2 |\n| c | 3 |",
+  "par": 24,
+  "optimal": 20,
+  "solutions": [
+    ":%s/ / | <CR><C-v>ggI| <Esc><C-v>G$A |",
+    ":%s/ / | <CR>:%s/.*/| & |<CR>",
+    "qqI| <Esc>ea |<Esc>A |<Esc>jq2@q"
+  ],
+  "hints": [],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

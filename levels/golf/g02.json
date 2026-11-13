@@ -1,0 +1,20 @@
+{
+  "id": "g02",
+  "chapter": 11,
+  "title": {
+    "key": "levels.g02.title"
+  },
+  "brief": {
+    "key": "levels.g02.brief"
+  },
+  "concepts": ["visual-block", "operator-c", "dot-repeat", "ex-substitute"],
+  "start": "x = foo(1)\ny = foo(2)\nz = foo(3)",
+  "target": "x = bar(1)\ny = bar(2)\nz = bar(3)",
+  "par": 12,
+  "optimal": 10,
+  "solutions": ["2w<C-v>2jecbar", "ffcwbar<Esc>jb.jb.", ":%s/foo/bar<CR>"],
+  "hints": [],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

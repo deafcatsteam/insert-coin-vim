@@ -1,0 +1,23 @@
+{
+  "id": "g10",
+  "chapter": 11,
+  "title": {
+    "key": "levels.g10.title"
+  },
+  "brief": {
+    "key": "levels.g10.brief"
+  },
+  "concepts": ["visual-block", "block-insert", "macro", "ex-substitute"],
+  "start": "host=localhost\nport=8080\nuser=admin",
+  "target": "export HOST=\"localhost\"\nexport PORT=\"8080\"\nexport USER=\"admin\"",
+  "par": 35,
+  "optimal": 29,
+  "solutions": [
+    "<C-v>2j3lU<C-v>2jIexport <Esc><C-v>2j$A\"<Esc>:%s/=/=\"<CR>",
+    "qqIexport <Esc>wgUiwf=a\"<Esc>A\"<Esc>jq2@q"
+  ],
+  "hints": [],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

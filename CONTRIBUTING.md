@@ -66,6 +66,10 @@ with real key presses. It needs Chromium once: `npx playwright install chromium`
 4. Run `npm run validate:levels`. It checks the file against the schema, checks that every text
    key exists, and replays every solution in the real editor.
 
+An expert golf puzzle goes in `levels/golf/gNN.json` instead, with `chapter` 11, a brief and
+`"hints": []`. Free Golf is the only place it is played, so any key is fair and `optimal` is the
+shortest solution you found.
+
 Limits to respect:
 
 - A solution ends on the key that completes the level. The level ends as soon as the text equals

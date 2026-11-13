@@ -1,0 +1,20 @@
+{
+  "id": "g01",
+  "chapter": 11,
+  "title": {
+    "key": "levels.g01.title"
+  },
+  "brief": {
+    "key": "levels.g01.brief"
+  },
+  "concepts": ["search", "dot-repeat", "ex-global"],
+  "start": "let a = 1;\nconsole.log(a);\nlet b = a * 2;\nconsole.log(b);\nreturn b;",
+  "target": "let a = 1;\n// console.log(a);\nlet b = a * 2;\n// console.log(b);\nreturn b;",
+  "par": 11,
+  "optimal": 9,
+  "solutions": ["jI// <Esc>jj.", "/^c<CR>I// <Esc>n.", ":g/c/s/^/\\/\\/ <CR>"],
+  "hints": [],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}
