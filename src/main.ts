@@ -1,5 +1,5 @@
 import { dailyIndex, dailyNumber } from './daily/daily';
-import { t, type TextKey } from './i18n/i18n';
+import { lang, t, type TextKey } from './i18n/i18n';
 import { levels, type Level } from './levels/levels';
 import { loadSave, recordResult, recordReview } from './progress/save';
 import { dueLevels } from './review/review';
@@ -135,6 +135,7 @@ window.addEventListener(
 );
 
 // The casing texts of index.html come from the locale file too.
+document.documentElement.lang = lang;
 for (const el of document.querySelectorAll<HTMLElement>('[data-t]'))
   el.textContent = t(el.dataset.t as TextKey);
 

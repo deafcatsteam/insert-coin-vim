@@ -20,6 +20,8 @@
   "game.solution": "Show solution",
   "game.solutionKeys": "Solution: {keys}",
   "game.target": "Target",
+  "lang.label": "Language",
+  "lang.name": "English",
   "levels.c00-l01.brief": "Press i to start typing. Then type the missing letter: a capital I.",
   "levels.c00-l01.hint1": "Vim starts in NORMAL mode, where letters are commands. The i command switches to INSERT mode.",
   "levels.c00-l01.hint2": "Press i, then Shift+I.",
