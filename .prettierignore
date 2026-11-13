@@ -1,3 +1,5 @@
 dist
 package-lock.json
 *.md
+# itch.io shows a tag split over lines as raw text.
+docs/itch-page.html
