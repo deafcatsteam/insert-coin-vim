@@ -284,14 +284,14 @@ On tag `v*`: build zip → upload to **itch.io** via `butler` (secret `BUTLER_AP
 
 ### Phase 0 — Technical prototype (blocking)
 Goal: know what the browser can really do. Deliverable: `docs/phase0-report.md`.
-- [ ] CodeMirror 6 + vim mode running in Vite.
-- [ ] Support matrix: test every command in section 6 → supported / partial / unsupported.
-- [ ] Keystroke recorder + VimGolf-style counter.
-- [ ] Buffer vs target comparison + completion detection.
-- [ ] Browser-reserved shortcut list (Chrome, Firefox, Edge; normal + fullscreen), incl. `<C-w>`, `<C-r>`, `<C-v>`, `<C-t>`, `<C-n>`.
-- [ ] Layout tests: AZERTY, QWERTZ, QWERTY, dead keys.
-- [ ] Headless replay of a solution string (for CI).
-- [ ] Recommendation: UI framework + which chapters stay in scope.
+- [x] CodeMirror 6 + vim mode running in Vite.
+- [x] Support matrix: test every command in section 6 → supported / partial / unsupported.
+- [x] Keystroke recorder + VimGolf-style counter.
+- [x] Buffer vs target comparison + completion detection.
+- [x] Browser-reserved shortcut list (Chrome, Firefox, Edge; normal + fullscreen), incl. `<C-w>`, `<C-r>`, `<C-v>`, `<C-t>`, `<C-n>`.
+- [x] Layout tests: AZERTY, QWERTZ, QWERTY, dead keys.
+- [x] Headless replay of a solution string (for CI).
+- [x] Recommendation: UI framework + which chapters stay in scope.
 
 ### Phase 1 — MVP (v0.1)
 Engine, scoring, 20 levels (chapters 0–3), results screen with replay, localStorage + export/import, base design system, English locale, GitHub Pages deploy.
