@@ -51,7 +51,7 @@ Status: early version (v0.1). You do not need to know Vim to start.
 - A daily challenge: the same level for every player on a given day (UTC), with no server.
   Open it from the title screen or with the link
   https://deafcatsteam.github.io/insert-coin-vim/#daily.
-- A review mode: a skipped level or a one-star level comes back the next day, then after
+- A review mode: a skipped level or a one-star level comes back the next day (UTC), then after
   3 and 7 more days until you pass it each time. Open it from the title screen.
 - Works with any keyboard layout (AZERTY, QWERTZ, QWERTY…).
 - Progress saved in your browser, with export and import to a file.

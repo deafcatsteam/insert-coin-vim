@@ -107,6 +107,17 @@ test.each([
   expect(loadSave().review).toEqual({ a: { box: 0, due: 11 } });
 });
 
+test('a bad stored review queue is dropped, the level results stay', () => {
+  localStorage.setItem(
+    'insert-coin-save',
+    '{"version":1,"levels":{"a":{"stars":2,"keys":4}},"review":{"b":{"box":3,"due":1}}}',
+  );
+  expect(loadSave()).toEqual({
+    version: 1,
+    levels: { a: { stars: 2, keys: 4 } },
+  });
+});
+
 test('a damaged stored save reads as empty', () => {
   localStorage.setItem('insert-coin-save', '{');
   expect(loadSave()).toEqual({ version: 1, levels: {} });

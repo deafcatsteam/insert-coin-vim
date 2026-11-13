@@ -21,6 +21,8 @@ let index = -1;
 let day: number | undefined;
 /** The level on screen comes from the review queue. */
 let reviewing = false;
+/** The visit already updated the review queue. */
+let remembered = false;
 let visit = newVisit();
 let close = none;
 
@@ -36,6 +38,7 @@ const start = (to: number, today?: number, review = false): void => {
   index = to;
   day = today;
   reviewing = review;
+  remembered = false;
   visit = newVisit();
   play();
 };
@@ -55,8 +58,13 @@ const review = (): void => {
   else start(next, undefined, true);
 };
 
-/** Skipped, or one star: the concepts of the level come back the next day. */
+/**
+ * Skipped, or one star: the concepts of the level come back the next day.
+ * Only the first end of a visit counts, so a retry for fun cannot undo a pass.
+ */
 const remember = (level: Level, weak: boolean): void => {
+  if (remembered) return;
+  remembered = true;
   recordReview(level.concepts, weak, dailyNumber(new Date()));
 };
 

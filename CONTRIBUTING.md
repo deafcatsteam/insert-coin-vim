@@ -57,6 +57,8 @@ with real key presses. It needs Chromium once: `npx playwright install chromium`
      the level. Keys are counted like VimGolf: `<Esc>` is one key, `<C-r>` is one key, a capital
      letter is one key.
    - `par`: the number of keys for a good, not perfect, answer.
+   - `concepts`: what the level teaches. Review mode brings these back. Pick them from the list
+     in `levels/level.schema.json`. A new concept goes in that list first.
    - `author`: your name or handle. `license`: `CC-BY-4.0`.
 3. Add the texts to `locales/en.json`: `levels.<id>.title`, `levels.<id>.brief`,
    `levels.<id>.hint1`, `levels.<id>.hint2`. The level file refers to these keys.

@@ -25,8 +25,11 @@ const STORE = 'insert-coin-save';
 const isCount = (value: unknown): value is number =>
   Number.isInteger(value) && (value as number) > 0;
 
-/** Reads a save from text nobody checked: storage, or a file the player picked. */
-const parse = (json: string): Save => {
+/**
+ * Reads a save from text nobody checked: storage, or a file the player picked.
+ * `dropBadReview` keeps the level results of a save whose review queue is bad.
+ */
+const parse = (json: string, dropBadReview = false): Save => {
   const data = JSON.parse(json) as Partial<Save> | null;
   const results =
     data?.version === 1 && data.levels && typeof data.levels === 'object'
@@ -35,23 +38,29 @@ const parse = (json: string): Save => {
         )
       : undefined;
   const review = data?.review;
+  const badReview =
+    review !== undefined &&
+    (!review ||
+      typeof review !== 'object' ||
+      !Object.values(review).every(isCard));
   if (
     !results?.every(
       (r) => isCount(r?.keys) && isCount(r.stars) && r.stars <= 3,
     ) ||
-    (review !== undefined &&
-      (!review ||
-        typeof review !== 'object' ||
-        !Object.values(review).every(isCard)))
+    (badReview && !dropBadReview)
   )
     throw new Error('not an Insert Coin save');
+  if (badReview) delete (data as Save).review;
   return data as Save;
 };
 
-/** An empty save when nothing is stored, or when storage is blocked or damaged. */
+/**
+ * An empty save when nothing is stored, or when storage is blocked or damaged.
+ * A bad review queue alone is dropped: the next write would erase the levels too.
+ */
 export function loadSave(): Save {
   try {
-    return parse(localStorage.getItem(STORE) ?? '');
+    return parse(localStorage.getItem(STORE) ?? '', true);
   } catch {
     return { version: 1, levels: {} };
   }

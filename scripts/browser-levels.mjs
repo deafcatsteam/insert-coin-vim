@@ -1,6 +1,6 @@
 // Plays every level solution in Chromium with real key presses (Ctrl+V included),
 // through the same session as the game. Run: npm run test:browser
-/* global window, console, process -- Node script; window is the page in evaluate(). */
+/* global window, localStorage, console, process -- Node script; window and localStorage are the page in evaluate(). */
 import { chromium } from 'playwright';
 import { createServer } from 'vite';
 
@@ -68,8 +68,62 @@ for (const { id, solutions } of await page.evaluate(() => window.levels)) {
     }
   }
 }
+// Review mode in the real game: skip a level, it comes back the next day, a pass
+// moves it to box 1, and a retry after the pass cannot undo it.
+const game = await browser.newPage({ reducedMotion: 'reduce' });
+game.on('pageerror', (e) => errors.push(e.message));
+const check = (name, ok) => {
+  count++;
+  if (!ok) {
+    failed++;
+    console.log(`FAIL review flow: ${name}`);
+  }
+};
+const queue = () =>
+  game.evaluate(
+    () => JSON.parse(localStorage.getItem('insert-coin-save')).review,
+  );
+const status = () => game.locator('[role=status]').last().textContent();
+const empty = await page.evaluate(async () => {
+  const { t } = await import('/src/i18n/i18n.ts');
+  return t('review.empty');
+});
+const at = (date) => game.clock.setFixedTime(new Date(`${date}T12:00:00Z`));
+await at('2026-12-01');
+await game.goto('http://localhost:4177/');
+await game.getByRole('button', { name: 'Start' }).click();
+await game.locator('li button').first().click();
+await game.getByRole('button', { name: 'Skip level' }).click();
+const skipped = await queue();
+check(
+  'a skip queues the concepts',
+  Object.values(skipped).every((c) => c.box === 0),
+);
+await game.reload();
+await game.locator('button', { hasText: /^Review/ }).click();
+check('nothing is due the same day', (await status()) === empty);
+await at('2026-12-02');
+await game.reload();
+await game.locator('button', { hasText: /^Review/ }).click();
+await game.locator('.cm-content').focus();
+for (const key of (await page.evaluate(() => window.levels))[0].solutions[0])
+  await game.keyboard.press(toPlaywright(key));
+await game.waitForSelector('.ic-results');
+const passed = await queue();
+check(
+  'a pass moves to box 1',
+  Object.values(passed).every((c) => c.box === 1),
+);
+await game.getByRole('button', { name: 'Retry (F2)' }).click();
+await game.getByRole('button', { name: 'Skip level' }).click();
+check(
+  'a retry keeps the pass',
+  JSON.stringify(await queue()) === JSON.stringify(passed),
+);
+check('the queue ends', (await status()) === empty);
+
 for (const e of errors) console.log(`PAGE ERROR ${e}`);
-console.log(`${count - failed}/${count} solutions passed in Chromium`);
+console.log(`${count - failed}/${count} checks passed in Chromium`);
 await browser.close();
 await server.close();
 process.exit(failed || errors.length ? 1 : 0);
