@@ -103,6 +103,10 @@ export function showResults(
             t('results.keys', { keys: attempt.keys.length, par: level.par }),
           ),
           h('p', {}, t('results.time', { time: clock(attempt.ms) })),
+          // The reference is the shortest solution known, not a proven minimum.
+          !attempt.shown && attempt.keys.length < steps.length
+            ? h('p', {}, t('results.beatBest'))
+            : '',
           h('p', { className: 'ic-stamp' }, t('results.stamp')),
           h('p', {}, copyEl),
           sharedEl,

@@ -203,6 +203,17 @@ test('copy result puts the share text on the clipboard', async () => {
   }
 });
 
+test('fewer keys than the reference solution are celebrated', () => {
+  const best = 'Shorter than our reference solution';
+  showResults(root, level, attempt, noActions)();
+  expect(root.textContent).not.toContain(best);
+  const short = { ...attempt, keys: ['x'] };
+  showResults(root, level, short, noActions)();
+  expect(root.textContent).toContain(best);
+  showResults(root, level, { ...short, shown: true }, noActions)();
+  expect(root.textContent).not.toContain(best);
+});
+
 test('without a clipboard, copy result shows the text to copy by hand', async () => {
   const close = showResults(root, level, attempt, noActions);
   button('Copy result').click();

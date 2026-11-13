@@ -245,6 +245,7 @@
   "mode.visual": "VISUAL",
   "nav.levels": "关卡",
   "nav.title": "主菜单",
+  "results.beatBest": "比我们的参考答案还短。漂亮的一杆！",
   "results.copied": "结果已复制，可以粘贴到任何地方。",
   "results.copy": "复制结果",
   "results.copyManual": "浏览器阻止了复制。请选中上面的文本并复制。",

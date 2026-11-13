@@ -245,6 +245,7 @@
   "mode.visual": "VISUAL",
   "nav.levels": "Level",
   "nav.title": "Titel",
+  "results.beatBest": "Kürzer als unsere Referenzlösung. Starker Schlag!",
   "results.copied": "Ergebnis kopiert. Füg es irgendwo ein.",
   "results.copy": "Ergebnis kopieren",
   "results.copyManual": "Der Browser hat das Kopieren blockiert. Markier den Text oben und kopier ihn.",
