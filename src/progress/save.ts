@@ -1,3 +1,5 @@
+import { isCard, nextCards, sooner, type Card } from '../review/review';
+
 /** The best result of one completed level. */
 export interface LevelResult {
   stars: number;
@@ -11,6 +13,11 @@ export interface Save {
   version: 1;
   /** By level id. */
   levels: Record<string, LevelResult>;
+  /**
+   * Concepts to review, by concept id (src/review/review.ts). Optional, so saves
+   * from before review mode stay version 1.
+   */
+  review?: Record<string, Card>;
 }
 
 const STORE = 'insert-coin-save';
@@ -27,8 +34,15 @@ const parse = (json: string): Save => {
           data.levels as Record<string, Partial<LevelResult> | null>,
         )
       : undefined;
+  const review = data?.review;
   if (
-    !results?.every((r) => isCount(r?.keys) && isCount(r.stars) && r.stars <= 3)
+    !results?.every(
+      (r) => isCount(r?.keys) && isCount(r.stars) && r.stars <= 3,
+    ) ||
+    (review !== undefined &&
+      (!review ||
+        typeof review !== 'object' ||
+        !Object.values(review).every(isCard)))
   )
     throw new Error('not an Insert Coin save');
   return data as Save;
@@ -63,13 +77,32 @@ export function recordResult(id: string, result: LevelResult): LevelResult {
   return best;
 }
 
+/** Updates the review queue after a level, or after a skip (`weak`). */
+export function recordReview(
+  concepts: readonly string[],
+  weak: boolean,
+  day: number,
+): void {
+  const save = loadSave();
+  save.review = nextCards(save.review ?? {}, concepts, weak, day);
+  store(save);
+}
+
 export const exportSave = (): string => JSON.stringify(loadSave(), null, 2);
 
-/** Merges a save file into the stored one, best result per level. Throws on a bad file. */
+/**
+ * Merges a save file into the stored one: best result per level, and per concept
+ * the card that comes back first. Throws on a bad file.
+ */
 export function importSave(json: string): void {
   const incoming = parse(json);
   const save = loadSave();
   for (const [id, result] of Object.entries(incoming.levels))
     save.levels[id] = better(result, save.levels[id]);
+  if (incoming.review) {
+    const review = (save.review ??= {});
+    for (const [concept, card] of Object.entries(incoming.review))
+      review[concept] = sooner(card, review[concept]);
+  }
   store(save);
 }

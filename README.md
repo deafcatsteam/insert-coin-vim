@@ -51,6 +51,8 @@ Status: early version (v0.1). You do not need to know Vim to start.
 - A daily challenge: the same level for every player on a given day (UTC), with no server.
   Open it from the title screen or with the link
   https://deafcatsteam.github.io/insert-coin-vim/#daily.
+- A review mode: a skipped level or a one-star level comes back the next day, then after
+  3 and 7 more days until you pass it each time. Open it from the title screen.
 - Works with any keyboard layout (AZERTY, QWERTZ, QWERTY…).
 - Progress saved in your browser, with export and import to a file.
 - A CRT look you can tune: scanlines, glow, flicker and screen curve each have a switch.
@@ -101,8 +103,8 @@ The full design is in [SPEC.md](SPEC.md).
 
 - **v0.1 (now):** 20 levels in chapters 0–3, scoring, results with replay, save export and import.
 - **v1.0 (in progress):** chapters 4–8 are in (line jumps, text objects, search, visual mode,
-  registers), the daily challenge and the result text to share. Still to come: a review mode,
-  sound.
+  registers), the daily challenge, the result text to share and the review mode. Still to
+  come: sound.
 - **v1.x:** chapters 9–11 (macros, Ex commands, golf puzzles), speedrun mode, more languages
   (French first).
 

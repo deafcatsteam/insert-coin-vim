@@ -35,14 +35,21 @@ export function showBoot(root: HTMLElement, onDone: () => void): void {
   window.addEventListener('pointerdown', end);
 }
 
-/** Shows the title screen in `root`. */
+/** Shows the title screen in `root`. `toReview`: levels in the review queue today. */
 export function showTitle(
   root: HTMLElement,
   onStart: () => void,
   onDaily: () => void,
+  onReview: () => void,
+  toReview: number,
 ): void {
   const startEl = h('button', { type: 'button' }, t('title.start'));
   const dailyEl = h('button', { type: 'button' }, t('title.daily'));
+  const reviewEl = h(
+    'button',
+    { type: 'button' },
+    t('title.review', { count: toReview }),
+  );
   root.replaceChildren(
     h(
       'div',
@@ -56,7 +63,7 @@ export function showTitle(
       ),
       h('p', {}, t('title.program')),
       h('h1', { className: 'ic-coin' }, t('title.name')),
-      h('p', { className: 'ic-menu' }, startEl, ' ', dailyEl),
+      h('p', { className: 'ic-menu' }, startEl, ' ', dailyEl, ' ', reviewEl),
       h('p', {}, t('title.keyboard')),
       displaySettings(),
       h('p', { className: 'ic-small' }, t('title.footnote')),
@@ -64,6 +71,7 @@ export function showTitle(
   );
   startEl.addEventListener('click', onStart);
   dailyEl.addEventListener('click', onDaily);
+  reviewEl.addEventListener('click', onReview);
   // Enter starts, without the mouse.
   startEl.focus();
 }

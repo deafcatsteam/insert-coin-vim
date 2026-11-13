@@ -1,7 +1,8 @@
 import { dailyIndex, dailyNumber } from './daily/daily';
 import { t, type TextKey } from './i18n/i18n';
-import { levels } from './levels/levels';
-import { recordResult } from './progress/save';
+import { levels, type Level } from './levels/levels';
+import { loadSave, recordResult, recordReview } from './progress/save';
+import { dueLevels } from './review/review';
 import './style.css';
 import { applyDisplay } from './ui/display';
 import { showGame, type Visit } from './ui/game';
@@ -18,20 +19,23 @@ const newVisit = (): Visit => ({ resets: 0, idle: false, shown: false });
 let index = -1;
 /** Number of the daily challenge on screen, or undefined in the campaign. */
 let day: number | undefined;
+/** The level on screen comes from the review queue. */
+let reviewing = false;
 let visit = newVisit();
 let close = none;
 
-const menu = (): void => {
+const menu = (message?: string): void => {
   close();
   close = none;
   index = -1;
-  showSelect(root, levels, start);
+  showSelect(root, levels, start, message);
 };
 
 /** `today` is set for a daily challenge. It stays the same past midnight. */
-const start = (to: number, today?: number): void => {
+const start = (to: number, today?: number, review = false): void => {
   index = to;
   day = today;
+  reviewing = review;
   visit = newVisit();
   play();
 };
@@ -39,6 +43,21 @@ const start = (to: number, today?: number): void => {
 const daily = (): void => {
   const today = dailyNumber(new Date());
   start(dailyIndex(today, levels), today);
+};
+
+/** Each level played leaves the queue of the day, so the queue is read again each time. */
+const reviewQueue = (): number[] =>
+  dueLevels(loadSave(), levels, dailyNumber(new Date()));
+
+const review = (): void => {
+  const next = reviewQueue()[0];
+  if (next === undefined) menu(t('review.empty'));
+  else start(next, undefined, true);
+};
+
+/** Skipped, or one star: the concepts of the level come back the next day. */
+const remember = (level: Level, weak: boolean): void => {
+  recordReview(level.concepts, weak, dailyNumber(new Date()));
 };
 
 /** Starts the current level again from its start buffer. */
@@ -52,37 +71,35 @@ const play = (): void => {
   close = showGame(root, level, visit, {
     done: (attempt) => {
       close();
+      const stars = rating(attempt, level);
       // A daily challenge is saved as a campaign result of the same level.
-      recordResult(level.id, {
-        stars: rating(attempt, level),
-        keys: attempt.keys.length,
-      });
+      recordResult(level.id, { stars, keys: attempt.keys.length });
+      remember(level, stars <= 1);
+      // At the end of the queue, review() shows the level list and says so.
+      const next = reviewing
+        ? review
+        : day === undefined && levels[index + 1]
+          ? () => {
+              start(index + 1);
+            }
+          : undefined;
       close = showResults(
         root,
         level,
         attempt,
-        {
-          retry: play,
-          next:
-            day === undefined && levels[index + 1]
-              ? () => {
-                  start(index + 1);
-                }
-              : undefined,
-          menu,
-        },
+        { retry: play, next, menu: () => menu() },
         day,
       );
     },
     reset,
-    // Skipping the daily challenge leads to the level list.
-    skip:
-      day === undefined
-        ? () => {
-            start(index + 1);
-          }
-        : menu,
-    menu,
+    skip: () => {
+      remember(level, true);
+      // Skipping the daily challenge leads to the level list.
+      if (reviewing) review();
+      else if (day === undefined) start(index + 1);
+      else menu();
+    },
+    menu: () => menu(),
   });
 };
 
@@ -111,7 +128,15 @@ for (const el of document.querySelectorAll<HTMLElement>('[data-t]'))
 
 applyDisplay();
 const title = (): void => {
-  showTitle(root, menu, daily);
+  showTitle(
+    root,
+    () => {
+      menu();
+    },
+    daily,
+    review,
+    reviewQueue().length,
+  );
 };
 // The shared link of a daily challenge opens it at once.
 if (location.hash === '#daily') daily();

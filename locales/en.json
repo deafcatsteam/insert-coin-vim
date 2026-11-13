@@ -216,6 +216,7 @@
   "results.title": "Level complete",
   "results.watch": "Watch it",
   "results.yours": "Your keys",
+  "review.empty": "Nothing to review today. Skipped levels and one-star levels come back the next day.",
   "select.badFile": "This file is not an Insert Coin save.",
   "select.chapter": "Chapter {chapter}",
   "select.export": "Export save",
@@ -233,5 +234,6 @@
   "title.footnote": "© 1987 KCP. All keystrokes are monitored for quality purposes.",
   "title.name": "INSERT COIN",
   "title.program": "Operator training terminal · V.I.M. — Verified Input Mastery",
+  "title.review": "Review ({count})",
   "title.start": "Start"
 }

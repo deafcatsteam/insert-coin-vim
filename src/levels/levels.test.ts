@@ -15,6 +15,13 @@ test('finds levels, each id once', () => {
   expect(new Set(levels.map((l) => l.id)).size).toBe(levels.length);
 });
 
+test('every concept of the schema is taught by a level', () => {
+  const taught = new Set(levels.flatMap((l) => l.concepts));
+  expect(
+    schema.properties.concepts.items.enum.filter((c) => !taught.has(c)),
+  ).toEqual([]);
+});
+
 describe.each(Object.entries(levelFiles))('%s', (path, level) => {
   test('follows the schema', () => {
     validate(level);

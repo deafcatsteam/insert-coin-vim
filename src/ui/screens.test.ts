@@ -202,12 +202,16 @@ test('without a clipboard, copy result shows the text to copy by hand', async ()
 test('the title screen starts and the level list shows the saved stars', () => {
   const start = vi.fn();
   const daily = vi.fn();
-  showTitle(root, start, daily);
+  const review = vi.fn();
+  showTitle(root, start, daily, review, 2);
   expect(document.activeElement).toBe(button('Start'));
   button('Start').click();
   expect(start).toHaveBeenCalledOnce();
   button('Daily challenge').click();
   expect(daily).toHaveBeenCalledOnce();
+  expect(button('Review').textContent).toBe('Review (2)');
+  button('Review').click();
+  expect(review).toHaveBeenCalledOnce();
 
   recordResult('t', { stars: 2, keys: 3 });
   const pick = vi.fn();
@@ -229,22 +233,23 @@ test('a display setting turns its effect off and stays off', () => {
   applyDisplay();
   expect(document.documentElement.classList).toContain('fx-glow');
 
-  showTitle(
-    root,
-    () => undefined,
-    () => undefined,
-  );
+  const title = (): void => {
+    showTitle(
+      root,
+      () => undefined,
+      () => undefined,
+      () => undefined,
+      0,
+    );
+  };
+  title();
   const boxes = [...root.querySelectorAll('input')];
   expect(boxes.map((b) => b.checked)).toEqual([true, true, true, true]);
   boxes[1]?.click();
   expect(document.documentElement.classList).not.toContain('fx-glow');
   expect(document.documentElement.classList).toContain('fx-scanlines');
 
-  showTitle(
-    root,
-    () => undefined,
-    () => undefined,
-  );
+  title();
   expect(root.querySelectorAll('input')[1]?.checked).toBe(false);
 });
 

@@ -1,6 +1,12 @@
 import { beforeEach, expect, test } from 'vitest';
 import { stars } from '../scoring/stars';
-import { exportSave, importSave, loadSave, recordResult } from './save';
+import {
+  exportSave,
+  importSave,
+  loadSave,
+  recordResult,
+  recordReview,
+} from './save';
 
 beforeEach(() => {
   localStorage.clear();
@@ -48,6 +54,57 @@ test.each([
     importSave(file);
   }).toThrow();
   expect(loadSave().levels).toEqual({ a: { stars: 1, keys: 3 } });
+});
+
+test('a save from before review mode still loads, then gets a queue', () => {
+  localStorage.setItem(
+    'insert-coin-save',
+    '{"version":1,"levels":{"a":{"stars":2,"keys":4}}}',
+  );
+  expect(loadSave()).toEqual({
+    version: 1,
+    levels: { a: { stars: 2, keys: 4 } },
+  });
+  recordReview(['c'], true, 10);
+  recordResult('a', { stars: 3, keys: 3 });
+  // A new result keeps the queue.
+  expect(loadSave()).toEqual({
+    version: 1,
+    levels: { a: { stars: 3, keys: 3 } },
+    review: { c: { box: 0, due: 11 } },
+  });
+});
+
+test('an import keeps, per concept, the card that comes back first', () => {
+  recordReview(['a', 'b'], true, 10);
+  const file = exportSave();
+  localStorage.clear();
+  recordReview(['a'], true, 20);
+  recordReview(['c'], true, 20);
+
+  importSave(file);
+  const merged = {
+    a: { box: 0, due: 11 },
+    b: { box: 0, due: 11 },
+    c: { box: 0, due: 21 },
+  };
+  expect(loadSave().review).toEqual(merged);
+  // A file from before review mode leaves the queue alone.
+  importSave('{"version":1,"levels":{}}');
+  expect(loadSave().review).toEqual(merged);
+});
+
+test.each([
+  '{"version":1,"levels":{},"review":null}',
+  '{"version":1,"levels":{},"review":"a"}',
+  '{"version":1,"levels":{},"review":{"a":{"box":7,"due":1}}}',
+  '{"version":1,"levels":{},"review":{"a":{"box":0}}}',
+])('refuses the review queue in %s', (file) => {
+  recordReview(['a'], true, 10);
+  expect(() => {
+    importSave(file);
+  }).toThrow();
+  expect(loadSave().review).toEqual({ a: { box: 0, due: 11 } });
 });
 
 test('a damaged stored save reads as empty', () => {
