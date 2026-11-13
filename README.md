@@ -17,7 +17,7 @@ _All keystrokes are monitored for quality purposes._
 
 </div>
 
-Status: v1.1, with the first v1.x modes live. You do not need to know Vim to start.
+Status: v1.2. You do not need to know Vim to start.
 
 ## How it works
 
@@ -126,7 +126,7 @@ The full design is in [SPEC.md](SPEC.md).
 - **v1.0:** chapters 4–8 (line jumps, text objects, search, visual mode, registers), the
   daily challenge, the result text to share, the review mode, sound and the itch.io release.
 - **v1.1:** chapters 9–11 (macros, Ex commands, golf puzzles) and 8 more languages.
-- **v1.x (now):** Speedrun mode, Free Golf with a pack of expert puzzles, unlockable
+- **v1.2 (now):** Speedrun mode, Free Golf with a pack of expert puzzles, unlockable
   screen themes, badges, arcade initials on Speedrun records and an attract mode.
 
 Details are in [SPEC.md](SPEC.md), section 12. There are no dates.
