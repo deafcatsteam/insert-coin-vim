@@ -20,6 +20,8 @@ export interface Save {
   review?: Record<string, Card>;
   /** Best Speedrun of each chapter, by chapter number. Optional like `review`. */
   speedrun?: Record<string, Run>;
+  /** Fewest keys of each level in Free Golf, by level id. Optional like `review`. */
+  golf?: Record<string, number>;
 }
 
 /** A Speedrun of one chapter (SPEC §5.4). Times in ms from the first key of the run. */
@@ -54,7 +56,7 @@ const isBad = (part: unknown, valid: (value: unknown) => boolean): boolean =>
 
 /**
  * Reads a save from text nobody checked: storage, or a file the player picked.
- * `dropBad` keeps the level results of a save whose review queue or Speedruns are bad.
+ * `dropBad` keeps the level results of a save whose review queue, Speedruns or golf records are bad.
  */
 const parse = (json: string, dropBad = false): Save => {
   const data = JSON.parse(json) as Partial<Save> | null;
@@ -66,21 +68,23 @@ const parse = (json: string, dropBad = false): Save => {
       : undefined;
   const badReview = isBad(data?.review, isCard);
   const badSpeedrun = isBad(data?.speedrun, isRun);
+  const badGolf = isBad(data?.golf, isCount);
   if (
     !results?.every(
       (r) => isCount(r?.keys) && isCount(r.stars) && r.stars <= 3,
     ) ||
-    ((badReview || badSpeedrun) && !dropBad)
+    ((badReview || badSpeedrun || badGolf) && !dropBad)
   )
     throw new Error('not an Insert Coin save');
   if (badReview) delete (data as Save).review;
   if (badSpeedrun) delete (data as Save).speedrun;
+  if (badGolf) delete (data as Save).golf;
   return data as Save;
 };
 
 /**
  * An empty save when nothing is stored, or when storage is blocked or damaged.
- * A bad review queue or bad Speedruns alone are dropped: the next write would erase the levels too.
+ * A bad review queue, bad Speedruns or bad golf records alone are dropped: the next write would erase the levels too.
  */
 export function loadSave(): Save {
   try {
@@ -131,11 +135,22 @@ export function recordRun(chapter: number, run: Run): Run | undefined {
   return old;
 }
 
+/** Keeps the keys if they beat the golf record of the level. Returns the record before. */
+export function recordGolf(id: string, keys: number): number | undefined {
+  const save = loadSave();
+  const records = (save.golf ??= {});
+  const old = records[id];
+  if (!old || keys < old) records[id] = keys;
+  store(save);
+  return old;
+}
+
 export const exportSave = (): string => JSON.stringify(loadSave(), null, 2);
 
 /**
  * Merges a save file into the stored one: best result per level, per concept
- * the card that comes back first, and the fastest run per chapter. Throws on a bad file.
+ * the card that comes back first, the fastest run per chapter and the fewest
+ * golf keys per level. Throws on a bad file.
  */
 export function importSave(json: string): void {
   const incoming = parse(json);
@@ -153,6 +168,11 @@ export function importSave(json: string): void {
       const old = runs[chapter];
       if (!old || run.ms < old.ms) runs[chapter] = run;
     }
+  }
+  if (incoming.golf) {
+    const records = (save.golf ??= {});
+    for (const [id, keys] of Object.entries(incoming.golf))
+      records[id] = Math.min(keys, records[id] ?? keys);
   }
   store(save);
 }

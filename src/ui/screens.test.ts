@@ -2,10 +2,10 @@ import { EditorView } from 'codemirror';
 import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { press } from '../engine/replay';
 import { levels, type Level } from '../levels/levels';
-import { recordResult, recordRun } from '../progress/save';
+import { recordGolf, recordResult, recordRun } from '../progress/save';
 import { showGame, type Attempt, type GameActions, type Visit } from './game';
 import { applyDisplay, campaignCleared } from './display';
-import { showBoot, showSelect, showTitle } from './menu';
+import { showBoot, showGolf, showSelect, showTitle } from './menu';
 import { clock, shareText, showResults, showRun } from './results';
 
 const level: Level = {
@@ -407,4 +407,77 @@ test('the clock rounds to seconds, or to tenths for Speedruns', () => {
   expect(clock(83_449)).toBe('01:23');
   expect(clock(83_449, true)).toBe('01:23.4');
   expect(clock(59_960, true)).toBe('01:00.0');
+});
+
+test('Free Golf is on the title screen once a level is done', () => {
+  showTitle(root, vi.fn(), vi.fn(), vi.fn(), 0);
+  expect(() => button('Free Golf')).toThrow();
+  const golf = vi.fn();
+  showTitle(root, vi.fn(), vi.fn(), vi.fn(), 0, golf);
+  button('Free Golf').click();
+  expect(golf).toHaveBeenCalledOnce();
+});
+
+test('the Free Golf list shows the levels done, their record and the reference', () => {
+  const other = { ...level, id: 'u' };
+  const third = { ...level, id: 'v', chapter: 2 };
+  recordResult('t', { stars: 1, keys: 9 });
+  recordResult('u', { stars: 3, keys: 2 });
+  recordGolf('u', 4);
+  const pick = vi.fn();
+  const back = vi.fn();
+  showGolf(root, [level, other, third], pick, back);
+  expect([...root.querySelectorAll('h2')].map((e) => e.textContent)).toEqual([
+    'Chapter 1',
+  ]);
+  const items = [...root.querySelectorAll('li button')];
+  expect(items.map((e) => e.textContent)).toEqual([
+    'Delete a word · reference 2',
+    'Delete a word · record 4 · reference 2',
+  ]);
+  expect(document.activeElement).toBe(items[0]);
+  (items[1] as HTMLButtonElement).click();
+  expect(pick).toHaveBeenCalledWith(1);
+  items[0]?.dispatchEvent(
+    new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+  );
+  expect(back).toHaveBeenCalledOnce();
+});
+
+test('a Free Golf level shows the record to beat and no help', () => {
+  const close = showGame(
+    root,
+    level,
+    visit(4),
+    actions(),
+    true,
+    'To beat: 4 keys',
+  );
+  expect(root.textContent).toContain('To beat: 4 keys');
+  expect(root.textContent).not.toContain('Show solution');
+  close();
+});
+
+test('the end of a Free Golf level shows the keys against the record, no stars', () => {
+  const attempt: Attempt = {
+    keys: ['x', 'x'],
+    faults: 0,
+    ms: 3000,
+    shown: false,
+  };
+  showResults(root, level, attempt, noActions, undefined, false, false, {
+    old: 3,
+  })();
+  expect(root.textContent).toContain('Keys: 2');
+  expect(root.textContent).toContain('NEW RECORD');
+  expect(root.textContent).toContain('Reference solution (2 keys)');
+  expect(root.querySelector('.ic-stars')).toBeNull();
+  expect(() => button('Copy result')).toThrow();
+  expect(root.textContent).not.toContain('No more levels');
+
+  showResults(root, level, attempt, noActions, undefined, false, false, {
+    old: 2,
+  })();
+  expect(root.textContent).not.toContain('NEW RECORD');
+  expect(root.textContent).toContain('Record: 2 keys');
 });

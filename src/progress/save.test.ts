@@ -6,6 +6,7 @@ import {
   loadSave,
   recordResult,
   recordReview,
+  recordGolf,
   recordRun,
 } from './save';
 
@@ -163,6 +164,47 @@ test('bad stored runs are dropped, the level results stay', () => {
   localStorage.setItem(
     'insert-coin-save',
     '{"version":1,"levels":{"a":{"stars":2,"keys":4}},"speedrun":{"1":{"ms":"x"}}}',
+  );
+  expect(loadSave()).toEqual({
+    version: 1,
+    levels: { a: { stars: 2, keys: 4 } },
+  });
+});
+
+test('keeps the fewest golf keys of a level and returns the record before', () => {
+  expect(recordGolf('a', 9)).toBeUndefined();
+  expect(recordGolf('a', 7)).toBe(9);
+  expect(recordGolf('a', 8)).toBe(7);
+  expect(loadSave().golf).toEqual({ a: 7 });
+  expect(loadSave().levels).toEqual({});
+});
+
+test('an import keeps the fewest golf keys per level', () => {
+  recordGolf('a', 5);
+  recordGolf('b', 9);
+  const file = exportSave();
+  localStorage.clear();
+  recordGolf('a', 6);
+  recordGolf('b', 8);
+
+  importSave(file);
+  expect(loadSave().golf).toEqual({ a: 5, b: 8 });
+});
+
+test.each([
+  '{"version":1,"levels":{},"golf":null}',
+  '{"version":1,"levels":{},"golf":{"a":0}}',
+  '{"version":1,"levels":{},"golf":{"a":1.5}}',
+])('refuses the golf records in %s', (file) => {
+  expect(() => {
+    importSave(file);
+  }).toThrow();
+});
+
+test('bad stored golf records are dropped, the level results stay', () => {
+  localStorage.setItem(
+    'insert-coin-save',
+    '{"version":1,"levels":{"a":{"stars":2,"keys":4}},"golf":{"a":"x"}}',
   );
   expect(loadSave()).toEqual({
     version: 1,

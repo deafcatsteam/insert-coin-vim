@@ -190,6 +190,37 @@ check(
   ),
 );
 
+// Free Golf in the real game: no help, the record is saved, the stars are not.
+await game.getByRole('button', { name: 'Title' }).click();
+await game.getByRole('button', { name: 'Free Golf' }).click();
+await game.locator('li button').first().click();
+check(
+  'a golf level has no skip',
+  (await game.getByRole('button', { name: 'Skip level' }).count()) === 0,
+);
+await game.locator('.cm-content').focus();
+const golfKeys = chapter0[0].solutions[0];
+for (const key of golfKeys) await game.keyboard.press(toPlaywright(key));
+await game.waitForSelector('text=NEW RECORD');
+const golfed = JSON.parse(
+  await game.evaluate(() => localStorage.getItem('insert-coin-save')),
+);
+check(
+  'the golf record is saved',
+  golfed.golf?.[chapter0[0].id] === golfKeys.length,
+);
+check(
+  'golf gives no stars',
+  JSON.stringify(golfed.levels) === JSON.stringify(seeded),
+);
+await game.getByRole('button', { name: 'Levels' }).click();
+check(
+  'the golf list shows the record',
+  (await game.locator('li button').first().textContent()).includes(
+    `record ${golfKeys.length}`,
+  ),
+);
+
 for (const e of errors) console.log(`PAGE ERROR ${e}`);
 console.log(`${count - failed}/${count} checks passed in Chromium`);
 await browser.close();

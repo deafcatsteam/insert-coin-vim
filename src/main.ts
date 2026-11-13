@@ -1,8 +1,10 @@
 import { dailyIndex, dailyNumber } from './daily/daily';
 import { lang, t, type TextKey } from './i18n/i18n';
-import { levels, type Level } from './levels/levels';
+import { levels, shortest, type Level } from './levels/levels';
+import { parseKeys } from './scoring/keys';
 import {
   loadSave,
+  recordGolf,
   recordResult,
   recordReview,
   recordRun,
@@ -11,7 +13,7 @@ import { dueLevels } from './review/review';
 import './style.css';
 import { applyDisplay, campaignCleared } from './ui/display';
 import { showGame, type Visit } from './ui/game';
-import { showBoot, showSelect, showTitle } from './ui/menu';
+import { showBoot, showGolf, showSelect, showTitle } from './ui/menu';
 import { rating, showResults, showRun } from './ui/results';
 
 const root = document.querySelector<HTMLElement>('#app');
@@ -26,6 +28,8 @@ let index = -1;
 let day: number | undefined;
 /** The level on screen comes from the review queue. */
 let reviewing = false;
+/** The level on screen is played in Free Golf (SPEC §5.4). */
+let golfing = false;
 /** The visit already updated the review queue. */
 let remembered = false;
 let visit = newVisit();
@@ -44,11 +48,32 @@ const menu = (message?: string): void => {
   showSelect(root, levels, start, title, message, startRun);
 };
 
+/** The Free Golf list: the levels done, with no help and no stars. */
+const golfMenu = (): void => {
+  close();
+  close = none;
+  index = -1;
+  showGolf(
+    root,
+    levels,
+    (to) => {
+      start(to, undefined, false, true);
+    },
+    title,
+  );
+};
+
 /** `today` is set for a daily challenge. It stays the same past midnight. */
-const start = (to: number, today?: number, review = false): void => {
+const start = (
+  to: number,
+  today?: number,
+  review = false,
+  golf = false,
+): void => {
   index = to;
   day = today;
   reviewing = review;
+  golfing = golf;
   remembered = false;
   visit = newVisit();
   play();
@@ -128,6 +153,20 @@ const play = (): void => {
           runDone(level, attempt.ms);
           return;
         }
+        // Free Golf keeps its own record: no stars, no review.
+        if (golfing) {
+          close = showResults(
+            root,
+            level,
+            attempt,
+            { retry: play, menu: golfMenu },
+            undefined,
+            false,
+            false,
+            { old: recordGolf(level.id, attempt.keys.length) },
+          );
+          return;
+        }
         const stars = rating(attempt, level);
         const cleared = campaignCleared();
         // A daily challenge is saved as a campaign result of the same level.
@@ -162,9 +201,18 @@ const play = (): void => {
         else if (day === undefined) start(index + 1);
         else menu();
       },
-      menu: () => menu(),
+      menu: () => {
+        if (golfing) golfMenu();
+        else menu();
+      },
     },
-    run !== undefined,
+    run !== undefined || golfing,
+    golfing
+      ? t('golf.toBeat', {
+          count:
+            loadSave().golf?.[level.id] ?? parseKeys(shortest(level)).length,
+        })
+      : '',
   );
 };
 
@@ -209,6 +257,7 @@ const title = (): void => {
     daily,
     review,
     reviewQueue().length,
+    Object.keys(loadSave().levels).length > 0 ? golfMenu : undefined,
   );
 };
 // The shared link of a daily challenge opens it at once.

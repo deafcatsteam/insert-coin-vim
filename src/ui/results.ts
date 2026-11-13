@@ -51,6 +51,7 @@ export const shareText = (
  * Shows the results of an attempt in `root`. Returns the function that removes it.
  * `day` is set for a daily challenge. `chapterEnd` adds the support links.
  * `unlocked` tells the player that the LCD olive theme is now in the settings.
+ * `golf` is set in Free Golf: keys against the record before (`old`), no stars, no share.
  */
 export function showResults(
   root: HTMLElement,
@@ -60,6 +61,7 @@ export function showResults(
   day?: number,
   chapterEnd = false,
   unlocked = false,
+  golf?: { old: number | undefined },
 ): () => void {
   const optimal = shortest(level);
   const steps = parseKeys(optimal);
@@ -82,7 +84,7 @@ export function showResults(
   // A daily challenge has no next level.
   const nextEl = actions.next
     ? h('button', { type: 'button' }, t('results.next'))
-    : h('span', {}, day ? '' : t('results.end'));
+    : h('span', {}, day || golf ? '' : t('results.end'));
   const menuEl = h('button', { type: 'button' }, t('nav.levels'));
   root.replaceChildren(
     h(
@@ -102,22 +104,42 @@ export function showResults(
           'section',
           { className: 'ic-panel' },
           h('h2', {}, t('results.score')),
-          h('p', { className: 'ic-stars' }, starRow(rating(attempt, level))),
-          h(
-            'p',
-            {},
-            t('results.keys', { keys: attempt.keys.length, par: level.par }),
-          ),
+          ...(golf
+            ? [
+                h('p', {}, t('game.keys', { count: attempt.keys.length })),
+                golf.old === undefined || attempt.keys.length < golf.old
+                  ? h('p', { className: 'ic-stamp' }, t('run.record'))
+                  : h('p', {}, t('golf.best', { keys: golf.old })),
+              ]
+            : [
+                h(
+                  'p',
+                  { className: 'ic-stars' },
+                  starRow(rating(attempt, level)),
+                ),
+                h(
+                  'p',
+                  {},
+                  t('results.keys', {
+                    keys: attempt.keys.length,
+                    par: level.par,
+                  }),
+                ),
+              ]),
           h('p', {}, t('results.time', { time: clock(attempt.ms) })),
           // The reference is the shortest solution known, not a proven minimum.
           !attempt.shown && attempt.keys.length < steps.length
             ? h('p', {}, t('results.beatBest'))
             : '',
           unlocked ? h('p', {}, t('results.unlocked')) : '',
-          h('p', { className: 'ic-stamp' }, t('results.stamp')),
-          h('p', {}, copyEl),
-          sharedEl,
-          copyStatusEl,
+          ...(golf
+            ? []
+            : [
+                h('p', { className: 'ic-stamp' }, t('results.stamp')),
+                h('p', {}, copyEl),
+                sharedEl,
+                copyStatusEl,
+              ]),
         ),
         h(
           'section',

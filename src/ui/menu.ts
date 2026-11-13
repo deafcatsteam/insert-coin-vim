@@ -1,9 +1,10 @@
 import { t, type TextKey } from '../i18n/i18n';
-import type { Level } from '../levels/levels';
+import { shortest, type Level } from '../levels/levels';
 import { exportSave, importSave, loadSave } from '../progress/save';
 import { displaySettings } from './display';
 import { h, starRow, strip } from './h';
 import { languageSetting } from './language';
+import { parseKeys } from '../scoring/keys';
 import { clock } from './results';
 import { soundSetting } from './sound';
 
@@ -38,13 +39,17 @@ export function showBoot(root: HTMLElement, onDone: () => void): void {
   window.addEventListener('pointerdown', end);
 }
 
-/** Shows the title screen in `root`. `toReview`: levels in the review queue today. */
+/**
+ * Shows the title screen in `root`. `toReview`: levels in the review queue today.
+ * `onGolf` adds the Free Golf button, offered once a level is done.
+ */
 export function showTitle(
   root: HTMLElement,
   onStart: () => void,
   onDaily: () => void,
   onReview: () => void,
   toReview: number,
+  onGolf?: () => void,
 ): void {
   const startEl = h('button', { type: 'button' }, t('title.start'));
   const dailyEl = h('button', { type: 'button' }, t('title.daily'));
@@ -53,6 +58,7 @@ export function showTitle(
     { type: 'button' },
     t('title.review', { count: toReview }),
   );
+  const golfEl = h('button', { type: 'button' }, t('golf.title'));
   root.replaceChildren(
     h(
       'div',
@@ -66,7 +72,16 @@ export function showTitle(
       ),
       h('p', {}, t('title.program')),
       h('h1', { className: 'ic-coin' }, t('title.name')),
-      h('p', { className: 'ic-menu' }, startEl, ' ', dailyEl, ' ', reviewEl),
+      h(
+        'p',
+        { className: 'ic-menu' },
+        startEl,
+        ' ',
+        dailyEl,
+        ' ',
+        reviewEl,
+        ...(onGolf ? [' ', golfEl] : []),
+      ),
       h('p', {}, t('title.keyboard')),
       displaySettings(),
       soundSetting(),
@@ -77,6 +92,7 @@ export function showTitle(
   startEl.addEventListener('click', onStart);
   dailyEl.addEventListener('click', onDaily);
   reviewEl.addEventListener('click', onReview);
+  if (onGolf) golfEl.addEventListener('click', onGolf);
   // Enter starts, without the mouse.
   startEl.focus();
 }
@@ -194,4 +210,60 @@ export function showSelect(
   root.replaceChildren(screen);
   // Enter plays the first level the player has not finished.
   (firstOpen ?? buttons[0])?.focus();
+}
+
+/**
+ * Shows the Free Golf list in `root` (SPEC §5.4): the levels done, each with the
+ * golf record and the keys of the reference solution. `onBack`: Title button and Escape.
+ */
+export function showGolf(
+  root: HTMLElement,
+  levels: readonly Level[],
+  onPick: (index: number) => void,
+  onBack: () => void,
+): void {
+  const save = loadSave();
+  const nodes: HTMLElement[] = [];
+  const buttons: HTMLButtonElement[] = [];
+  let list: HTMLElement | undefined;
+  let chapter: number | undefined;
+  levels.forEach((level, index) => {
+    if (!save.levels[level.id]) return;
+    if (level.chapter !== chapter) {
+      chapter = level.chapter;
+      list = h('ol');
+      nodes.push(h('h2', {}, t('select.chapter', { chapter })), list);
+    }
+    const title = t(level.title.key as TextKey);
+    const ref = parseKeys(shortest(level)).length;
+    const keys = save.golf?.[level.id];
+    const button = h(
+      'button',
+      { type: 'button' },
+      keys === undefined
+        ? t('golf.entry', { title, ref })
+        : t('golf.entryBest', { title, keys, ref }),
+    );
+    button.addEventListener('click', () => {
+      onPick(index);
+    });
+    buttons.push(button);
+    list?.append(h('li', {}, button));
+  });
+
+  const backEl = h('button', { type: 'button' }, t('nav.title'));
+  backEl.addEventListener('click', onBack);
+  const screen = h(
+    'div',
+    { className: 'ic-select' },
+    strip(),
+    h('header', { className: 'ic-head' }, h('h1', {}, t('golf.title')), backEl),
+    h('p', {}, t('golf.intro')),
+    ...nodes,
+  );
+  screen.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') onBack();
+  });
+  root.replaceChildren(screen);
+  (buttons[0] ?? backEl).focus();
 }

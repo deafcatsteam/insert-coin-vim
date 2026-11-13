@@ -39,14 +39,16 @@ const IDLE_MS = 60_000;
 
 /**
  * Shows one attempt at a level in `root`. Returns the function that removes it.
- * `run`: a Speedrun level, with no hints, no solution and no skip (SPEC §5.4).
+ * `bare`: a Speedrun or Free Golf level, with no hints, no solution and no skip
+ * (SPEC §5.4). `goal`: a line under the brief, the golf record to beat.
  */
 export function showGame(
   root: HTMLElement,
   level: Level,
   visit: Visit,
   actions: GameActions,
-  run = false,
+  bare = false,
+  goal = '',
 ): () => void {
   const editorEl = h('div', { className: 'ic-editor' });
   const targetEl = h('pre', { className: 'ic-target' });
@@ -82,6 +84,7 @@ export function showGame(
         { className: 'ic-brief' },
         level.brief ? t(level.brief.key as TextKey) : '',
       ),
+      goal ? h('p', { className: 'ic-brief' }, goal) : '',
       h(
         'div',
         { className: 'ic-panes' },
@@ -116,7 +119,7 @@ export function showGame(
         { className: 'ic-actions' },
         button('game.reset', actions.reset),
         ' ',
-        ...(run
+        ...(bare
           ? []
           : [solutionEl, ' ', button('game.skip', actions.skip), ' ']),
         button('nav.levels', actions.menu),
@@ -130,7 +133,7 @@ export function showGame(
   let idleTimer: ReturnType<typeof setTimeout> | undefined;
 
   const showHelp = (): void => {
-    if (run) return;
+    if (bare) return;
     const count =
       HINT_RESETS.filter((n) => visit.resets >= n).length || Number(visit.idle);
     helpEl.replaceChildren(
