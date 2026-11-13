@@ -1,4 +1,4 @@
-import { getCM } from '@replit/codemirror-vim';
+import { getCM, Vim } from '@replit/codemirror-vim';
 import { diffHighlight, diffSpan } from '../engine/diff';
 import { createSession } from '../engine/session';
 import { t, type TextKey } from '../i18n/i18n';
@@ -47,6 +47,8 @@ export function showGame(
   const editorEl = h('div', { className: 'ic-editor' });
   const targetEl = h('pre', { className: 'ic-target' });
   const modeEl = h('strong', {}, t('mode.normal'));
+  // Vim shows nothing else while it records, and a stray q starts a recording.
+  const recEl = h('strong', { className: 'ic-rec', hidden: true });
   const keysEl = h('span');
   const faultsEl = h('span');
   const deniedEl = h('p', { className: 'ic-denied', role: 'status' });
@@ -88,6 +90,8 @@ export function showGame(
             'p',
             { className: 'ic-status' },
             modeEl,
+            ' ',
+            recEl,
             ' ',
             keysEl,
             ' ',
@@ -158,6 +162,14 @@ export function showGame(
     deniedEl.textContent = session.faults > faults ? t('game.denied') : '';
     if (session.faults > faults) beep('denied');
     faults = session.faults;
+    // `show` runs before Vim handles the key; read the recording once it has.
+    queueMicrotask(() => {
+      const macro = Vim.getVimGlobalState_().macroModeState;
+      recEl.hidden = !macro.isRecording;
+      recEl.textContent = t('mode.recording', {
+        register: macro.latestRegister ?? '',
+      });
+    });
 
     clearTimeout(idleTimer);
     if (!session.done)

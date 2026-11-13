@@ -54,6 +54,21 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
+test('the game screen shows a macro recording', async () => {
+  const close = showGame(root, level, visit(), actions());
+  const rec = root.querySelector<HTMLElement>('.ic-rec');
+  await Promise.resolve();
+  expect(rec?.hidden).toBe(true);
+  press(view(), 'qa');
+  await Promise.resolve();
+  expect(rec?.hidden).toBe(false);
+  expect(rec?.textContent).toBe('REC @a');
+  press(view(), 'q');
+  await Promise.resolve();
+  expect(rec?.hidden).toBe(true);
+  close();
+});
+
 test('the game screen shows the level, the fault and the end of the attempt', () => {
   let attempt: Attempt | undefined;
   const close = showGame(

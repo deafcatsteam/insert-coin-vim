@@ -198,6 +198,7 @@
   "levels.c08-l04.title": "Paste the yank while typing",
   "mode.insert": "INSERT",
   "mode.normal": "NORMAL",
+  "mode.recording": "REC @{register}",
   "mode.replace": "REPLACE",
   "mode.visual": "VISUAL",
   "nav.levels": "Levels",
