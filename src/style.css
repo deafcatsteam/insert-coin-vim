@@ -550,6 +550,13 @@ fieldset label {
   font-size: clamp(3rem, 11vw, 6rem);
   animation: ic-blink 1.2s steps(1) infinite;
 }
+/* The buttons wrap on small screens; the gap keeps the rows apart. */
+.ic-menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1rem;
+}
 .ic-menu button {
   font-size: 2rem;
 }
