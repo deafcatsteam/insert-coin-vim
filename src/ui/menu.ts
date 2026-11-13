@@ -1,5 +1,5 @@
 import { t, type TextKey } from '../i18n/i18n';
-import { shortest, type Level } from '../levels/levels';
+import { shortest, type Level, type Pack } from '../levels/levels';
 import { badges, BADGES, type Badge } from '../progress/feats';
 import { exportSave, importSave, loadSave } from '../progress/save';
 import { displaySettings } from './display';
@@ -98,6 +98,7 @@ export function showBoot(root: HTMLElement, onDone: () => void): void {
 /**
  * Shows the title screen in `root`. `toReview`: levels in the review queue today.
  * `onGolf` adds the Free Golf button, offered once a level is done.
+ * `onCommunity` adds the Community button, offered once a pack exists.
  */
 export function showTitle(
   root: HTMLElement,
@@ -106,6 +107,7 @@ export function showTitle(
   onReview: () => void,
   toReview: number,
   onGolf?: () => void,
+  onCommunity?: () => void,
 ): void {
   const startEl = h('button', { type: 'button' }, t('title.start'));
   const dailyEl = h('button', { type: 'button' }, t('title.daily'));
@@ -115,6 +117,7 @@ export function showTitle(
     t('title.review', { count: toReview }),
   );
   const golfEl = h('button', { type: 'button' }, t('golf.title'));
+  const communityEl = h('button', { type: 'button' }, t('community.title'));
   root.replaceChildren(
     h(
       'div',
@@ -137,6 +140,7 @@ export function showTitle(
         ' ',
         reviewEl,
         ...(onGolf ? [' ', golfEl] : []),
+        ...(onCommunity ? [' ', communityEl] : []),
       ),
       showcase(),
       h('p', {}, t('title.keyboard')),
@@ -150,6 +154,7 @@ export function showTitle(
   dailyEl.addEventListener('click', onDaily);
   reviewEl.addEventListener('click', onReview);
   if (onGolf) golfEl.addEventListener('click', onGolf);
+  if (onCommunity) communityEl.addEventListener('click', onCommunity);
   // Enter starts, without the mouse.
   startEl.focus();
 }
@@ -331,6 +336,68 @@ export function showGolf(
     strip(),
     h('header', { className: 'ic-head' }, h('h1', {}, t('golf.title')), backEl),
     h('p', {}, t('golf.intro')),
+    ...nodes,
+  );
+  screen.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') onBack();
+  });
+  root.replaceChildren(screen);
+  (buttons[0] ?? backEl).focus();
+}
+
+/**
+ * Shows the community packs in `root`: each pack with its authors, then its levels
+ * and their saved stars. `onPick` gets an index in the levels of every pack, in order.
+ * `onBack`: Title button and Escape.
+ */
+export function showCommunity(
+  root: HTMLElement,
+  packs: readonly Pack[],
+  onPick: (index: number) => void,
+  onBack: () => void,
+): void {
+  const save = loadSave();
+  const buttons: HTMLButtonElement[] = [];
+  let index = 0;
+  const nodes = packs.flatMap((pack) => {
+    const list = h('ol');
+    for (const level of pack.levels) {
+      const at = index++;
+      const button = h(
+        'button',
+        { type: 'button' },
+        t(level.title.key as TextKey),
+        ' ',
+        starRow(save.levels[level.id]?.stars ?? 0),
+      );
+      button.addEventListener('click', () => {
+        onPick(at);
+      });
+      buttons.push(button);
+      list.append(h('li', {}, button));
+    }
+    // Names as the authors wrote them (CC BY 4.0 asks for credit).
+    const authors = [...new Set(pack.levels.map((l) => l.author))].join(', ');
+    return [
+      h('h2', {}, t(`community.${pack.id}.title` as TextKey)),
+      h('p', { className: 'ic-small' }, t('community.by', { authors })),
+      list,
+    ];
+  });
+
+  const backEl = h('button', { type: 'button' }, t('nav.title'));
+  backEl.addEventListener('click', onBack);
+  const screen = h(
+    'div',
+    { className: 'ic-select' },
+    strip(),
+    h(
+      'header',
+      { className: 'ic-head' },
+      h('h1', {}, t('community.title')),
+      backEl,
+    ),
+    h('p', {}, t('community.intro')),
     ...nodes,
   );
   screen.addEventListener('keydown', (e) => {

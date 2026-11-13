@@ -7,10 +7,10 @@ import { createServer } from 'vite';
 const PAGE = `<!doctype html><meta charset="utf-8"><div id="e"></div>
 <script type="module">
 import { createSession } from '/src/engine/session.ts';
-import { golfPack, levels } from '/src/levels/levels.ts';
+import { golfPack, levels, packs } from '/src/levels/levels.ts';
 import { parseKeys } from '/src/scoring/keys.ts';
 let session;
-const all = [...levels, ...golfPack];
+const all = [...levels, ...golfPack, ...packs.flatMap((p) => p.levels)];
 window.levels = all.map((l) => ({ id: l.id, solutions: l.solutions.map(parseKeys) }));
 window.start = (id) => {
   session?.destroy();

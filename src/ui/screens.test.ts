@@ -6,7 +6,13 @@ import { recordGolf, recordResult, recordRun } from '../progress/save';
 import { attract, ATTRACT_IDLE_MS } from './attract';
 import { showGame, type Attempt, type GameActions, type Visit } from './game';
 import { applyDisplay } from './display';
-import { showBoot, showGolf, showSelect, showTitle } from './menu';
+import {
+  showBoot,
+  showCommunity,
+  showGolf,
+  showSelect,
+  showTitle,
+} from './menu';
 import { clock, shareText, showResults, showRun } from './results';
 
 const level: Level = {
@@ -539,6 +545,61 @@ test('the expert pack is listed once unlocked, after the campaign levels', () =>
   expect(items).toHaveLength(2);
   (items[1] as HTMLButtonElement).click();
   expect(pick).toHaveBeenCalledWith(2);
+});
+
+test('the community screen lists each pack with its authors and stars', () => {
+  recordResult('p-02', { stars: 2, keys: 3 });
+  const pick = vi.fn();
+  const back = vi.fn();
+  showCommunity(
+    root,
+    [
+      {
+        id: 'p',
+        levels: [
+          { ...level, id: 'p-01', author: 'Ana' },
+          { ...level, id: 'p-02', author: 'Bo' },
+          { ...level, id: 'p-03', author: 'Ana' },
+        ],
+      },
+      { id: 'q', levels: [{ ...level, id: 'q-01', author: 'Cy' }] },
+    ],
+    pick,
+    back,
+  );
+  expect([...root.querySelectorAll('h2')].map((e) => e.textContent)).toEqual([
+    'community.p.title',
+    'community.q.title',
+  ]);
+  expect(root.textContent).toContain('By Ana, Bo');
+  expect(root.textContent).toContain('By Cy');
+  const items = [...root.querySelectorAll('li button')];
+  expect(items.map((e) => e.querySelector('[role=img]')?.textContent)).toEqual([
+    '☆☆☆',
+    '★★☆',
+    '☆☆☆',
+    '☆☆☆',
+  ]);
+  expect(document.activeElement).toBe(items[0]);
+  (items[3] as HTMLButtonElement).click();
+  expect(pick).toHaveBeenCalledWith(3);
+  items[0]?.dispatchEvent(
+    new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+  );
+  expect(back).toHaveBeenCalledOnce();
+});
+
+test('the title screen offers Community only when a pack exists', () => {
+  const none = vi.fn();
+  showTitle(root, none, none, none, 0);
+  expect(root.textContent).not.toContain('Community');
+  const open = vi.fn();
+  showTitle(root, none, none, none, 0, undefined, open);
+  const button = [...root.querySelectorAll('button')].find(
+    (b) => b.textContent === 'Community',
+  );
+  button?.click();
+  expect(open).toHaveBeenCalledOnce();
 });
 
 test('a Free Golf level shows the record to beat and no help', () => {

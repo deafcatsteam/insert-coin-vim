@@ -39,8 +39,13 @@ const golfFiles = import.meta.glob<Level>('../../levels/golf/*.json', {
   import: 'default',
 });
 
-/** Level files by path, the golf pack included. `npm run validate:levels` checks each one. */
-export const levelFiles = { ...campaignFiles, ...golfFiles };
+const communityFiles = import.meta.glob<Level>(
+  '../../levels/community/*/*.json',
+  { eager: true, import: 'default' },
+);
+
+/** Level files by path, the packs included. `npm run validate:levels` checks each one. */
+export const levelFiles = { ...campaignFiles, ...golfFiles, ...communityFiles };
 
 /** All levels of the campaign, in playing order. */
 export const levels: Level[] = Object.values(campaignFiles).sort(
@@ -51,3 +56,28 @@ export const levels: Level[] = Object.values(campaignFiles).sort(
 export const golfPack: Level[] = Object.values(golfFiles).sort((a, b) =>
   a.id.localeCompare(b.id),
 );
+
+/** A community level pack (CONTRIBUTING.md): one folder of `levels/community/`. */
+export interface Pack {
+  /** The folder name. Every level id starts with it. */
+  id: string;
+  levels: Level[];
+}
+
+/** Groups level files by their folder under `community/`, each pack and its levels sorted by id. */
+export const packsOf = (files: Record<string, Level>): Pack[] => {
+  const byPack = new Map<string, Level[]>();
+  for (const [path, level] of Object.entries(files)) {
+    const id = path.split('/').at(-2) ?? '';
+    byPack.set(id, [...(byPack.get(id) ?? []), level]);
+  }
+  return [...byPack]
+    .map(([id, list]) => ({
+      id,
+      levels: list.sort((a, b) => a.id.localeCompare(b.id)),
+    }))
+    .sort((a, b) => a.id.localeCompare(b.id));
+};
+
+/** The community packs, played only from their own screen: no badge, no review. */
+export const packs: Pack[] = packsOf(communityFiles);

@@ -1,6 +1,6 @@
 import { dailyIndex, dailyNumber } from './daily/daily';
 import { lang, t, type TextKey } from './i18n/i18n';
-import { golfPack, levels, shortest, type Level } from './levels/levels';
+import { golfPack, levels, packs, shortest, type Level } from './levels/levels';
 import { parseKeys } from './scoring/keys';
 import {
   loadSave,
@@ -17,7 +17,13 @@ import './style.css';
 import { attract } from './ui/attract';
 import { applyDisplay } from './ui/display';
 import { helped, showGame, type Visit } from './ui/game';
-import { showBoot, showGolf, showSelect, showTitle } from './ui/menu';
+import {
+  showBoot,
+  showCommunity,
+  showGolf,
+  showSelect,
+  showTitle,
+} from './ui/menu';
 import { rating, showResults, showRun } from './ui/results';
 
 const root = document.querySelector<HTMLElement>('#app');
@@ -34,6 +40,8 @@ const unlocks = (write: () => void): Unlocks => {
   return gained(before, loadSave());
 };
 const newVisit = (): Visit => ({ resets: 0, idle: false, shown: false });
+/** The levels of every community pack, in the order of their screen. */
+const community = packs.flatMap((pack) => pack.levels);
 
 /** The level on screen, or -1 in the menus. */
 let index = -1;
@@ -43,6 +51,8 @@ let day: number | undefined;
 let reviewing = false;
 /** The level on screen is played in Free Golf (SPEC §5.4). */
 let golfing = false;
+/** The level on screen comes from a community pack: stars only, no review. */
+let sharing = false;
 /** The visit already updated the review queue. */
 let remembered = false;
 let visit = newVisit();
@@ -82,17 +92,34 @@ const golfMenu = (): void => {
   );
 };
 
+/** The community packs, each level with its stars. */
+const communityMenu = (): void => {
+  close();
+  close = none;
+  index = -1;
+  showCommunity(
+    root,
+    packs,
+    (to) => {
+      start(to, undefined, false, false, true);
+    },
+    title,
+  );
+};
+
 /** `today` is set for a daily challenge. It stays the same past midnight. */
 const start = (
   to: number,
   today?: number,
   review = false,
   golf = false,
+  shared = false,
 ): void => {
   index = to;
   day = today;
   reviewing = review;
   golfing = golf;
+  sharing = shared;
   remembered = false;
   visit = newVisit();
   play();
@@ -165,7 +192,11 @@ const remember = (level: Level, weak: boolean): void => {
 const play = (): void => {
   close();
   // Free Golf indexes the campaign, then the expert pack.
-  const level = golfing ? [...levels, ...golfPack][index] : levels[index];
+  const level = golfing
+    ? [...levels, ...golfPack][index]
+    : sharing
+      ? community[index]
+      : levels[index];
   if (!level) {
     menu();
     return;
@@ -201,6 +232,16 @@ const play = (): void => {
           return;
         }
         const stars = rating(attempt, level);
+        // A community level keeps its stars only: badges and review read the campaign.
+        if (sharing) {
+          recordResult(level.id, { stars, keys: attempt.keys.length });
+          close = showResults(root, level, attempt, {
+            retry: play,
+            next: nextShared(level),
+            menu: communityMenu,
+          });
+          return;
+        }
         const result: LevelResult = { stars, keys: attempt.keys.length };
         if (!helped(visit)) result.noHints = true;
         if (!attempt.keys.some((key) => ARROW.test(key)))
@@ -231,6 +272,10 @@ const play = (): void => {
       },
       reset,
       skip: () => {
+        if (sharing) {
+          (nextShared(level) ?? communityMenu)();
+          return;
+        }
         remember(level, true);
         // Skipping the daily challenge leads to the level list.
         if (reviewing) review();
@@ -239,6 +284,7 @@ const play = (): void => {
       },
       menu: () => {
         if (golfing) golfMenu();
+        else if (sharing) communityMenu();
         else menu();
       },
     },
@@ -250,6 +296,17 @@ const play = (): void => {
         })
       : '',
   );
+};
+
+/** Plays the next level of the same pack, or undefined after its last level. */
+const nextShared = (level: Level): (() => void) | undefined => {
+  const next = community[index + 1];
+  return next &&
+    packs.some((p) => p.levels.includes(level) && p.levels.includes(next))
+    ? () => {
+        start(index + 1, undefined, false, false, true);
+      }
+    : undefined;
 };
 
 // shortcut: every reset counts as a failed attempt for the hints, even with no
@@ -294,7 +351,9 @@ const title = (): void => {
     daily,
     review,
     reviewQueue().length,
-    Object.keys(loadSave().levels).length > 0 ? golfMenu : undefined,
+    // Free Golf lists campaign levels: a community level alone does not open it.
+    levels.some((l) => l.id in loadSave().levels) ? golfMenu : undefined,
+    packs.length > 0 ? communityMenu : undefined,
   );
   // Every screen that replaces the title calls `close` first.
   close = attract(root, levels, title);
