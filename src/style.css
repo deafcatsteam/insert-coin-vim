@@ -254,6 +254,13 @@ button:focus-visible {
 input[type='checkbox'] {
   accent-color: var(--accent);
 }
+select {
+  padding: 0.1rem 0.25rem;
+  background: var(--bg);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  font: inherit;
+}
 fieldset {
   margin: 2rem 0 0;
   border: 1px solid var(--fg);
