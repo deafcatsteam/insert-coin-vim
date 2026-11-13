@@ -1,0 +1,27 @@
+{
+  "id": "c11-l03",
+  "chapter": 11,
+  "title": {
+    "key": "levels.c11-l03.title"
+  },
+  "brief": {
+    "key": "levels.c11-l03.brief"
+  },
+  "concepts": ["visual-block", "block-insert", "count"],
+  "start": "red\ngreen\nblue\ncyan",
+  "target": "red, green, blue, cyan",
+  "par": 11,
+  "optimal": 9,
+  "solutions": ["<C-v>2j$A,<Esc>4J", "qqA,<Esc>Jq2@q", "4J:s/ /, /g<CR>"],
+  "hints": [
+    {
+      "key": "levels.c11-l03.hint1"
+    },
+    {
+      "key": "levels.c11-l03.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

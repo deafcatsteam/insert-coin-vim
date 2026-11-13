@@ -1,0 +1,27 @@
+{
+  "id": "c11-l01",
+  "chapter": 11,
+  "title": {
+    "key": "levels.c11-l01.title"
+  },
+  "brief": {
+    "key": "levels.c11-l01.brief"
+  },
+  "concepts": ["visual-block", "block-insert"],
+  "start": "let a = 1\nlet total = a + b\nprint(total)\ncall(a, b, c)\nx++\nreturn",
+  "target": "let a = 1;\nlet total = a + b;\nprint(total);\ncall(a, b, c);\nx++;\nreturn;",
+  "par": 7,
+  "optimal": 5,
+  "solutions": ["<C-v>G$A;", ":%s/$/;<CR>", ":%norm A;<CR>"],
+  "hints": [
+    {
+      "key": "levels.c11-l01.hint1"
+    },
+    {
+      "key": "levels.c11-l01.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

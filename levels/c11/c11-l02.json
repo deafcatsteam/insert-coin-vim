@@ -1,0 +1,27 @@
+{
+  "id": "c11-l02",
+  "chapter": 11,
+  "title": {
+    "key": "levels.c11-l02.title"
+  },
+  "brief": {
+    "key": "levels.c11-l02.brief"
+  },
+  "concepts": ["ex-move", "delete-line", "put"],
+  "start": "END\nbody one\nbody two\nSTART",
+  "target": "START\nbody one\nbody two\nEND",
+  "par": 11,
+  "optimal": 9,
+  "solutions": [":m$<CR>:-m0<CR>", "ddGpk:m0<CR>", "ddGpkddggP"],
+  "hints": [
+    {
+      "key": "levels.c11-l02.hint1"
+    },
+    {
+      "key": "levels.c11-l02.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "c11-l05",
+  "chapter": 11,
+  "title": {
+    "key": "levels.c11-l05.title"
+  },
+  "brief": {
+    "key": "levels.c11-l05.brief"
+  },
+  "concepts": ["ex-global", "ex-substitute"],
+  "start": "alpha=1\n# old\nbeta=2\n# todo\ngamma=3\n# fixme\ndelta=4",
+  "target": "alpha = 1\nbeta = 2\ngamma = 3\ndelta = 4",
+  "par": 19,
+  "optimal": 17,
+  "solutions": [":g/#/d<CR>:%s/=/ = <CR>", "jddj.j.:%s/=/ = <CR>"],
+  "hints": [
+    {
+      "key": "levels.c11-l05.hint1"
+    },
+    {
+      "key": "levels.c11-l05.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

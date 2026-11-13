@@ -1,0 +1,27 @@
+{
+  "id": "c11-l04",
+  "chapter": 11,
+  "title": {
+    "key": "levels.c11-l04.title"
+  },
+  "brief": {
+    "key": "levels.c11-l04.brief"
+  },
+  "concepts": ["macro", "count", "inner-quote"],
+  "start": "log(\"boot\")\nlog(\"disk ok\")\nlog(\"net up\")\nlog(\"users\")\nlog(\"ready\")\nlog(\"idle\")",
+  "target": "log(\"\")\nlog(\"\")\nlog(\"\")\nlog(\"\")\nlog(\"\")\nlog(\"\")",
+  "par": 12,
+  "optimal": 10,
+  "solutions": ["qqdi\"jq5@q", ":%norm di\"<CR>", "di\"j.j.j.j.j."],
+  "hints": [
+    {
+      "key": "levels.c11-l04.hint1"
+    },
+    {
+      "key": "levels.c11-l04.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}
