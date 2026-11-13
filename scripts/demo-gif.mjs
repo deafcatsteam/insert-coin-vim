@@ -8,7 +8,7 @@ import { preview } from 'vite';
 
 const server = await preview({ preview: { port: 4173 } });
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 960, height: 780 } });
+const page = await browser.newPage({ viewport: { width: 1024, height: 780 } });
 await page.goto('http://localhost:4173/');
 
 const gif = GIFEncoder();
