@@ -5,7 +5,7 @@ import { shortest, type Level } from '../levels/levels';
 import { parseKeys } from '../scoring/keys';
 import { stars } from '../scoring/stars';
 import type { Attempt } from './game';
-import { h, starRow, starText, strip } from './h';
+import { h, starRow, starText, strip, support } from './h';
 
 /** Pause between two keys of the replayed solution. */
 const REPLAY_STEP_MS = 500;
@@ -45,7 +45,7 @@ export const shareText = (
 
 /**
  * Shows the results of an attempt in `root`. Returns the function that removes it.
- * `day` is set for a daily challenge.
+ * `day` is set for a daily challenge. `chapterEnd` adds the support links.
  */
 export function showResults(
   root: HTMLElement,
@@ -53,6 +53,7 @@ export function showResults(
   attempt: Attempt,
   actions: { retry: () => void; next?: () => void; menu: () => void },
   day?: number,
+  chapterEnd = false,
 ): () => void {
   const optimal = shortest(level);
   const steps = parseKeys(optimal);
@@ -124,6 +125,7 @@ export function showResults(
         ),
       ),
       h('p', {}, retryEl, ' ', nextEl, ' ', menuEl),
+      chapterEnd ? support() : '',
     ),
   );
 

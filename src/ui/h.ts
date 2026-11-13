@@ -23,6 +23,21 @@ export const starRow = (count: number): HTMLElement =>
     starText(count),
   );
 
+/** Ko-fi and Sponsors links. Never on the game screen (SPEC §11). index.html has a copy. */
+export const support = (): HTMLElement => {
+  const link = (href: string, text: string): HTMLElement =>
+    h('a', { href, target: '_blank', rel: 'noopener' }, text);
+  return h(
+    'p',
+    { className: 'ic-support' },
+    t('support.text'),
+    ' ',
+    link('https://ko-fi.com/deafcatsteam', t('support.kofi')),
+    ' · ',
+    link('https://github.com/sponsors/deafcatsteam', t('support.sponsors')),
+  );
+};
+
 /** The status strip at the top of the dashboard screens. Decoration only. */
 export const strip = (): HTMLElement =>
   h(

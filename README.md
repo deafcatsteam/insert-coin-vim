@@ -56,6 +56,7 @@ Status: early version (v0.1). You do not need to know Vim to start.
 - Works with any keyboard layout (AZERTY, QWERTZ, QWERTY…).
 - Progress saved in your browser, with export and import to a file.
 - A CRT look you can tune: scanlines, glow, flicker and screen curve each have a switch.
+- Arcade beeps, off by default. Turn them on with the Sound box on the title screen.
 - No account, no ads, no tracking.
 
 ## You need
@@ -103,8 +104,8 @@ The full design is in [SPEC.md](SPEC.md).
 
 - **v0.1 (now):** 20 levels in chapters 0–3, scoring, results with replay, save export and import.
 - **v1.0 (in progress):** chapters 4–8 are in (line jumps, text objects, search, visual mode,
-  registers), the daily challenge, the result text to share and the review mode. Still to
-  come: sound.
+  registers), the daily challenge, the result text to share, the review mode and sound.
+  Still to come: the itch.io release.
 - **v1.x:** chapters 9–11 (macros, Ex commands, golf puzzles), speedrun mode, more languages
   (French first).
 
@@ -113,7 +114,8 @@ Details are in [SPEC.md](SPEC.md), section 12. There are no dates.
 ## Support
 
 The game is free and stays free. If you like it, you can
-[buy me a coffee on Ko-fi](https://ko-fi.com/deafcatsteam). A bug report or a new level helps
+[buy me a coffee on Ko-fi](https://ko-fi.com/deafcatsteam) or
+[sponsor it on GitHub](https://github.com/sponsors/deafcatsteam). A bug report or a new level helps
 just as much.
 
 ## Credits

@@ -97,6 +97,10 @@ const play = (): void => {
         attempt,
         { retry: play, next, menu: () => menu() },
         day,
+        // The last level of a chapter in the campaign (SPEC §11).
+        day === undefined &&
+          !reviewing &&
+          levels[index + 1]?.chapter !== level.chapter,
       );
     },
     reset,

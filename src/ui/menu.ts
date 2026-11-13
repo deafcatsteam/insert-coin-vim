@@ -3,6 +3,7 @@ import type { Level } from '../levels/levels';
 import { exportSave, importSave, loadSave } from '../progress/save';
 import { displaySettings } from './display';
 import { h, starRow, strip } from './h';
+import { soundSetting } from './sound';
 
 /** Pause between two lines of the boot text. */
 const BOOT_LINE_MS = 350;
@@ -66,6 +67,7 @@ export function showTitle(
       h('p', { className: 'ic-menu' }, startEl, ' ', dailyEl, ' ', reviewEl),
       h('p', {}, t('title.keyboard')),
       displaySettings(),
+      soundSetting(),
       h('p', { className: 'ic-small' }, t('title.footnote')),
     ),
   );

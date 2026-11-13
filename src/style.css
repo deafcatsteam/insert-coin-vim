@@ -159,6 +159,14 @@ body {
   font: 1.6rem/1 var(--display);
   text-shadow: 0 1px 0 #fff;
 }
+/* Ko-fi and Sponsors: on the casing and at the end of a chapter, in the text color. */
+.ic-device .ic-support {
+  font-size: 0.75rem;
+  white-space: normal;
+}
+.ic-support a {
+  color: inherit;
+}
 /* The corporation logo: a striped keystone. */
 .ic-logo {
   display: inline-block;

@@ -4,6 +4,7 @@ import { createSession } from '../engine/session';
 import { t, type TextKey } from '../i18n/i18n';
 import { shortest, type Level } from '../levels/levels';
 import { h } from './h';
+import { beep } from './sound';
 
 export interface Attempt {
   keys: readonly string[];
@@ -155,6 +156,7 @@ export function showGame(
     faultsEl.textContent = t('game.faults', { count: session.faults });
     // The message stays until the next key.
     deniedEl.textContent = session.faults > faults ? t('game.denied') : '';
+    if (session.faults > faults) beep('denied');
     faults = session.faults;
 
     clearTimeout(idleTimer);
@@ -172,6 +174,7 @@ export function showGame(
       ms: performance.now() - (startedAt ?? performance.now()),
       shown: visit.shown,
     };
+    beep('done');
     // Not now: this runs inside an editor update, and the results remove the editor.
     timer = setTimeout(() => {
       actions.done(attempt);

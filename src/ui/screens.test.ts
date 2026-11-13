@@ -251,13 +251,23 @@ test('a display setting turns its effect off and stays off', () => {
   };
   title();
   const boxes = [...root.querySelectorAll('input')];
-  expect(boxes.map((b) => b.checked)).toEqual([true, true, true, true]);
+  // Four display effects on, then the sound, off by default.
+  expect(boxes.map((b) => b.checked)).toEqual([true, true, true, true, false]);
   boxes[1]?.click();
   expect(document.documentElement.classList).not.toContain('fx-glow');
   expect(document.documentElement.classList).toContain('fx-scanlines');
 
   title();
   expect(root.querySelectorAll('input')[1]?.checked).toBe(false);
+});
+
+test('the support links show at the end of a chapter only', () => {
+  showResults(root, level, attempt, noActions)();
+  expect(root.querySelector('.ic-support')).toBeNull();
+  showResults(root, level, attempt, noActions, undefined, true)();
+  expect(
+    [...root.querySelectorAll('.ic-support a')].map((a) => a.textContent),
+  ).toEqual(['Ko-fi', 'GitHub Sponsors']);
 });
 
 test('the boot text ends alone or on the first key, one time only', () => {
