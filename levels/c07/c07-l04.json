@@ -1,0 +1,27 @@
+{
+  "id": "c07-l04",
+  "chapter": 7,
+  "title": {
+    "key": "levels.c07-l04.title"
+  },
+  "brief": {
+    "key": "levels.c07-l04.brief"
+  },
+  "concepts": ["visual-block"],
+  "start": "1. fuel\n2. oxygen\n3. water\n4. food\n5. spare parts",
+  "target": "fuel\noxygen\nwater\nfood\nspare parts",
+  "par": 8,
+  "optimal": 5,
+  "solutions": ["<C-v>Glld", "<C-v>4jlld"],
+  "hints": [
+    {
+      "key": "levels.c07-l04.hint1"
+    },
+    {
+      "key": "levels.c07-l04.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

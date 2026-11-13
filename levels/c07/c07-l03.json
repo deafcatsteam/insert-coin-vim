@@ -1,0 +1,31 @@
+{
+  "id": "c07-l03",
+  "chapter": 7,
+  "title": {
+    "key": "levels.c07-l03.title"
+  },
+  "brief": {
+    "key": "levels.c07-l03.brief"
+  },
+  "concepts": ["visual-put"],
+  "start": "alarm_threshold = 90\nprint(value)",
+  "target": "alarm_threshold = 90\nprint(alarm_threshold)",
+  "cursor": {
+    "line": 0,
+    "ch": 6
+  },
+  "par": 11,
+  "optimal": 7,
+  "solutions": ["yiwjvep", "yiwjviwp"],
+  "hints": [
+    {
+      "key": "levels.c07-l03.hint1"
+    },
+    {
+      "key": "levels.c07-l03.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

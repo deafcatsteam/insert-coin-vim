@@ -1,0 +1,31 @@
+{
+  "id": "c07-l01",
+  "chapter": 7,
+  "title": {
+    "key": "levels.c07-l01.title"
+  },
+  "brief": {
+    "key": "levels.c07-l01.brief"
+  },
+  "concepts": ["visual"],
+  "start": "Report: hull ok, DRAFT\nDRAFT DRAFT TEXT  fuel ok.",
+  "target": "Report: hull ok, fuel ok.",
+  "cursor": {
+    "line": 0,
+    "ch": 16
+  },
+  "par": 6,
+  "optimal": 3,
+  "solutions": ["vjd"],
+  "hints": [
+    {
+      "key": "levels.c07-l01.hint1"
+    },
+    {
+      "key": "levels.c07-l01.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

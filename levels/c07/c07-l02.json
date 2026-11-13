@@ -1,0 +1,27 @@
+{
+  "id": "c07-l02",
+  "chapter": 7,
+  "title": {
+    "key": "levels.c07-l02.title"
+  },
+  "brief": {
+    "key": "levels.c07-l02.brief"
+  },
+  "concepts": ["visual-line"],
+  "start": "mode = safe\nspeed = 3\nmode = fast\nmode = turbo",
+  "target": "mode = safe\nspeed = 3\nmode = safe",
+  "par": 10,
+  "optimal": 6,
+  "solutions": ["yyGVkp", "yyjjVjp"],
+  "hints": [
+    {
+      "key": "levels.c07-l02.hint1"
+    },
+    {
+      "key": "levels.c07-l02.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

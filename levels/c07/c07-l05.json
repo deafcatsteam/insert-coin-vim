@@ -1,0 +1,27 @@
+{
+  "id": "c07-l05",
+  "chapter": 7,
+  "title": {
+    "key": "levels.c07-l05.title"
+  },
+  "brief": {
+    "key": "levels.c07-l05.brief"
+  },
+  "concepts": ["block-insert"],
+  "start": "fuel\noxygen\nwater\nfood",
+  "target": "- fuel\n- oxygen\n- water\n- food",
+  "par": 8,
+  "optimal": 5,
+  "solutions": ["<C-v>GI- "],
+  "hints": [
+    {
+      "key": "levels.c07-l05.hint1"
+    },
+    {
+      "key": "levels.c07-l05.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}
