@@ -20,6 +20,21 @@ export function createEditor(
 ): EditorView {
   // Vim keeps macro recording, registers and the last search across editors.
   Vim.resetVimGlobalState_();
+  // A line delete that takes the last line also takes the line break before it, and the
+  // plugin keeps "\nlast" in the register instead of Vim's "last\n": p and P then add a blank line.
+  const registers = Vim.getRegisterController();
+  const pushText = registers.pushText.bind(registers);
+  registers.pushText = (name, operator, text, linewise, blockwise) => {
+    pushText(
+      name,
+      operator,
+      linewise && text.startsWith('\n') && !text.endsWith('\n')
+        ? text.slice(1)
+        : text,
+      linewise,
+      blockwise,
+    );
+  };
   // A click right of the text puts the cursor after the last character. Vim never
   // does that in normal mode, and the plugin leaves it there, so "x" deletes nothing.
   const clipClick = EditorState.transactionFilter.of((tr) => {
