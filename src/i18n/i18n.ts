@@ -3,7 +3,10 @@ import en from '../../locales/en.json';
 /** A key of `locales/en.json`. A typo in the code is a type error. */
 export type TextKey = keyof typeof en;
 
-/** Every `locales/<lang>.json`, by language tag. English is the reference. */
+/**
+ * Every `locales/<lang>.json`, by language tag. English is the reference.
+ * shortcut: every locale is in the bundle (~25 kB each before gzip); load them lazily past ~15 locales.
+ */
 export const locales: Record<
   string,
   Record<string, string>

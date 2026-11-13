@@ -21,15 +21,17 @@ const holes = (text: string): string[] =>
 describe.each(Object.keys(locales))('locale %s', (code) => {
   const texts = locales[code] ?? {};
 
-  test('has the same keys as en', () => {
-    expect(Object.keys(texts).sort()).toEqual(Object.keys(en).sort());
+  // A missing key shows the English text, so a new level does not need every language.
+  test('has no key that en lacks', () => {
+    expect(Object.keys(texts).filter((key) => !(key in en))).toEqual([]);
   });
 
   test('keeps the {variables} of en and no text is empty', () => {
-    for (const [key, text] of Object.entries(en)) {
-      const own = texts[key] ?? '';
+    for (const [key, own] of Object.entries(texts)) {
       expect(own.trim(), `${code} ${key}`).not.toBe('');
-      expect(holes(own), `${code} ${key}`).toEqual(holes(text));
+      expect(holes(own), `${code} ${key}`).toEqual(
+        holes(en[key as keyof typeof en]),
+      );
     }
   });
 });
