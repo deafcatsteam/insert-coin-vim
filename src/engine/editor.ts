@@ -1,6 +1,7 @@
 import { EditorState, type Extension } from '@codemirror/state';
 import { getCM, Vim, vim } from '@replit/codemirror-vim';
 import { EditorView, minimalSetup } from 'codemirror';
+import './ex';
 
 /** The level fields (SPEC §7) that an editor needs. */
 export interface EditorLevel {
