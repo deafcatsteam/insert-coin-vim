@@ -216,7 +216,8 @@ test('the title screen starts and the level list shows the saved stars', () => {
   recordResult('t', { stars: 2, keys: 3 });
   const pick = vi.fn();
   const other = { ...level, id: 'u', chapter: 2 };
-  showSelect(root, [level, other], pick);
+  const back = vi.fn();
+  showSelect(root, [level, other], pick, back);
   expect([...root.querySelectorAll('h2')].map((e) => e.textContent)).toEqual([
     'Chapter 1',
     'Chapter 2',
@@ -227,6 +228,12 @@ test('the title screen starts and the level list shows the saved stars', () => {
   expect(document.activeElement).toBe(open);
   (open as HTMLButtonElement).click();
   expect(pick).toHaveBeenCalledWith(1);
+
+  button('Title').click();
+  open?.dispatchEvent(
+    new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+  );
+  expect(back).toHaveBeenCalledTimes(2);
 });
 
 test('a display setting turns its effect off and stays off', () => {

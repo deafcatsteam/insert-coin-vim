@@ -30,7 +30,7 @@ const menu = (message?: string): void => {
   close();
   close = none;
   index = -1;
-  showSelect(root, levels, start, message);
+  showSelect(root, levels, start, title, message);
 };
 
 /** `today` is set for a daily challenge. It stays the same past midnight. */

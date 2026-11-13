@@ -201,6 +201,7 @@
   "mode.replace": "REPLACE",
   "mode.visual": "VISUAL",
   "nav.levels": "Levels",
+  "nav.title": "Title",
   "results.copied": "Result copied. Paste it anywhere.",
   "results.copy": "Copy result",
   "results.copyManual": "The browser blocked the copy. Select the text above and copy it.",

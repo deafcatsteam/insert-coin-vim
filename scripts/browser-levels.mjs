@@ -121,6 +121,11 @@ check(
   JSON.stringify(await queue()) === JSON.stringify(passed),
 );
 check('the queue ends', (await status()) === empty);
+await game.getByRole('button', { name: 'Title' }).click();
+check(
+  'the level list leads back to the title',
+  await game.getByRole('button', { name: 'Start' }).isVisible(),
+);
 
 for (const e of errors) console.log(`PAGE ERROR ${e}`);
 console.log(`${count - failed}/${count} checks passed in Chromium`);

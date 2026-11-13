@@ -76,11 +76,12 @@ export function showTitle(
   startEl.focus();
 }
 
-/** Shows the level list with the saved stars in `root`. */
+/** Shows the level list with the saved stars in `root`. `onBack`: Title button and Escape. */
 export function showSelect(
   root: HTMLElement,
   levels: readonly Level[],
   onPick: (index: number) => void,
+  onBack: () => void,
   message = '',
 ): void {
   const save = loadSave();
@@ -122,7 +123,7 @@ export function showSelect(
   const importEl = h('input', { type: 'file', accept: '.json' });
   importEl.addEventListener('change', () => {
     const again = (key: TextKey): void => {
-      showSelect(root, levels, onPick, t(key));
+      showSelect(root, levels, onPick, onBack, t(key));
     };
     importEl.files?.[0]
       ?.text()
@@ -137,23 +138,33 @@ export function showSelect(
       );
   });
 
-  root.replaceChildren(
+  const backEl = h('button', { type: 'button' }, t('nav.title'));
+  backEl.addEventListener('click', onBack);
+  const screen = h(
+    'div',
+    { className: 'ic-select' },
+    strip(),
     h(
-      'div',
-      { className: 'ic-select' },
-      strip(),
-      h('header', { className: 'ic-head' }, h('h1', {}, t('select.title'))),
-      ...nodes,
-      h(
-        'p',
-        { className: 'ic-actions' },
-        exportEl,
-        ' ',
-        h('label', {}, t('select.import'), ' ', importEl),
-      ),
-      h('p', { role: 'status' }, message),
+      'header',
+      { className: 'ic-head' },
+      h('h1', {}, t('select.title')),
+      backEl,
     ),
+    ...nodes,
+    h(
+      'p',
+      { className: 'ic-actions' },
+      exportEl,
+      ' ',
+      h('label', {}, t('select.import'), ' ', importEl),
+    ),
+    h('p', { role: 'status' }, message),
   );
+  // On the screen, not the window: the listener goes away with the screen.
+  screen.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') onBack();
+  });
+  root.replaceChildren(screen);
   // Enter plays the first level the player has not finished.
   (firstOpen ?? buttons[0])?.focus();
 }

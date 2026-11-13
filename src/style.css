@@ -22,8 +22,13 @@
 body {
   margin: 0;
   padding: 1rem;
-  background: #ecebe7;
   font: 1rem/1.5 var(--mono);
+}
+/* Dark room behind the light casing; on html too, so overscroll stays dark. */
+html,
+body {
+  background: radial-gradient(circle at 50% 40%, #2a2a27, #121211 70%) fixed
+    #121211;
 }
 
 /* The casing of the device (SPEC §8.2): plastic shell, bezel, lens, grille, LED. */
@@ -43,7 +48,7 @@ body {
   box-shadow:
     inset 0 2px 1px #fff,
     inset 0 -3px 4px rgb(0 0 0 / 25%),
-    0 1.5rem 3rem rgb(0 0 0 / 35%);
+    0 1.5rem 3rem rgb(0 0 0 / 60%);
   color: #4a4a45;
   font-size: 0.65rem;
   line-height: 1.3;
