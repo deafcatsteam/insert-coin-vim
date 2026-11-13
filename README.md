@@ -41,6 +41,9 @@ Status: v1.0. You do not need to know Vim to start.
 | 6 — Search       | 5      | `/` `?` `n` `N` `*` `#` `cgn`                  |
 | 7 — Visual mode  | 5      | `v` `V` `Ctrl+V`, `d` `p` `I` on a selection   |
 | 8 — Registers    | 4      | `"0` `''` and `Ctrl+R` in insert mode          |
+| 9 — Macros       | 4      | `q` `@` `@@` and counts                        |
+| 10 — Ex power    | 6      | `:s` `:g` `:v` `:norm` `:m` `:t`, patterns     |
+| 11 — Golf        | 5      | Every key allowed, plus `J`                    |
 
 ## Features
 
