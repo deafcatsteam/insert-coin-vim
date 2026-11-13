@@ -1,3 +1,4 @@
+import { dailyIndex, dailyNumber } from './daily/daily';
 import { t, type TextKey } from './i18n/i18n';
 import { levels } from './levels/levels';
 import { recordResult } from './progress/save';
@@ -15,6 +16,8 @@ const newVisit = (): Visit => ({ resets: 0, idle: false, shown: false });
 
 /** The level on screen, or -1 in the menus. */
 let index = -1;
+/** Number of the daily challenge on screen, or undefined in the campaign. */
+let day: number | undefined;
 let visit = newVisit();
 let close = none;
 
@@ -25,10 +28,17 @@ const menu = (): void => {
   showSelect(root, levels, start);
 };
 
-const start = (to: number): void => {
+/** `today` is set for a daily challenge. It stays the same past midnight. */
+const start = (to: number, today?: number): void => {
   index = to;
+  day = today;
   visit = newVisit();
   play();
+};
+
+const daily = (): void => {
+  const today = dailyNumber(new Date());
+  start(dailyIndex(today, levels), today);
 };
 
 /** Starts the current level again from its start buffer. */
@@ -42,24 +52,36 @@ const play = (): void => {
   close = showGame(root, level, visit, {
     done: (attempt) => {
       close();
+      // A daily challenge is saved as a campaign result of the same level.
       recordResult(level.id, {
         stars: rating(attempt, level),
         keys: attempt.keys.length,
       });
-      close = showResults(root, level, attempt, {
-        retry: play,
-        next: levels[index + 1]
-          ? () => {
-              start(index + 1);
-            }
-          : undefined,
-        menu,
-      });
+      close = showResults(
+        root,
+        level,
+        attempt,
+        {
+          retry: play,
+          next:
+            day === undefined && levels[index + 1]
+              ? () => {
+                  start(index + 1);
+                }
+              : undefined,
+          menu,
+        },
+        day,
+      );
     },
     reset,
-    skip: () => {
-      start(index + 1);
-    },
+    // Skipping the daily challenge leads to the level list.
+    skip:
+      day === undefined
+        ? () => {
+            start(index + 1);
+          }
+        : menu,
     menu,
   });
 };
@@ -89,8 +111,10 @@ for (const el of document.querySelectorAll<HTMLElement>('[data-t]'))
 
 applyDisplay();
 const title = (): void => {
-  showTitle(root, menu);
+  showTitle(root, menu, daily);
 };
+// The shared link of a daily challenge opens it at once.
+if (location.hash === '#daily') daily();
 // No boot animation for players who ask for less motion (SPEC §8.5).
-if (matchMedia('(prefers-reduced-motion: reduce)').matches) title();
+else if (matchMedia('(prefers-reduced-motion: reduce)').matches) title();
 else showBoot(root, title);

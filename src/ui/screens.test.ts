@@ -6,7 +6,7 @@ import { recordResult } from '../progress/save';
 import { showGame, type Attempt, type GameActions, type Visit } from './game';
 import { applyDisplay } from './display';
 import { showBoot, showSelect, showTitle } from './menu';
-import { showResults } from './results';
+import { shareText, showResults } from './results';
 
 const level: Level = {
   id: 't',
@@ -150,12 +150,64 @@ test('the results screen shows stars and replays the shortest solution', () => {
   close();
 });
 
+const attempt: Attempt = {
+  keys: ['l', 'x', 'x'],
+  faults: 0,
+  ms: 14_000,
+  shown: false,
+};
+const noActions = { retry: () => undefined, menu: () => undefined };
+
+test('the share text tells the score and links to the game', () => {
+  expect(shareText(level, attempt)).toBe(
+    'INSERT COIN t ★★☆\n3 keys (par 3) · 00:14\nhttps://deafcatsteam.github.io/insert-coin-vim/',
+  );
+  expect(shareText(level, attempt, 7)).toBe(
+    'INSERT COIN #007 ★★☆\n3 keys (par 3) · 00:14\nhttps://deafcatsteam.github.io/insert-coin-vim/#daily',
+  );
+});
+
+test('copy result puts the share text on the clipboard', async () => {
+  const writeText = vi.fn(() => Promise.resolve());
+  Object.defineProperty(navigator, 'clipboard', {
+    value: { writeText },
+    configurable: true,
+  });
+  try {
+    const close = showResults(root, level, attempt, noActions, 7);
+    // A daily challenge has no next level, and says nothing about it.
+    expect(root.textContent).not.toContain('No more levels');
+    button('Copy result').click();
+    await vi.runAllTimersAsync();
+    expect(writeText).toHaveBeenCalledWith(shareText(level, attempt, 7));
+    expect(root.textContent).toContain('Result copied.');
+    expect(root.querySelector('textarea')?.hidden).toBe(true);
+    close();
+  } finally {
+    Reflect.deleteProperty(navigator, 'clipboard');
+  }
+});
+
+test('without a clipboard, copy result shows the text to copy by hand', async () => {
+  const close = showResults(root, level, attempt, noActions);
+  button('Copy result').click();
+  await vi.runAllTimersAsync();
+  const text = root.querySelector('textarea');
+  expect(text?.hidden).toBe(false);
+  expect(text?.value).toBe(shareText(level, attempt));
+  expect(root.textContent).toContain('The browser blocked the copy.');
+  close();
+});
+
 test('the title screen starts and the level list shows the saved stars', () => {
   const start = vi.fn();
-  showTitle(root, start);
+  const daily = vi.fn();
+  showTitle(root, start, daily);
   expect(document.activeElement).toBe(button('Start'));
   button('Start').click();
   expect(start).toHaveBeenCalledOnce();
+  button('Daily challenge').click();
+  expect(daily).toHaveBeenCalledOnce();
 
   recordResult('t', { stars: 2, keys: 3 });
   const pick = vi.fn();
@@ -177,14 +229,22 @@ test('a display setting turns its effect off and stays off', () => {
   applyDisplay();
   expect(document.documentElement.classList).toContain('fx-glow');
 
-  showTitle(root, () => undefined);
+  showTitle(
+    root,
+    () => undefined,
+    () => undefined,
+  );
   const boxes = [...root.querySelectorAll('input')];
   expect(boxes.map((b) => b.checked)).toEqual([true, true, true, true]);
   boxes[1]?.click();
   expect(document.documentElement.classList).not.toContain('fx-glow');
   expect(document.documentElement.classList).toContain('fx-scanlines');
 
-  showTitle(root, () => undefined);
+  showTitle(
+    root,
+    () => undefined,
+    () => undefined,
+  );
   expect(root.querySelectorAll('input')[1]?.checked).toBe(false);
 });
 

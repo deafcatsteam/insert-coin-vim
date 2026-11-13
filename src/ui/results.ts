@@ -5,7 +5,7 @@ import { shortest, type Level } from '../levels/levels';
 import { parseKeys } from '../scoring/keys';
 import { stars } from '../scoring/stars';
 import type { Attempt } from './game';
-import { h, starRow, strip } from './h';
+import { h, starRow, starText, strip } from './h';
 
 /** Pause between two keys of the replayed solution. */
 const REPLAY_STEP_MS = 500;
@@ -20,12 +20,39 @@ const clock = (ms: number): string => {
 export const rating = (attempt: Attempt, level: Level): 1 | 2 | 3 =>
   attempt.shown ? 1 : stars(attempt.keys.length, level);
 
-/** Shows the results of an attempt in `root`. Returns the function that removes it. */
+/** The site the shared text links to. An itch.io copy links here too. */
+export const SITE_URL = 'https://deafcatsteam.github.io/insert-coin-vim/';
+
+/** Text to paste anywhere (SPEC §5.5). It tells the score, not the keys. */
+export const shareText = (
+  level: Level,
+  attempt: Attempt,
+  day?: number,
+): string => {
+  const head = day
+    ? t('share.daily', { day: String(day).padStart(3, '0') })
+    : t('share.level', { id: level.id });
+  return [
+    `${head} ${starText(rating(attempt, level))}`,
+    t('share.score', {
+      keys: attempt.keys.length,
+      par: level.par,
+      time: clock(attempt.ms),
+    }),
+    day ? `${SITE_URL}#daily` : SITE_URL,
+  ].join('\n');
+};
+
+/**
+ * Shows the results of an attempt in `root`. Returns the function that removes it.
+ * `day` is set for a daily challenge.
+ */
 export function showResults(
   root: HTMLElement,
   level: Level,
   attempt: Attempt,
   actions: { retry: () => void; next?: () => void; menu: () => void },
+  day?: number,
 ): () => void {
   const optimal = shortest(level);
   const steps = parseKeys(optimal);
@@ -34,10 +61,21 @@ export function showResults(
   // The player watches this editor and cannot type in it.
   const replayEl = h('div', { className: 'ic-editor', inert: true });
   const watchEl = h('button', { type: 'button' }, t('results.watch'));
+  const copyEl = h('button', { type: 'button' }, t('results.copy'));
+  // Shown when the browser refuses the clipboard, to copy by hand.
+  const sharedEl = h('textarea', {
+    className: 'ic-keys',
+    readOnly: true,
+    hidden: true,
+    rows: 3,
+    value: shareText(level, attempt, day),
+  });
+  const copyStatusEl = h('p', { role: 'status' });
   const retryEl = h('button', { type: 'button' }, t('results.retry'));
+  // A daily challenge has no next level.
   const nextEl = actions.next
     ? h('button', { type: 'button' }, t('results.next'))
-    : h('span', {}, t('results.end'));
+    : h('span', {}, day ? '' : t('results.end'));
   const menuEl = h('button', { type: 'button' }, t('nav.levels'));
   root.replaceChildren(
     h(
@@ -65,6 +103,9 @@ export function showResults(
           ),
           h('p', {}, t('results.time', { time: clock(attempt.ms) })),
           h('p', { className: 'ic-stamp' }, t('results.stamp')),
+          h('p', {}, copyEl),
+          sharedEl,
+          copyStatusEl,
         ),
         h(
           'section',
@@ -107,6 +148,21 @@ export function showResults(
       pressKey(session.view, key);
       playedEl.textContent += key;
     }, REPLAY_STEP_MS);
+  });
+  copyEl.addEventListener('click', () => {
+    // A missing clipboard (old browser, iframe without permission) throws here too.
+    Promise.resolve()
+      .then(() => navigator.clipboard.writeText(sharedEl.value))
+      .then(
+        () => {
+          copyStatusEl.textContent = t('results.copied');
+        },
+        () => {
+          sharedEl.hidden = false;
+          sharedEl.select();
+          copyStatusEl.textContent = t('results.copyManual');
+        },
+      );
   });
   retryEl.addEventListener('click', actions.retry);
   menuEl.addEventListener('click', actions.menu);

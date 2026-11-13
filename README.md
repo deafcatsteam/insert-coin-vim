@@ -46,7 +46,11 @@ Status: early version (v0.1). You do not need to know Vim to start.
 
 - A real Vim engine ([CodeMirror 6](https://codemirror.net/) with its Vim mode), not a simulation of a few keys.
 - Two hints per level, a **Show solution** button, and a **Skip level** button. Nobody stays stuck.
-- A results screen that replays the reference solution key by key.
+- A results screen that replays the reference solution key by key, and a result text to
+  paste anywhere (no keys in it, so no spoilers).
+- A daily challenge: the same level for every player on a given day (UTC), with no server.
+  Open it from the title screen or with the link
+  https://deafcatsteam.github.io/insert-coin-vim/#daily.
 - Works with any keyboard layout (AZERTY, QWERTZ, QWERTY…).
 - Progress saved in your browser, with export and import to a file.
 - A CRT look you can tune: scanlines, glow, flicker and screen curve each have a switch.
@@ -97,7 +101,8 @@ The full design is in [SPEC.md](SPEC.md).
 
 - **v0.1 (now):** 20 levels in chapters 0–3, scoring, results with replay, save export and import.
 - **v1.0 (in progress):** chapters 4–8 are in (line jumps, text objects, search, visual mode,
-  registers). Still to come: a daily challenge, a review mode, a result text to share, sound.
+  registers), the daily challenge and the result text to share. Still to come: a review mode,
+  sound.
 - **v1.x:** chapters 9–11 (macros, Ex commands, golf puzzles), speedrun mode, more languages
   (French first).
 

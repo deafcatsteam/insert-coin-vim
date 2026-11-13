@@ -36,8 +36,13 @@ export function showBoot(root: HTMLElement, onDone: () => void): void {
 }
 
 /** Shows the title screen in `root`. */
-export function showTitle(root: HTMLElement, onStart: () => void): void {
+export function showTitle(
+  root: HTMLElement,
+  onStart: () => void,
+  onDaily: () => void,
+): void {
   const startEl = h('button', { type: 'button' }, t('title.start'));
+  const dailyEl = h('button', { type: 'button' }, t('title.daily'));
   root.replaceChildren(
     h(
       'div',
@@ -51,13 +56,14 @@ export function showTitle(root: HTMLElement, onStart: () => void): void {
       ),
       h('p', {}, t('title.program')),
       h('h1', { className: 'ic-coin' }, t('title.name')),
-      h('p', { className: 'ic-menu' }, startEl),
+      h('p', { className: 'ic-menu' }, startEl, ' ', dailyEl),
       h('p', {}, t('title.keyboard')),
       displaySettings(),
       h('p', { className: 'ic-small' }, t('title.footnote')),
     ),
   );
   startEl.addEventListener('click', onStart);
+  dailyEl.addEventListener('click', onDaily);
   // Enter starts, without the mouse.
   startEl.focus();
 }
