@@ -86,6 +86,21 @@ INSERT COIN #042 ★★★
 insertcoin.example/daily
 ```
 
+### 5.6 Unlockables
+Cosmetic rewards for feats. Local only, stored with the save.
+
+| Reward | Unlocked by |
+|---|---|
+| Theme "LCD olive" | Clearing the campaign |
+| Theme "Phosphor" | All ★★★ in one chapter |
+| Theme "Ice" | First Speedrun record |
+| Theme "Paper" | Clearing chapter 11 (Golf) |
+| Badges on the title screen | Feats such as "no hints", "no arrow keys", "★★★ everywhere" (exact list in the plan) |
+| Arcade initials (3 letters) | Shown next to a Speedrun record |
+| Attract mode | Always on: an idle title screen replays a level solution, like an arcade cabinet |
+
+Display settings show a theme list with only the unlocked themes.
+
 ---
 
 ## 6. Curriculum (skill tree)
@@ -179,7 +194,7 @@ The player is a newly recruited **operator** at a fictional megacorporation. The
 | `--accent` (phosphor green, actions/success) | `#39FF6A` |
 | `--danger` | `#FF3B30` |
 | `--casing` | `#D9D9D6` |
-| Unlockable theme | "LCD olive" (green-grey monochrome) |
+| Unlockable themes | "LCD olive" (green-grey monochrome), "Phosphor" (green on black), "Ice" (cold cyan), "Paper" (black ink on cream). Each meets WCAG AA (contrast ≥ 4.5). |
 
 ### 8.4 Typography (OFL licensed)
 - Display: VT323 or Share Tech Mono.
@@ -281,7 +296,7 @@ Engine, scoring, 20 levels (chapters 0–3), results screen with replay, localSt
 Chapters 4–8, Daily Challenge, Review mode, share text, Display settings, sound, itch.io release, Ko-fi/Sponsors.
 
 ### Phase 3 — v1.x
-Chapters 9–11, Speedrun, Free Golf, extra locales (French first), LCD olive theme.
+Chapters 9–11, Speedrun, Free Golf, extra locales (French first), LCD olive theme. Then the unlockables of §5.6 (extra themes, badges, initials, attract mode).
 
 ### Later / ideas
 Global leaderboard (e.g. Supabase free tier), Neovim plugin mode for features the browser can't emulate, community level packs.
