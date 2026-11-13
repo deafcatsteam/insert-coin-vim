@@ -131,6 +131,10 @@ The full design is in [SPEC.md](SPEC.md).
 
 Details are in [SPEC.md](SPEC.md), section 12. There are no dates.
 
+What comes next is up to the players.
+[Vote in the polls](https://github.com/deafcatsteam/insert-coin-vim/discussions/categories/polls)
+or share an idea in [Discussions](https://github.com/deafcatsteam/insert-coin-vim/discussions).
+
 ## Support
 
 The game is free and stays free. If you like it, you can
