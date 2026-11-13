@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- An arcade coin, in the amber of the CRT screen. -->
+  <rect width="32" height="32" rx="6" fill="#0b0a08"/>
+  <circle cx="16" cy="16" r="12" fill="#ff8a1f"/>
+  <circle cx="16" cy="16" r="8.5" fill="none" stroke="#0b0a08" stroke-width="1.5"/>
+  <text x="16" y="20.5" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="12" fill="#0b0a08">1</text>
+</svg>
