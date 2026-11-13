@@ -17,7 +17,7 @@ _All keystrokes are monitored for quality purposes._
 
 </div>
 
-Status: v1.1. You do not need to know Vim to start.
+Status: v1.1, with the first v1.x modes live. You do not need to know Vim to start.
 
 ## How it works
 
@@ -56,6 +56,11 @@ Status: v1.1. You do not need to know Vim to start.
   https://deafcatsteam.github.io/insert-coin-vim/#daily.
 - A review mode: a skipped level or a one-star level comes back the next day (UTC), then after
   3 and 7 more days until you pass it each time. Open it from the title screen.
+- A Speedrun mode: once every level of a chapter is done, play the whole chapter in one timed
+  run, with no help. The best time per chapter is saved with its splits.
+- Free Golf: replay any level you finished for the fewest keys, with no help. Your record is
+  saved apart from your stars. Open it from the title screen.
+- An LCD olive theme, unlocked when you clear the campaign.
 - Works with any keyboard layout (AZERTY, QWERTZ, QWERTY…).
 - In 9 languages: English, French, Spanish, German, Portuguese (Brazil), Italian, Russian,
   Simplified Chinese and Japanese. The texts you edit stay in English.
@@ -110,8 +115,10 @@ The full design is in [SPEC.md](SPEC.md).
 - **v0.1:** 20 levels in chapters 0–3, scoring, results with replay, save export and import.
 - **v1.0:** chapters 4–8 (line jumps, text objects, search, visual mode, registers), the
   daily challenge, the result text to share, the review mode, sound and the itch.io release.
-- **v1.1 (now):** chapters 9–11 (macros, Ex commands, golf puzzles) and 8 more languages.
-- **v1.x:** speedrun mode, free golf mode, LCD olive theme.
+- **v1.1:** chapters 9–11 (macros, Ex commands, golf puzzles) and 8 more languages.
+- **v1.x (now):** done: Speedrun mode, Free Golf on finished levels, LCD olive theme.
+  Next: a pack of expert golf puzzles, then more unlockable themes, badges, arcade initials
+  on Speedrun records and an attract mode.
 
 Details are in [SPEC.md](SPEC.md), section 12. There are no dates.
 
