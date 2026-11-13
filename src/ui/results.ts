@@ -46,6 +46,7 @@ export const shareText = (
 /**
  * Shows the results of an attempt in `root`. Returns the function that removes it.
  * `day` is set for a daily challenge. `chapterEnd` adds the support links.
+ * `unlocked` tells the player that the LCD olive theme is now in the settings.
  */
 export function showResults(
   root: HTMLElement,
@@ -54,6 +55,7 @@ export function showResults(
   actions: { retry: () => void; next?: () => void; menu: () => void },
   day?: number,
   chapterEnd = false,
+  unlocked = false,
 ): () => void {
   const optimal = shortest(level);
   const steps = parseKeys(optimal);
@@ -107,6 +109,7 @@ export function showResults(
           !attempt.shown && attempt.keys.length < steps.length
             ? h('p', {}, t('results.beatBest'))
             : '',
+          unlocked ? h('p', {}, t('results.unlocked')) : '',
           h('p', { className: 'ic-stamp' }, t('results.stamp')),
           h('p', {}, copyEl),
           sharedEl,

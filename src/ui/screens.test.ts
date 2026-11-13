@@ -1,10 +1,10 @@
 import { EditorView } from 'codemirror';
 import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { press } from '../engine/replay';
-import type { Level } from '../levels/levels';
+import { levels, type Level } from '../levels/levels';
 import { recordResult } from '../progress/save';
 import { showGame, type Attempt, type GameActions, type Visit } from './game';
-import { applyDisplay } from './display';
+import { applyDisplay, campaignCleared } from './display';
 import { showBoot, showSelect, showTitle } from './menu';
 import { shareText, showResults } from './results';
 
@@ -285,6 +285,43 @@ test('a display setting turns its effect off and stays off', () => {
 
   title();
   expect(root.querySelectorAll('input')[1]?.checked).toBe(false);
+});
+
+test('the LCD olive theme unlocks when the whole campaign is cleared', () => {
+  const title = (): void => {
+    showTitle(
+      root,
+      () => undefined,
+      () => undefined,
+      () => undefined,
+      0,
+    );
+  };
+  const olive = (): HTMLInputElement | undefined =>
+    [...root.querySelectorAll('label')]
+      .find((l) => l.textContent.includes('LCD olive'))
+      ?.querySelector('input') ?? undefined;
+
+  for (const { id } of levels.slice(1)) recordResult(id, { stars: 1, keys: 9 });
+  title();
+  expect(campaignCleared()).toBe(false);
+  expect(olive()).toBeUndefined();
+
+  recordResult(levels[0]?.id ?? '', { stars: 1, keys: 9 });
+  title();
+  expect(campaignCleared()).toBe(true);
+  olive()?.click();
+  expect(document.documentElement.classList).toContain('theme-olive');
+  olive()?.click();
+  expect(document.documentElement.classList).not.toContain('theme-olive');
+});
+
+test('the results screen tells the player about the unlocked theme', () => {
+  const unlocked = 'The LCD olive screen is now in the display settings';
+  showResults(root, level, attempt, noActions)();
+  expect(root.textContent).not.toContain(unlocked);
+  showResults(root, level, attempt, noActions, undefined, false, true)();
+  expect(root.textContent).toContain(unlocked);
 });
 
 test('the support links show at the end of a chapter only', () => {

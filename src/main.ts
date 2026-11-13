@@ -4,7 +4,7 @@ import { levels, type Level } from './levels/levels';
 import { loadSave, recordResult, recordReview } from './progress/save';
 import { dueLevels } from './review/review';
 import './style.css';
-import { applyDisplay } from './ui/display';
+import { applyDisplay, campaignCleared } from './ui/display';
 import { showGame, type Visit } from './ui/game';
 import { showBoot, showSelect, showTitle } from './ui/menu';
 import { rating, showResults } from './ui/results';
@@ -80,6 +80,7 @@ const play = (): void => {
     done: (attempt) => {
       close();
       const stars = rating(attempt, level);
+      const cleared = campaignCleared();
       // A daily challenge is saved as a campaign result of the same level.
       recordResult(level.id, { stars, keys: attempt.keys.length });
       remember(level, stars <= 1);
@@ -101,6 +102,7 @@ const play = (): void => {
         day === undefined &&
           !reviewing &&
           levels[index + 1]?.chapter !== level.chapter,
+        !cleared && campaignCleared(),
       );
     },
     reset,
