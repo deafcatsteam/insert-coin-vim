@@ -186,9 +186,12 @@ export function showResults(
   return stop;
 }
 
-/** `+1.2` or `−0.4` seconds against the record. */
-const gap = (ms: number): string =>
-  `${ms < 0 ? '−' : '+'}${(Math.abs(ms) / 1000).toFixed(1)}`;
+/** `+1.2`, `−0.4` or `±0.0` seconds against the record. */
+const gap = (ms: number): string => {
+  const tenths = Math.round(ms / 100);
+  const sign = tenths < 0 ? '−' : tenths > 0 ? '+' : '±';
+  return `${sign}${(Math.abs(tenths) / 10).toFixed(1)}`;
+};
 
 /**
  * Shows the end of a Speedrun in `root`: the time, and each split against `old`,

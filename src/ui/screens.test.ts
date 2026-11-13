@@ -380,7 +380,7 @@ test('the end of a Speedrun shows the time, the record and the splits', () => {
   const two = [level, { ...level, id: 'u' }];
   const retry = vi.fn();
   const old = { ms: 20_000, splits: [9_000, 20_000] };
-  showRun(root, two, { ms: 18_000, splits: [9_500, 18_000] }, old, {
+  showRun(root, two, { ms: 18_000, splits: [9_030, 18_000] }, old, {
     retry,
     menu: vi.fn(),
   });
@@ -388,7 +388,7 @@ test('the end of a Speedrun shows the time, the record and the splits', () => {
   expect(root.textContent).toContain('Time: 00:18.0');
   expect(root.textContent).toContain('NEW RECORD');
   expect([...root.querySelectorAll('li')].map((e) => e.textContent)).toEqual([
-    'Delete a word 00:09.5 +0.5',
+    'Delete a word 00:09.0 ±0.0',
     'Delete a word 00:18.0 −2.0',
   ]);
   expect(document.activeElement).toBe(button('Retry'));

@@ -1,6 +1,6 @@
 // Plays every level solution in Chromium with real key presses (Ctrl+V included),
 // through the same session as the game. Run: npm run test:browser
-/* global window, localStorage, console, process -- Node script; window and localStorage are the page in evaluate(). */
+/* global window, document, localStorage, console, process -- Node script; window and localStorage are the page in evaluate(). */
 import { chromium } from 'playwright';
 import { createServer } from 'vite';
 
