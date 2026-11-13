@@ -1,0 +1,28 @@
+{
+  "id": "c09-l04",
+  "chapter": 9,
+  "title": {
+    "key": "levels.c09-l04.title"
+  },
+  "brief": {
+    "key": "levels.c09-l04.brief"
+  },
+  "concepts": ["macro", "search-next"],
+  "start": "pump_a OK\npump_b ERR\npump_c OK\npump_d ERR\npump_e ERR\npump_f OK\npump_g ERR",
+  "target": "pump_a OK\n# pump_b RESET\npump_c OK\n# pump_d RESET\n# pump_e RESET\npump_f OK\n# pump_g RESET",
+  "forbiddenKeys": [":", "<C-v>"],
+  "par": 26,
+  "optimal": 24,
+  "solutions": ["/ERR<CR>qqcwRESET<Esc>I# <Esc>nq3@q"],
+  "hints": [
+    {
+      "key": "levels.c09-l04.hint1"
+    },
+    {
+      "key": "levels.c09-l04.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

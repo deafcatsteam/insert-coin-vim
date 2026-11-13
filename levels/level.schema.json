@@ -68,6 +68,8 @@
           "insert-register-0",
           "jump-back",
           "line-jump",
+          "macro",
+          "macro-repeat",
           "match-bracket",
           "motion-b",
           "motion-big-e",

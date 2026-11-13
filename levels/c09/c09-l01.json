@@ -1,0 +1,28 @@
+{
+  "id": "c09-l01",
+  "chapter": 9,
+  "title": {
+    "key": "levels.c09-l01.title"
+  },
+  "brief": {
+    "key": "levels.c09-l01.brief"
+  },
+  "concepts": ["macro"],
+  "start": "north 12\neast 7",
+  "target": "\"north\": 12,\n\"east\": 7,",
+  "forbiddenKeys": [":", "<C-v>"],
+  "par": 19,
+  "optimal": 18,
+  "solutions": ["qqI\"<Esc>f i\":<Esc>A,<Esc>jq@q"],
+  "hints": [
+    {
+      "key": "levels.c09-l01.hint1"
+    },
+    {
+      "key": "levels.c09-l01.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

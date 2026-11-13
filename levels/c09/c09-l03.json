@@ -1,0 +1,28 @@
+{
+  "id": "c09-l03",
+  "chapter": 9,
+  "title": {
+    "key": "levels.c09-l03.title"
+  },
+  "brief": {
+    "key": "levels.c09-l03.brief"
+  },
+  "concepts": ["macro", "count"],
+  "start": "north OK\neast OK\nsouth FAIL\nwest OK\nupper OK\nlower FAIL\ncore OK\nshaft OK",
+  "target": "[north] OK\n[east] OK\n[south] FAIL\n[west] OK\n[upper] OK\n[lower] FAIL\n[core] OK\n[shaft] OK",
+  "forbiddenKeys": [":", "<C-v>"],
+  "par": 16,
+  "optimal": 14,
+  "solutions": ["qqI[<Esc>ea]<Esc>jq7@q"],
+  "hints": [
+    {
+      "key": "levels.c09-l03.hint1"
+    },
+    {
+      "key": "levels.c09-l03.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

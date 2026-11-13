@@ -1,0 +1,31 @@
+{
+  "id": "c09-l02",
+  "chapter": 9,
+  "title": {
+    "key": "levels.c09-l02.title"
+  },
+  "brief": {
+    "key": "levels.c09-l02.brief"
+  },
+  "concepts": ["macro-repeat"],
+  "start": "alarm_low on\n# keep\nalarm_high on\n# keep\n# keep\nalarm_fire on",
+  "target": "# alarm_low off\n# keep\n# alarm_high off\n# keep\n# keep\n# alarm_fire off",
+  "forbiddenKeys": [":", "<C-v>"],
+  "par": 23,
+  "optimal": 22,
+  "solutions": [
+    "qqwcwoff<Esc>I# <Esc>q2j@q3j@@",
+    "qqwcwoff<Esc>I# <Esc>q2j@q3j@q"
+  ],
+  "hints": [
+    {
+      "key": "levels.c09-l02.hint1"
+    },
+    {
+      "key": "levels.c09-l02.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}
