@@ -309,7 +309,7 @@ Global leaderboard (e.g. Supabase free tier), Neovim plugin mode for features th
 
 ## 13. Open decisions
 
-- [ ] Fictional corporation name and lore tone.
-- [ ] Final display/editor fonts.
+- [x] Fictional corporation name and lore tone: Keystone Consolidated Products, Operator 0420.
+- [x] Final display/editor fonts: VT323 (display), IBM Plex Mono (editor), self-hosted.
 - [x] UI framework: vanilla TypeScript.
-- [ ] Name availability check: GitHub (free on 2026-11-10, checked by the maintainer), itch.io, domain.
+- [x] Name availability check: GitHub (free on 2026-11-10, checked by the maintainer), itch.io (deafcatsteam/insert-coin-vim, used since v1.0). No domain: the game stays on GitHub Pages.
