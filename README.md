@@ -71,6 +71,8 @@ Status: v1.2. You do not need to know Vim to start.
 - An attract mode: leave the title screen alone for 30 seconds and it plays a level solution,
   like an arcade cabinet. Any key brings the title back. Off when your system asks for less
   motion.
+- Community level packs: sets of levels made by players, read by the maintainer before they
+  ship. Write one with [CONTRIBUTING.md](CONTRIBUTING.md#how-to-add-a-level-pack).
 - Works with any keyboard layout (AZERTY, QWERTZ, QWERTY…).
 - In 9 languages: English, French, Spanish, German, Portuguese (Brazil), Italian, Russian,
   Simplified Chinese and Japanese. The texts you edit stay in English.
@@ -117,7 +119,7 @@ npm run build
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). It explains how to add a level.
+See [CONTRIBUTING.md](CONTRIBUTING.md). It explains how to add a level or a level pack.
 The full design is in [SPEC.md](SPEC.md).
 
 ## Roadmap

@@ -300,10 +300,10 @@ Engine, scoring, 20 levels (chapters 0–3), results screen with replay, localSt
 Chapters 4–8, Daily Challenge, Review mode, share text, Display settings, sound, itch.io release, Ko-fi/Sponsors.
 
 ### Phase 3 — v1.x
-Chapters 9–11, Speedrun, Free Golf, extra locales (French first), LCD olive theme. Then the unlockables of §5.6 (extra themes, badges, initials, attract mode).
+Chapters 9–11, Speedrun, Free Golf, extra locales (French first), LCD olive theme. Then the unlockables of §5.6 (extra themes, badges, initials, attract mode). Then community level packs: sent by pull request, checked by CI and read by the maintainer, played from a Community screen for stars only (CONTRIBUTING.md).
 
 ### Later / ideas
-Global leaderboard (e.g. Supabase free tier), Neovim plugin mode for features the browser can't emulate, community level packs.
+Global leaderboard (e.g. Supabase free tier), Neovim plugin mode for features the browser can't emulate, ghost records. Players vote on these in the repository Discussions polls first.
 
 ---
 
