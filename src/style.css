@@ -326,7 +326,7 @@ fieldset label {
 .ic-panes {
   display: grid;
   flex: 1;
-  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
   gap: 1rem;
   margin: 1rem 0 0.5rem;
 }

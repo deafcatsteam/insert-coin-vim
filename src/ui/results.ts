@@ -169,8 +169,8 @@ export function showResults(
   retryEl.addEventListener('click', actions.retry);
   menuEl.addEventListener('click', actions.menu);
   if (actions.next) nextEl.addEventListener('click', actions.next);
-  // Enter goes on, without the mouse.
-  (actions.next ? nextEl : menuEl).focus();
+  // Enter goes on, without the mouse. No scroll: the title stays in view.
+  (actions.next ? nextEl : menuEl).focus({ preventScroll: true });
 
   return stop;
 }
