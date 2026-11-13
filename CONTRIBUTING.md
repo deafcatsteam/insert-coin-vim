@@ -61,7 +61,8 @@ with real key presses. It needs Chromium once: `npx playwright install chromium`
      in `levels/level.schema.json`. A new concept goes in that list first.
    - `author`: your name or handle. `license`: `CC-BY-4.0`.
 3. Add the texts to `locales/en.json`: `levels.<id>.title`, `levels.<id>.brief`,
-   `levels.<id>.hint1`, `levels.<id>.hint2`. The level file refers to these keys.
+   `levels.<id>.hint1`, `levels.<id>.hint2`. The level file refers to these keys. Other
+   languages are optional: a missing key shows the English text.
 4. Run `npm run validate:levels`. It checks the file against the schema, checks that every text
    key exists, and replays every solution in the real editor.
 
@@ -73,6 +74,20 @@ Limits to respect:
 - Use only commands marked as supported in `docs/support-matrix.md`.
 - Teach one new idea per level, and say in `brief` which keys do what. Many players have never
   used Vim.
+
+## How to translate
+
+Each language is one file in `locales/`, named after its language tag: `fr.json`,
+`pt-BR.json`. The game finds new files by itself.
+
+1. To add a language, copy `locales/en.json` to `locales/<tag>.json` and translate the values.
+   `lang.name` is the name of the language in that language, for the menu on the title screen.
+2. Keep Vim keys, commands and the words of the level texts as they are: the buffers stay in
+   English, so `slow` must stay `slow`.
+3. Keep every `{variable}` of the English text.
+4. Run `npm test`. It checks that each file has no unknown key and keeps the variables.
+
+To fix a translation, edit the file and open a pull request with the `i18n` label.
 
 By adding a level you agree to publish it under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Code contributions are under the
