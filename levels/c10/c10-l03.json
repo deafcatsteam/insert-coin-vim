@@ -1,0 +1,28 @@
+{
+  "id": "c10-l03",
+  "chapter": 10,
+  "title": {
+    "key": "levels.c10-l03.title"
+  },
+  "brief": {
+    "key": "levels.c10-l03.brief"
+  },
+  "concepts": ["ex-regex", "ex-substitute"],
+  "start": "pump 12 bar\nfan 7 rpm\nvalve 304 kpa\nlamp 5 w",
+  "target": "pump [12] bar\nfan [7] rpm\nvalve [304] kpa\nlamp [5] w",
+  "forbiddenKeys": [".", "q", "<C-v>"],
+  "par": 16,
+  "optimal": 14,
+  "solutions": [":%s/\\d\\d*/[&]<CR>", ":%s/\\d\\d*/[&]/<CR>"],
+  "hints": [
+    {
+      "key": "levels.c10-l03.hint1"
+    },
+    {
+      "key": "levels.c10-l03.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

@@ -1,0 +1,28 @@
+{
+  "id": "c10-l04",
+  "chapter": 10,
+  "title": {
+    "key": "levels.c10-l04.title"
+  },
+  "brief": {
+    "key": "levels.c10-l04.brief"
+  },
+  "concepts": ["ex-global", "delete-line"],
+  "start": "INFO boot ok\nDEBUG mem 41\nINFO link up\nDEBUG mem 40\nWARN temp high\nDEBUG cpu 9\nINFO fan on\nDEBUG mem 39\nDEBUG io 3\nINFO pump on\nDEBUG mem 38\nINFO ready\nDEBUG exit 0",
+  "target": "INFO boot ok\nINFO link up\nWARN temp high\nINFO fan on\nINFO pump on\nINFO ready",
+  "forbiddenKeys": [".", "q", "<C-v>"],
+  "par": 12,
+  "optimal": 7,
+  "solutions": [":g/D/d<CR>", ":g/DEBUG/d<CR>"],
+  "hints": [
+    {
+      "key": "levels.c10-l04.hint1"
+    },
+    {
+      "key": "levels.c10-l04.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

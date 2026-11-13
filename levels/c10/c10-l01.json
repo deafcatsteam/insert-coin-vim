@@ -1,0 +1,28 @@
+{
+  "id": "c10-l01",
+  "chapter": 10,
+  "title": {
+    "key": "levels.c10-l01.title"
+  },
+  "brief": {
+    "key": "levels.c10-l01.brief"
+  },
+  "concepts": ["ex-substitute"],
+  "start": "unit 1 up\nunit 2 down, unit 3 up\nunit 4 up\nunit 5 down, unit 6 down\nunit 7 up",
+  "target": "node 1 up\nnode 2 down, node 3 up\nnode 4 up\nnode 5 down, node 6 down\nnode 7 up",
+  "forbiddenKeys": [".", "q", "<C-v>"],
+  "par": 18,
+  "optimal": 16,
+  "solutions": [":%s/unit/node/g<CR>"],
+  "hints": [
+    {
+      "key": "levels.c10-l01.hint1"
+    },
+    {
+      "key": "levels.c10-l01.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

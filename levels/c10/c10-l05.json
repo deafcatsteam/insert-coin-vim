@@ -1,0 +1,28 @@
+{
+  "id": "c10-l05",
+  "chapter": 10,
+  "title": {
+    "key": "levels.c10-l05.title"
+  },
+  "brief": {
+    "key": "levels.c10-l05.brief"
+  },
+  "concepts": ["ex-normal", "ex-range"],
+  "start": "err: disk full\nwarn: fan stop\ninfo: link up\nfatal: temp high\nerr: pump dry\ninfo: ready",
+  "target": "ERR: disk full\nWARN: fan stop\nINFO: link up\nFATAL: temp high\nERR: pump dry\nINFO: ready",
+  "forbiddenKeys": [".", "q", "<C-v>"],
+  "par": 13,
+  "optimal": 11,
+  "solutions": [":%norm gUw<CR>"],
+  "hints": [
+    {
+      "key": "levels.c10-l05.hint1"
+    },
+    {
+      "key": "levels.c10-l05.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

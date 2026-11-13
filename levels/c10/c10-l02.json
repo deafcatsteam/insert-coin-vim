@@ -1,0 +1,28 @@
+{
+  "id": "c10-l02",
+  "chapter": 10,
+  "title": {
+    "key": "levels.c10-l02.title"
+  },
+  "brief": {
+    "key": "levels.c10-l02.brief"
+  },
+  "concepts": ["ex-range", "ex-substitute"],
+  "start": "alarm off\n[zone b]\nlight off\nfan off\npump off\n[zone c]\nlight off",
+  "target": "alarm off\n[zone b]\nlight on\nfan on\npump on\n[zone c]\nlight off",
+  "forbiddenKeys": [".", "q", "<C-v>"],
+  "par": 14,
+  "optimal": 11,
+  "solutions": [":3,5s/ff/n<CR>", ":3,5s/off/on/<CR>"],
+  "hints": [
+    {
+      "key": "levels.c10-l02.hint1"
+    },
+    {
+      "key": "levels.c10-l02.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

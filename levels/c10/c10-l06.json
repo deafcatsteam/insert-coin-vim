@@ -1,0 +1,28 @@
+{
+  "id": "c10-l06",
+  "chapter": 10,
+  "title": {
+    "key": "levels.c10-l06.title"
+  },
+  "brief": {
+    "key": "levels.c10-l06.brief"
+  },
+  "concepts": ["ex-move", "ex-global"],
+  "start": "liftoff\nclamps release\nengines full\nignition\nfuel pressurized\npower internal",
+  "target": "power internal\nfuel pressurized\nignition\nengines full\nclamps release\nliftoff",
+  "forbiddenKeys": [".", "q", "<C-v>"],
+  "par": 10,
+  "optimal": 8,
+  "solutions": [":g/./m0<CR>"],
+  "hints": [
+    {
+      "key": "levels.c10-l06.hint1"
+    },
+    {
+      "key": "levels.c10-l06.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}
