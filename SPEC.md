@@ -100,7 +100,7 @@ insertcoin.example/daily
 | 5 — Text objects | Advanced | `iw aw i" a" i( a( ip ap` |
 | 6 — Search | Advanced | `/ ? n N * #`, `cgn` |
 | 7 — Visual | Advanced | `v V <C-v>`*, block insert |
-| 8 — Registers & marks | Advanced | `"a`–`"z`, `"0`, `m` `'` `` ` `` |
+| 8 — Registers | Advanced | `"0`, `''`, `<C-r>` with a register in insert mode |
 | 9 — Macros | Expert | `q`, `@`, `@@`, counts on macros |
 | 10 — Ex power | Expert | `:s` with regex, ranges, `:g`, `:norm` |
 | 11 — Golf | Expert | Combined optimization puzzles |
@@ -108,6 +108,9 @@ insertcoin.example/daily
 \* Subject to Phase 0 browser-shortcut findings (section 12).
 Final chapter contents depend on what the Vim emulation supports reliably.
 Removed after Phase 0 (`docs/phase0-report.md`): `it`, `at` (chapter 5) and `"+` (chapter 8). Chapter 10 regex levels use only patterns that mean the same in Vim and in JavaScript.
+Not in chapter 8: `"a`–`"z`, `"A` and `m` marks. In a level-sized text they are never the shortest
+way (reordering the steps, `p` over a selection or `''` win), and a level's reference solution
+must be the shortest known one. `` ` `` is also a dead key on AZERTY.
 
 **MVP: 20 levels** covering chapters 0–3.
 

@@ -40,6 +40,7 @@ Status: early version (v0.1). You do not need to know Vim to start.
 | 5 — Text objects | 5      | `iw` `aw` `i"` `a"` `i(` `a(` `ip` `ap`        |
 | 6 — Search       | 5      | `/` `?` `n` `N` `*` `#` `cgn`                  |
 | 7 — Visual mode  | 5      | `v` `V` `Ctrl+V`, `d` `p` `I` on a selection   |
+| 8 — Registers    | 4      | `"0` `''` and `Ctrl+R` in insert mode          |
 
 ## Features
 
@@ -95,9 +96,8 @@ The full design is in [SPEC.md](SPEC.md).
 ## Roadmap
 
 - **v0.1 (now):** 20 levels in chapters 0–3, scoring, results with replay, save export and import.
-- **v1.0 (in progress):** chapters 4–7 are in (line jumps, text objects, search, visual mode).
-  Still to come: chapter 8 (registers and marks), a daily challenge, a review mode, a result text
-  to share, sound.
+- **v1.0 (in progress):** chapters 4–8 are in (line jumps, text objects, search, visual mode,
+  registers). Still to come: a daily challenge, a review mode, a result text to share, sound.
 - **v1.x:** chapters 9–11 (macros, Ex commands, golf puzzles), speedrun mode, more languages
   (French first).
 

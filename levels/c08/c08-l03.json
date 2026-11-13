@@ -1,0 +1,31 @@
+{
+  "id": "c08-l03",
+  "chapter": 8,
+  "title": {
+    "key": "levels.c08-l03.title"
+  },
+  "brief": {
+    "key": "levels.c08-l03.brief"
+  },
+  "concepts": ["insert-register"],
+  "start": "lock(crew_quarters)",
+  "target": "lock(crew_quarters); seal(crew_quarters);",
+  "cursor": {
+    "line": 0,
+    "ch": 5
+  },
+  "par": 19,
+  "optimal": 15,
+  "solutions": ["yi(A; seal(<C-r>\");"],
+  "hints": [
+    {
+      "key": "levels.c08-l03.hint1"
+    },
+    {
+      "key": "levels.c08-l03.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

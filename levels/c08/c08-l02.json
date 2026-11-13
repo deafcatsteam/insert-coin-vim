@@ -1,0 +1,31 @@
+{
+  "id": "c08-l02",
+  "chapter": 8,
+  "title": {
+    "key": "levels.c08-l02.title"
+  },
+  "brief": {
+    "key": "levels.c08-l02.brief"
+  },
+  "concepts": ["jump-back"],
+  "start": "check: ok\ncheck: ok\ncheck: ok\ncheck: ok\ncheck: ok\nmode = ?\nstep 1: done\nstep 2: done\nstep 3: done\nstep 4: done\nstep 5: done\nstep 6: done\nstep 7: done\nstep 8: done\nstep 9: done\nstep 10: done\ndefault mode = decontamination",
+  "target": "check: ok\ncheck: ok\ncheck: ok\ncheck: ok\ncheck: ok\nmode = decontamination\nstep 1: done\nstep 2: done\nstep 3: done\nstep 4: done\nstep 5: done\nstep 6: done\nstep 7: done\nstep 8: done\nstep 9: done\nstep 10: done\ndefault mode = decontamination",
+  "cursor": {
+    "line": 5,
+    "ch": 7
+  },
+  "par": 14,
+  "optimal": 10,
+  "solutions": ["G$yiw''$vp"],
+  "hints": [
+    {
+      "key": "levels.c08-l02.hint1"
+    },
+    {
+      "key": "levels.c08-l02.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}

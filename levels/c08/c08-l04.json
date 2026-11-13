@@ -1,0 +1,31 @@
+{
+  "id": "c08-l04",
+  "chapter": 8,
+  "title": {
+    "key": "levels.c08-l04.title"
+  },
+  "brief": {
+    "key": "levels.c08-l04.brief"
+  },
+  "concepts": ["insert-register-0"],
+  "start": "target: crew_quarters\nmessage: OLD",
+  "target": "target: crew_quarters\nmessage: seal crew_quarters",
+  "cursor": {
+    "line": 0,
+    "ch": 8
+  },
+  "par": 18,
+  "optimal": 14,
+  "solutions": ["yiwjwcwseal <C-r>0"],
+  "hints": [
+    {
+      "key": "levels.c08-l04.hint1"
+    },
+    {
+      "key": "levels.c08-l04.hint2"
+    }
+  ],
+  "match": "exact",
+  "author": "deafcatsteam",
+  "license": "CC-BY-4.0"
+}
