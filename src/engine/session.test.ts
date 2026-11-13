@@ -53,6 +53,13 @@ test('starts at the level cursor', () => {
   expect(session.done).toBe(true);
 });
 
+test('keys a macro plays are not counted', () => {
+  const { session } = play({ start: 'a\nb\nc\nd', target: 'a!\nb!\nc!\nd' });
+  notation(session.view, 'qqA!<Esc>jq2@q');
+  expect(session.done).toBe(true);
+  expect(session.keys).toHaveLength(10);
+});
+
 test('a new session does not inherit Vim state from the last one', () => {
   const first = play({ start: 'abc', target: '' });
   first.press('q', 'a'); // starts recording a macro and never stops
