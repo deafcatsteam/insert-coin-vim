@@ -7,6 +7,7 @@ import {
   recordResult,
   recordReview,
   recordGolf,
+  recordInitials,
   recordRun,
 } from './save';
 
@@ -205,6 +206,53 @@ test('bad stored golf records are dropped, the level results stay', () => {
   localStorage.setItem(
     'insert-coin-save',
     '{"version":1,"levels":{"a":{"stars":2,"keys":4}},"golf":{"a":"x"}}',
+  );
+  expect(loadSave()).toEqual({
+    version: 1,
+    levels: { a: { stars: 2, keys: 4 } },
+  });
+});
+
+test('feats stay once earned, whatever result is the best, and an import keeps them', () => {
+  recordResult('a', { stars: 3, keys: 2, noHints: true });
+  recordResult('a', { stars: 1, keys: 9, noArrows: true });
+  const both = { stars: 3, keys: 2, noHints: true, noArrows: true };
+  expect(loadSave().levels).toEqual({ a: both });
+  const file = exportSave();
+  localStorage.clear();
+  recordResult('a', { stars: 1, keys: 20 });
+  importSave(file);
+  expect(loadSave().levels).toEqual({ a: both });
+});
+
+test('a bad stored feat is dropped, the result stays', () => {
+  localStorage.setItem(
+    'insert-coin-save',
+    '{"version":1,"levels":{"a":{"stars":2,"keys":4,"noHints":"yes","noArrows":true}}}',
+  );
+  expect(loadSave().levels).toEqual({
+    a: { stars: 2, keys: 4, noArrows: true },
+  });
+});
+
+test('initials sign the stored record only, 3 letters A–Z', () => {
+  recordInitials(0, 'ABC');
+  expect(loadSave().speedrun).toBeUndefined();
+  recordRun(0, { ms: 5000, splits: [5000] });
+  recordInitials(0, 'abc');
+  recordInitials(0, 'ABCD');
+  expect(loadSave().speedrun?.[0]?.initials).toBeUndefined();
+  recordInitials(0, 'KIM');
+  expect(loadSave().speedrun?.[0]?.initials).toBe('KIM');
+  // A faster run comes unsigned until the player signs it.
+  recordRun(0, { ms: 4000, splits: [4000] });
+  expect(loadSave().speedrun?.[0]?.initials).toBeUndefined();
+});
+
+test('bad stored initials drop the runs, the level results stay', () => {
+  localStorage.setItem(
+    'insert-coin-save',
+    '{"version":1,"levels":{"a":{"stars":2,"keys":4}},"speedrun":{"0":{"ms":1,"splits":[1],"initials":"<b>"}}}',
   );
   expect(loadSave()).toEqual({
     version: 1,

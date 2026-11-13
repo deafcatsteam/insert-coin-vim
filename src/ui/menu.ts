@@ -1,5 +1,6 @@
 import { t, type TextKey } from '../i18n/i18n';
 import { shortest, type Level } from '../levels/levels';
+import { badges } from '../progress/feats';
 import { exportSave, importSave, loadSave } from '../progress/save';
 import { displaySettings } from './display';
 import { h, starRow, strip } from './h';
@@ -59,6 +60,7 @@ export function showTitle(
     t('title.review', { count: toReview }),
   );
   const golfEl = h('button', { type: 'button' }, t('golf.title'));
+  const earned = badges(loadSave());
   root.replaceChildren(
     h(
       'div',
@@ -82,6 +84,13 @@ export function showTitle(
         reviewEl,
         ...(onGolf ? [' ', golfEl] : []),
       ),
+      earned.length > 0
+        ? h(
+            'ul',
+            { className: 'ic-badges', ariaLabel: t('title.badges') },
+            ...earned.map((badge) => h('li', {}, t(`badge.${badge}`))),
+          )
+        : '',
       h('p', {}, t('title.keyboard')),
       displaySettings(),
       soundSetting(),
@@ -129,7 +138,8 @@ export function showSelect(
           'button',
           { type: 'button' },
           best
-            ? t('select.speedrunBest', { time: clock(best.ms, true) })
+            ? // Initials are letters, the same in every language.
+              `${t('select.speedrunBest', { time: clock(best.ms, true) })}${best.initials ? ` ${best.initials}` : ''}`
             : t('select.speedrun'),
         );
         runEl.addEventListener('click', () => {

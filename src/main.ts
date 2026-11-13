@@ -5,14 +5,18 @@ import { parseKeys } from './scoring/keys';
 import {
   loadSave,
   recordGolf,
+  recordInitials,
   recordResult,
   recordReview,
   recordRun,
+  type LevelResult,
 } from './progress/save';
+import type { Theme } from './progress/feats';
 import { dueLevels } from './review/review';
 import './style.css';
-import { applyDisplay, campaignCleared } from './ui/display';
-import { showGame, type Visit } from './ui/game';
+import { attract } from './ui/attract';
+import { applyDisplay, unlockedThemes } from './ui/display';
+import { helped, showGame, type Visit } from './ui/game';
 import { showBoot, showGolf, showSelect, showTitle } from './ui/menu';
 import { rating, showResults, showRun } from './ui/results';
 
@@ -20,6 +24,15 @@ const root = document.querySelector<HTMLElement>('#app');
 if (!root) throw new Error('page markup missing: app');
 
 const none = (): void => undefined;
+/** An arrow key, with or without modifiers, in Vim notation. */
+const ARROW = /^<(?:[CSAMD]-)*(?:Up|Down|Left|Right)>$/;
+
+/** Runs `write`, then returns the themes it unlocked. */
+const unlocks = (write: () => void): Theme[] => {
+  const before = unlockedThemes();
+  write();
+  return unlockedThemes().filter((theme) => !before.includes(theme));
+};
 const newVisit = (): Visit => ({ resets: 0, idle: false, shown: false });
 
 /** The level on screen, or -1 in the menus. */
@@ -105,12 +118,21 @@ const runDone = (level: Level, ms: number): void => {
   }
   const result = { ms: now - run.start, splits: run.splits };
   const { chapter } = run;
+  let old;
+  const unlocked = unlocks(() => (old = recordRun(chapter, result)));
   showRun(
     root,
     levels.filter((l) => l.chapter === chapter),
     result,
-    recordRun(chapter, result),
-    { retry: reset, menu: () => menu() },
+    old,
+    {
+      retry: reset,
+      menu: () => menu(),
+      sign: (initials) => {
+        recordInitials(chapter, initials);
+      },
+    },
+    unlocked,
   );
 };
 
@@ -169,15 +191,18 @@ const play = (): void => {
             { retry: play, menu: golfMenu },
             undefined,
             false,
-            false,
+            [],
             { old: recordGolf(level.id, attempt.keys.length) },
           );
           return;
         }
         const stars = rating(attempt, level);
-        const cleared = campaignCleared();
+        const result: LevelResult = { stars, keys: attempt.keys.length };
+        if (!helped(visit)) result.noHints = true;
+        if (!attempt.keys.some((key) => ARROW.test(key)))
+          result.noArrows = true;
         // A daily challenge is saved as a campaign result of the same level.
-        recordResult(level.id, { stars, keys: attempt.keys.length });
+        const unlocked = unlocks(() => recordResult(level.id, result));
         remember(level, stars <= 1);
         // At the end of the queue, review() shows the level list and says so.
         const next = reviewing
@@ -197,7 +222,7 @@ const play = (): void => {
           day === undefined &&
             !reviewing &&
             levels[index + 1]?.chapter !== level.chapter,
-          !cleared && campaignCleared(),
+          unlocked,
         );
       },
       reset,
@@ -256,6 +281,7 @@ for (const el of document.querySelectorAll<HTMLElement>('[data-t]'))
 
 applyDisplay();
 const title = (): void => {
+  close();
   showTitle(
     root,
     () => {
@@ -266,6 +292,8 @@ const title = (): void => {
     reviewQueue().length,
     Object.keys(loadSave().levels).length > 0 ? golfMenu : undefined,
   );
+  // Every screen that replaces the title calls `close` first.
+  close = attract(root, levels, title);
 };
 // The shared link of a daily challenge opens it at once.
 if (location.hash === '#daily') daily();

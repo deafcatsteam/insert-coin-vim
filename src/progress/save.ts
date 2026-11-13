@@ -4,7 +4,14 @@ import { isCard, nextCards, sooner, type Card } from '../review/review';
 export interface LevelResult {
   stars: number;
   keys: number;
+  /** Once done with no hint and no solution on screen (badges, SPEC §5.6). Optional: older saves lack it. */
+  noHints?: true;
+  /** Once done with no arrow key. Optional like `noHints`. */
+  noArrows?: true;
 }
+
+/** The feats of a level, kept once earned, whatever result is the best. */
+const FLAGS = ['noHints', 'noArrows'] as const;
 
 /** Everything the game stores. Also the content of an exported save file. */
 export interface Save {
@@ -29,6 +36,8 @@ export interface Run {
   ms: number;
   /** Time at the end of each level. The last one is `ms`. */
   splits: number[];
+  /** Arcade initials of the player, 3 letters A–Z (SPEC §5.6). */
+  initials?: string;
 }
 
 const STORE = 'insert-coin-save';
@@ -39,13 +48,17 @@ const isCount = (value: unknown): value is number =>
 const isTime = (value: unknown): value is number =>
   typeof value === 'number' && Number.isFinite(value) && value >= 0;
 
+export const isInitials = (value: unknown): value is string =>
+  typeof value === 'string' && /^[A-Z]{3}$/.test(value);
+
 const isRun = (value: unknown): value is Run => {
   const run = value as Partial<Run> | null;
   return (
     isTime(run?.ms) &&
     Array.isArray(run.splits) &&
     run.splits.length > 0 &&
-    run.splits.every(isTime)
+    run.splits.every(isTime) &&
+    (run.initials === undefined || isInitials(run.initials))
   );
 };
 
@@ -76,6 +89,11 @@ const parse = (json: string, dropBad = false): Save => {
     ((badReview || badSpeedrun || badGolf) && !dropBad)
   )
     throw new Error('not an Insert Coin save');
+  // A bad feat flag costs that feat only, never the save.
+  for (const result of results as LevelResult[]) {
+    if (result.noHints !== true) delete result.noHints;
+    if (result.noArrows !== true) delete result.noArrows;
+  }
   if (badReview) delete (data as Save).review;
   if (badSpeedrun) delete (data as Save).speedrun;
   if (badGolf) delete (data as Save).golf;
@@ -105,10 +123,17 @@ const store = (save: Save): void => {
 const better = (a: LevelResult, b: LevelResult | undefined): LevelResult =>
   !b || a.stars > b.stars || (a.stars === b.stars && a.keys < b.keys) ? a : b;
 
+/** The better result of the two, with the feats of both. */
+const merge = (a: LevelResult, b: LevelResult | undefined): LevelResult => {
+  const best = { ...better(a, b) };
+  for (const flag of FLAGS) if (a[flag] || b?.[flag]) best[flag] = true;
+  return best;
+};
+
 /** Keeps the result if it beats the stored one. Returns the best of the two. */
 export function recordResult(id: string, result: LevelResult): LevelResult {
   const save = loadSave();
-  const best = better(result, save.levels[id]);
+  const best = merge(result, save.levels[id]);
   save.levels[id] = best;
   store(save);
   return best;
@@ -145,6 +170,15 @@ export function recordGolf(id: string, keys: number): number | undefined {
   return old;
 }
 
+/** Signs the Speedrun record of a chapter with arcade initials. */
+export function recordInitials(chapter: number, initials: string): void {
+  const save = loadSave();
+  const run = save.speedrun?.[chapter];
+  if (!run || !isInitials(initials)) return;
+  run.initials = initials;
+  store(save);
+}
+
 export const exportSave = (): string => JSON.stringify(loadSave(), null, 2);
 
 /**
@@ -156,7 +190,7 @@ export function importSave(json: string): void {
   const incoming = parse(json);
   const save = loadSave();
   for (const [id, result] of Object.entries(incoming.levels))
-    save.levels[id] = better(result, save.levels[id]);
+    save.levels[id] = merge(result, save.levels[id]);
   if (incoming.review) {
     const review = (save.review ??= {});
     for (const [concept, card] of Object.entries(incoming.review))

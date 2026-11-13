@@ -1,27 +1,24 @@
 import { t } from '../i18n/i18n';
-import { levels } from '../levels/levels';
+import { themes, THEMES, type Theme } from '../progress/feats';
 import { loadSave } from '../progress/save';
 import { h } from './h';
 
 /** The screen effects of SPEC §8.5. Each one is the class `fx-<name>` on <html>. */
 const EFFECTS = ['scanlines', 'glow', 'curve', 'flicker'] as const;
 const STORE = 'insert-coin-display';
-/** The LCD olive theme: a reward for finishing the campaign. */
+/** The chosen screen theme (SPEC §5.6), or 'amber', the default. */
 const THEME_STORE = 'insert-coin-theme';
 
-/** True once every level of the campaign has a result. */
-export const campaignCleared = (): boolean => {
-  const done = loadSave().levels;
-  return levels.every((level) => level.id in done);
-};
-
-const loadOlive = (): boolean => {
+const loadTheme = (): string => {
   try {
-    return localStorage.getItem(THEME_STORE) === 'olive';
+    return localStorage.getItem(THEME_STORE) ?? 'amber';
   } catch {
-    return false;
+    return 'amber';
   }
 };
+
+/** The themes the save unlocks now. */
+export const unlockedThemes = (): Theme[] => themes(loadSave());
 
 const store = (key: string, value: string): void => {
   try {
@@ -46,18 +43,31 @@ export function applyDisplay(): void {
   const off = loadOff();
   for (const effect of EFFECTS)
     document.documentElement.classList.toggle(`fx-${effect}`, !off.has(effect));
-  document.documentElement.classList.toggle(
-    'theme-olive',
-    loadOlive() && campaignCleared(),
-  );
+  // A theme stored on a device whose save lacks it stays off.
+  const theme = loadTheme();
+  const on = unlockedThemes().find((name) => name === theme);
+  for (const name of THEMES)
+    document.documentElement.classList.toggle(`theme-${name}`, name === on);
 }
 
-/** The display settings: one checkbox per effect, and the theme once unlocked. */
+/** The display settings: one checkbox per effect, and the theme list once a theme is unlocked. */
 export function displaySettings(): HTMLElement {
   const off = loadOff();
-  const olive = h('input', { type: 'checkbox', checked: loadOlive() });
-  olive.addEventListener('change', () => {
-    store(THEME_STORE, olive.checked ? 'olive' : 'amber');
+  const unlocked = unlockedThemes();
+  const current = loadTheme();
+  const theme = h(
+    'select',
+    {},
+    ...['amber', ...unlocked].map((name) =>
+      h(
+        'option',
+        { value: name, selected: name === current },
+        t(`display.${name as Theme | 'amber'}`),
+      ),
+    ),
+  );
+  theme.addEventListener('change', () => {
+    store(THEME_STORE, theme.value);
     applyDisplay();
   });
   return h(
@@ -74,6 +84,6 @@ export function displaySettings(): HTMLElement {
       });
       return h('label', {}, box, ' ', t(`display.${effect}`));
     }),
-    campaignCleared() ? h('label', {}, olive, ' ', t('display.olive')) : '',
+    unlocked.length > 0 ? h('label', {}, t('display.theme'), ' ', theme) : '',
   );
 }

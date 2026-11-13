@@ -57,11 +57,20 @@ Status: v1.1, with the first v1.x modes live. You do not need to know Vim to sta
 - A review mode: a skipped level or a one-star level comes back the next day (UTC), then after
   3 and 7 more days until you pass it each time. Open it from the title screen.
 - A Speedrun mode: once every level of a chapter is done, play the whole chapter in one timed
-  run, with no help. The best time per chapter is saved with its splits.
+  run, with no help. The best time per chapter is saved with its splits, signed with your
+  3-letter initials.
 - Free Golf: replay any level you finished for the fewest keys, with no help. Your record is
   saved apart from your stars. Clear chapter 11 to open a pack of 10 expert puzzles. Open it
   from the title screen.
-- An LCD olive theme, unlocked when you clear the campaign.
+- Screen themes to unlock: LCD olive (clear the campaign), green phosphor (★★★ on a whole
+  chapter), ice (your first Speedrun record) and paper (clear chapter 11). Pick one in the
+  display settings.
+- Badges on the title screen for feats: the campaign cleared, ★★★ everywhere, a Speedrun in
+  every chapter, an expert golf puzzle at the reference, and a chapter with no hints or with
+  no arrow keys.
+- An attract mode: leave the title screen alone for 30 seconds and it plays a level solution,
+  like an arcade cabinet. Any key brings the title back. Off when your system asks for less
+  motion.
 - Works with any keyboard layout (AZERTY, QWERTZ, QWERTY…).
 - In 9 languages: English, French, Spanish, German, Portuguese (Brazil), Italian, Russian,
   Simplified Chinese and Japanese. The texts you edit stay in English.
@@ -117,9 +126,8 @@ The full design is in [SPEC.md](SPEC.md).
 - **v1.0:** chapters 4–8 (line jumps, text objects, search, visual mode, registers), the
   daily challenge, the result text to share, the review mode, sound and the itch.io release.
 - **v1.1:** chapters 9–11 (macros, Ex commands, golf puzzles) and 8 more languages.
-- **v1.x (now):** done: Speedrun mode, Free Golf with a pack of expert puzzles, LCD olive
-  theme. Next: more unlockable themes, badges, arcade initials on Speedrun records and an
-  attract mode.
+- **v1.x (now):** Speedrun mode, Free Golf with a pack of expert puzzles, unlockable
+  screen themes, badges, arcade initials on Speedrun records and an attract mode.
 
 Details are in [SPEC.md](SPEC.md), section 12. There are no dates.
 

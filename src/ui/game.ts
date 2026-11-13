@@ -37,6 +37,10 @@ const DONE_DELAY_MS = 600;
 const HINT_RESETS = [2, 4] as const;
 const IDLE_MS = 60_000;
 
+/** True once the visit showed a hint or the solution. */
+export const helped = (visit: Visit): boolean =>
+  visit.shown || visit.idle || visit.resets >= HINT_RESETS[0];
+
 /**
  * Shows one attempt at a level in `root`. Returns the function that removes it.
  * `bare`: a Speedrun or Free Golf level, with no hints, no solution and no skip

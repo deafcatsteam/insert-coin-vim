@@ -27,6 +27,34 @@
   --select: #8e9763;
   color-scheme: light;
 }
+/* Green phosphor, unlocked by ★★★ on a whole chapter. */
+:root.theme-phosphor {
+  --bg: #050c06;
+  --fg: #3cff73;
+  --accent: #d2ffd9;
+  --danger: #ff5a4a;
+  --glow: 60 255 115;
+  --select: #124a22;
+}
+/* Ice blue, unlocked by the first Speedrun record. */
+:root.theme-ice {
+  --bg: #06101a;
+  --fg: #8fd8ff;
+  --accent: #f0fbff;
+  --danger: #ff6b7a;
+  --glow: 143 216 255;
+  --select: #1c3d5a;
+}
+/* Ink on paper, unlocked by the last chapter. */
+:root.theme-paper {
+  --bg: #ece6d6;
+  --fg: #2b2620;
+  --accent: #1a4d8f;
+  --danger: #a3221a;
+  --glow: 43 38 32;
+  --select: #cfc4a8;
+  color-scheme: light;
+}
 
 [hidden] {
   display: none !important;
@@ -575,6 +603,35 @@ fieldset label {
 .ic-title fieldset label {
   display: inline-block;
   margin: 0 0.6rem;
+}
+/* Badges (SPEC §5.6): small stamps under the menu. */
+.ic-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ic-badges li {
+  padding: 0 0.5rem;
+  color: var(--accent);
+  border: 2px double var(--accent);
+  font: 1.1rem/1.4 var(--display);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+/* Attract mode: the demo blinks its call to play. */
+.ic-demo {
+  text-align: center;
+  font: 2rem/1.2 var(--display);
+  animation: ic-blink 1.2s steps(1) infinite;
+}
+.ic-sign input {
+  width: 4ch;
+  font: inherit;
+  text-transform: uppercase;
 }
 .ic-small {
   margin-top: 1.5rem;

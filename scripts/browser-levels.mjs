@@ -118,6 +118,14 @@ check(
   'a pass moves to box 1',
   Object.values(passed).every((c) => c.box === 1),
 );
+const first = (await page.evaluate(() => window.levels))[0];
+check(
+  'a level done with no help and no arrow keys keeps both feats',
+  await game.evaluate((id) => {
+    const r = JSON.parse(localStorage.getItem('insert-coin-save')).levels[id];
+    return r.noHints === true && r.noArrows === true;
+  }, first.id),
+);
 await game.getByRole('button', { name: 'Retry (F2)' }).click();
 await game.getByRole('button', { name: 'Skip level' }).click();
 check(
@@ -169,13 +177,22 @@ for (const { id, solutions } of chapter0) {
   for (const key of solutions[0]) await game.keyboard.press(toPlaywright(key));
 }
 await game.waitForSelector('text=NEW RECORD');
+check(
+  'the first record unlocks the Ice screen',
+  (await game.locator('body').textContent()).includes('Unlocked: Ice screen'),
+);
+// The initials field has the focus: type, then Enter signs.
+await game.keyboard.type('k1im');
+await game.keyboard.press('Enter');
+await game.waitForSelector('text=Record signed KIM.');
 const saved = JSON.parse(
   await game.evaluate(() => localStorage.getItem('insert-coin-save')),
 );
 const run = saved.speedrun?.['0'];
 check(
   'the run is saved with one split per level',
-  run?.splits.length === chapter0.length &&
+  run?.initials === 'KIM' &&
+    run.splits.length === chapter0.length &&
     run.splits.every((s, i) => i === 0 || s > run.splits[i - 1]) &&
     run.ms === run.splits.at(-1),
 );
@@ -186,7 +203,7 @@ check(
 await game.getByRole('button', { name: 'Levels' }).click();
 check(
   'the level list shows the record',
-  /^Speedrun · record \d\d:\d\d\.\d$/.test(
+  /^Speedrun · record \d\d:\d\d\.\d KIM$/.test(
     await game.getByRole('button', { name: 'Speedrun' }).textContent(),
   ),
 );
@@ -249,6 +266,27 @@ check(
   JSON.parse(
     await game.evaluate(() => localStorage.getItem('insert-coin-save')),
   ).golf?.g01 === puzzle.solutions[0].length,
+);
+
+// Attract mode: an idle title plays a demo, a key brings the title back.
+const idle = await browser.newPage({ locale: 'en-US' });
+idle.on('pageerror', (e) => errors.push(e.message));
+await idle.clock.install();
+await idle.goto('http://localhost:4177/');
+await idle.keyboard.press('Escape');
+await idle.getByRole('button', { name: 'Start' }).waitFor();
+await idle.clock.runFor(31_000);
+check('an idle title plays a demo', await idle.locator('.ic-demo').isVisible());
+await idle.clock.runFor(3_000);
+check(
+  'the demo types its keys',
+  (await idle.locator('.ic-attract .cm-content').textContent()) !== '',
+);
+await idle.keyboard.press('Enter');
+check(
+  'a key brings the title back, and presses nothing on it',
+  (await idle.getByRole('button', { name: 'Start' }).isVisible()) &&
+    (await idle.locator('.ic-select').count()) === 0,
 );
 
 for (const e of errors) console.log(`PAGE ERROR ${e}`);

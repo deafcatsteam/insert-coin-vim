@@ -1,10 +1,11 @@
 import { EditorView } from 'codemirror';
-import { afterEach, beforeEach, expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { press } from '../engine/replay';
 import { levels, type Level } from '../levels/levels';
 import { recordGolf, recordResult, recordRun } from '../progress/save';
+import { attract, ATTRACT_IDLE_MS } from './attract';
 import { showGame, type Attempt, type GameActions, type Visit } from './game';
-import { applyDisplay, campaignCleared } from './display';
+import { applyDisplay } from './display';
 import { showBoot, showGolf, showSelect, showTitle } from './menu';
 import { clock, shareText, showResults, showRun } from './results';
 
@@ -287,7 +288,7 @@ test('a display setting turns its effect off and stays off', () => {
   expect(root.querySelectorAll('input')[1]?.checked).toBe(false);
 });
 
-test('the LCD olive theme unlocks when the whole campaign is cleared', () => {
+test('the theme list shows the unlocked themes only, and the choice stays', () => {
   const title = (): void => {
     showTitle(
       root,
@@ -297,31 +298,81 @@ test('the LCD olive theme unlocks when the whole campaign is cleared', () => {
       0,
     );
   };
-  const olive = (): HTMLInputElement | undefined =>
-    [...root.querySelectorAll('label')]
-      .find((l) => l.textContent.includes('LCD olive'))
-      ?.querySelector('input') ?? undefined;
+  const theme = (): HTMLSelectElement | null => root.querySelector('select');
+  const pick = (value: string): void => {
+    const select = theme();
+    if (!select) throw new Error('no theme list');
+    select.value = value;
+    select.dispatchEvent(new Event('change'));
+  };
 
   for (const { id } of levels.slice(1)) recordResult(id, { stars: 1, keys: 9 });
   title();
-  expect(campaignCleared()).toBe(false);
-  expect(olive()).toBeUndefined();
+  // The last chapter is done: Paper only.
+  expect([...(theme()?.options ?? [])].map((o) => o.textContent)).toEqual([
+    'Amber screen',
+    'Paper screen',
+  ]);
+  pick('paper');
+  expect(document.documentElement.classList).toContain('theme-paper');
 
   recordResult(levels[0]?.id ?? '', { stars: 1, keys: 9 });
   title();
-  expect(campaignCleared()).toBe(true);
-  olive()?.click();
+  expect([...(theme()?.options ?? [])].map((o) => o.value)).toEqual([
+    'amber',
+    'olive',
+    'paper',
+  ]);
+  expect(theme()?.value).toBe('paper');
+  pick('olive');
   expect(document.documentElement.classList).toContain('theme-olive');
-  olive()?.click();
+  expect(document.documentElement.classList).not.toContain('theme-paper');
+  pick('amber');
   expect(document.documentElement.classList).not.toContain('theme-olive');
 });
 
-test('the results screen tells the player about the unlocked theme', () => {
-  const unlocked = 'The LCD olive screen is now in the display settings';
+test('a stored theme the save does not unlock stays off', () => {
+  localStorage.setItem('insert-coin-theme', 'ice');
+  applyDisplay();
+  expect(document.documentElement.classList).not.toContain('theme-ice');
+  recordRun(0, { ms: 1000, splits: [1000] });
+  applyDisplay();
+  expect(document.documentElement.classList).toContain('theme-ice');
+  localStorage.clear();
+  applyDisplay();
+});
+
+test('the results screen tells the player about the unlocked themes', () => {
+  const unlocked =
+    'Unlocked: LCD olive screen. Pick it in the display settings.';
   showResults(root, level, attempt, noActions)();
-  expect(root.textContent).not.toContain(unlocked);
-  showResults(root, level, attempt, noActions, undefined, false, true)();
+  expect(root.textContent).not.toContain('Unlocked');
+  showResults(root, level, attempt, noActions, undefined, false, ['olive'])();
   expect(root.textContent).toContain(unlocked);
+});
+
+test('the title screen shows the badges earned', () => {
+  const title = (): void => {
+    showTitle(
+      root,
+      () => undefined,
+      () => undefined,
+      () => undefined,
+      0,
+    );
+  };
+  title();
+  expect(root.querySelector('.ic-badges')).toBeNull();
+  for (const { id } of levels)
+    recordResult(id, { stars: 3, keys: 9, noArrows: true });
+  title();
+  expect(
+    [...root.querySelectorAll('.ic-badges li')].map((e) => e.textContent),
+  ).toEqual([
+    'Campaign cleared',
+    '★★★ everywhere',
+    'A chapter with no arrow keys',
+  ]);
 });
 
 test('the support links show at the end of a chapter only', () => {
@@ -380,9 +431,11 @@ test('the end of a Speedrun shows the time, the record and the splits', () => {
   const two = [level, { ...level, id: 'u' }];
   const retry = vi.fn();
   const old = { ms: 20_000, splits: [9_000, 20_000] };
+  const sign = vi.fn();
   showRun(root, two, { ms: 18_000, splits: [9_030, 18_000] }, old, {
     retry,
     menu: vi.fn(),
+    sign,
   });
   expect(root.querySelector('h1')?.textContent).toBe('Speedrun — chapter 1');
   expect(root.textContent).toContain('Time: 00:18.0');
@@ -391,6 +444,22 @@ test('the end of a Speedrun shows the time, the record and the splits', () => {
     'Delete a word 00:09.0 ±0.0',
     'Delete a word 00:18.0 −2.0',
   ]);
+  // A new record asks for initials: letters only, upper case, three of them.
+  const initials = root.querySelector<HTMLInputElement>('.ic-sign input');
+  const form = root.querySelector('form');
+  if (!initials || !form) throw new Error('no initials');
+  expect(document.activeElement).toBe(initials);
+  initials.value = 'é1a';
+  initials.dispatchEvent(new Event('input'));
+  expect(initials.value).toBe('A');
+  form.requestSubmit();
+  expect(sign).not.toHaveBeenCalled();
+  expect(root.textContent).toContain('Type 3 letters');
+  initials.value = 'abc';
+  initials.dispatchEvent(new Event('input'));
+  form.requestSubmit();
+  expect(sign).toHaveBeenCalledWith('ABC');
+  expect(root.textContent).toContain('Record signed ABC.');
   expect(document.activeElement).toBe(button('Retry'));
   button('Retry').click();
   expect(retry).toHaveBeenCalledOnce();
@@ -398,9 +467,12 @@ test('the end of a Speedrun shows the time, the record and the splits', () => {
   showRun(root, two, { ms: 25_000, splits: [10_000, 25_000] }, old, {
     retry,
     menu: vi.fn(),
+    sign,
   });
   expect(root.textContent).not.toContain('NEW RECORD');
   expect(root.textContent).toContain('Record: 00:20.0');
+  expect(root.querySelector('form')).toBeNull();
+  expect(document.activeElement).toBe(button('Retry'));
 });
 
 test('the clock rounds to seconds, or to tenths for Speedruns', () => {
@@ -481,7 +553,7 @@ test('the end of a Free Golf level shows the keys against the record, no stars',
     ms: 3000,
     shown: false,
   };
-  showResults(root, level, attempt, noActions, undefined, false, false, {
+  showResults(root, level, attempt, noActions, undefined, false, [], {
     old: 3,
   })();
   expect(root.textContent).toContain('Keys: 2');
@@ -491,9 +563,97 @@ test('the end of a Free Golf level shows the keys against the record, no stars',
   expect(() => button('Copy result')).toThrow();
   expect(root.textContent).not.toContain('No more levels');
 
-  showResults(root, level, attempt, noActions, undefined, false, false, {
+  showResults(root, level, attempt, noActions, undefined, false, [], {
     old: 2,
   })();
   expect(root.textContent).not.toContain('NEW RECORD');
   expect(root.textContent).toContain('Record: 2 keys');
+});
+
+test('the initials of an earlier record fill the field, and the level list shows them', () => {
+  recordRun(1, { ms: 9_000, splits: [9_000], initials: 'ZED' });
+  showRun(
+    root,
+    [level],
+    { ms: 8_000, splits: [8_000] },
+    undefined,
+    { retry: vi.fn(), menu: vi.fn(), sign: vi.fn() },
+    ['ice'],
+  );
+  expect(root.querySelector<HTMLInputElement>('.ic-sign input')?.value).toBe(
+    'ZED',
+  );
+  expect(root.textContent).toContain('Unlocked: Ice screen.');
+  recordResult(level.id, { stars: 1, keys: 9 });
+  showSelect(root, [level], vi.fn(), vi.fn(), '', vi.fn());
+  expect(button('Speedrun').textContent).toBe('Speedrun · record 00:09.0 ZED');
+});
+
+describe('attract mode', () => {
+  const reduced = (matches: boolean): void => {
+    vi.stubGlobal('matchMedia', () => ({
+      matches,
+      addListener: () => undefined,
+      removeListener: () => undefined,
+    }));
+  };
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  test('an idle title replays a solution; a key brings the title back', () => {
+    reduced(false);
+    vi.spyOn(document, 'hasFocus').mockReturnValue(true);
+    const back = vi.fn();
+    root.replaceChildren('title');
+    const stop = attract(root, [level], back);
+    vi.advanceTimersByTime(ATTRACT_IDLE_MS - 1000);
+    // Any input keeps the title awake.
+    window.dispatchEvent(new Event('pointermove'));
+    vi.advanceTimersByTime(ATTRACT_IDLE_MS - 1000);
+    expect(root.textContent).toBe('title');
+    vi.advanceTimersByTime(1000);
+    expect(root.textContent).toContain('DEMO');
+    // Two keys, 400 ms apart; the buffer stays 2 s after.
+    vi.advanceTimersByTime(1_000);
+    expect(view().state.doc.toString()).toBe(level.target);
+    expect(back).not.toHaveBeenCalled();
+    const key = new KeyboardEvent('keydown', { key: 'a', cancelable: true });
+    window.dispatchEvent(key);
+    expect(key.defaultPrevented).toBe(true);
+    expect(back).toHaveBeenCalledOnce();
+    expect(root.querySelector('.cm-editor')).toBeNull();
+    stop();
+  });
+
+  test('the demo ends alone, and the title gives way to no demo once stopped', () => {
+    reduced(false);
+    vi.spyOn(document, 'hasFocus').mockReturnValue(true);
+    const back = vi.fn();
+    attract(root, [level], back);
+    vi.advanceTimersByTime(ATTRACT_IDLE_MS + 10_000);
+    expect(back).toHaveBeenCalledOnce();
+
+    const stop = attract(root, [level], back);
+    root.replaceChildren('levels');
+    stop();
+    vi.advanceTimersByTime(ATTRACT_IDLE_MS * 2);
+    expect(root.textContent).toBe('levels');
+  });
+
+  test('no demo for less motion, nor while the page has no focus', () => {
+    reduced(true);
+    root.replaceChildren('title');
+    attract(root, [level], vi.fn());
+    vi.advanceTimersByTime(ATTRACT_IDLE_MS * 2);
+    expect(root.textContent).toBe('title');
+
+    reduced(false);
+    vi.spyOn(document, 'hasFocus').mockReturnValue(false);
+    const stop = attract(root, [level], vi.fn());
+    vi.advanceTimersByTime(ATTRACT_IDLE_MS * 2);
+    expect(root.textContent).toBe('title');
+    stop();
+  });
 });
