@@ -35,6 +35,7 @@
   "display.title": "Ajustes de tela",
   "game.buffer": "Seu texto",
   "game.denied": "⚠ ACESSO NEGADO",
+  "game.exitRefused": "Para terminar: o texto deve ficar igual ao alvo; depois digite :{command} e aperte Enter.",
   "game.faults": "Bloqueadas: {count}",
   "game.hint": "Dica {n}: {text}",
   "game.keys": "Teclas: {count}",

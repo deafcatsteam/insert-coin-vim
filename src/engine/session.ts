@@ -24,22 +24,28 @@ export interface Session {
   readonly faults: number;
   /** True once the level is complete. The editor is then frozen. */
   readonly done: boolean;
+  /** True after an exit command the level did not accept, until the next key. */
+  readonly refused: boolean;
   destroy(): void;
 }
 
 // Ex commands are global in the plugin; each one finds its session through the editor.
 // The game has no file: ":w" and ":q" do nothing outside a level that asks for them.
-// shortcut: ":x" and "ZZ" are not exits; add them when a level teaches them.
 const exitHandlers = new WeakMap<EditorView, (command: string) => void>();
 for (const [name, prefix, command] of [
   ['write', 'w', 'w'],
   ['quit', 'q', 'q'],
   ['wq', 'wq', 'wq'],
+  ['xit', 'x', 'x'],
 ] as const)
   Vim.defineEx(name, prefix, (cm, params) => {
     const bang = params.input.trimEnd().endsWith('!') ? '!' : '';
     exitHandlers.get(cm.cm6)?.(command + bang);
   });
+Vim.map('ZZ', ':x<CR>', 'normal');
+Vim.map('ZQ', ':q!<CR>', 'normal');
+// Other ways real Vim writes and quits; a player who knows Vim types them.
+const SAME_AS: Record<string, string> = { 'wq!': 'wq', x: 'wq', 'x!': 'wq' };
 
 /** `onChange` runs after every key, blocked or not, and after every buffer change. */
 export function createSession(
@@ -50,6 +56,9 @@ export function createSession(
 ): Session {
   let faults = 0;
   let done = false;
+  let refused = false;
+  // ":w" then ":q" also ends a ":wq" level, if no change came between them.
+  let saved = false;
   const editable = new Compartment();
   const finish = (): void => {
     done = true;
@@ -64,6 +73,7 @@ export function createSession(
     editable.of([]),
     EditorView.updateListener.of((update) => {
       if (!update.docChanged) return;
+      saved = false;
       if (
         !done &&
         !level.exit &&
@@ -76,17 +86,20 @@ export function createSession(
   ]);
   const recorder = createRecorder(view, (_key, blocked) => {
     if (blocked) faults++;
+    refused = false;
     onChange();
   });
   recorder.forbidden = new Set(level.forbiddenKeys);
-  exitHandlers.set(view, (command) => {
-    if (
-      done ||
-      command !== level.exit ||
-      !matches(view.state.doc.toString(), level.target)
-    )
-      return;
-    finish();
+  exitHandlers.set(view, (typed) => {
+    if (done || !level.exit) return;
+    const ready = matches(view.state.doc.toString(), level.target);
+    const command =
+      typed === 'q' && saved && level.exit === 'wq'
+        ? 'wq'
+        : (SAME_AS[typed] ?? typed);
+    if (ready && command === level.exit) finish();
+    else if (ready && command === 'w' && level.exit === 'wq') saved = true;
+    else refused = true;
     onChange();
   });
 
@@ -100,6 +113,9 @@ export function createSession(
     },
     get done() {
       return done;
+    },
+    get refused() {
+      return refused;
     },
     destroy: () => {
       recorder.destroy();

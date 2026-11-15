@@ -35,6 +35,7 @@
   "display.title": "Display settings",
   "game.buffer": "Your text",
   "game.denied": "⚠ ACCESS DENIED",
+  "game.exitRefused": "To finish: make the text match the target, then type :{command} and press Enter.",
   "game.faults": "Blocked: {count}",
   "game.hint": "Hint {n}: {text}",
   "game.keys": "Keys: {count}",

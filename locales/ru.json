@@ -35,6 +35,7 @@
   "display.title": "Настройки экрана",
   "game.buffer": "Твой текст",
   "game.denied": "⚠ ДОСТУП ЗАПРЕЩЁН",
+  "game.exitRefused": "Чтобы закончить: текст должен совпасть с целью, затем введите :{command} и нажмите Enter.",
   "game.faults": "Заблокировано: {count}",
   "game.hint": "Подсказка {n}: {text}",
   "game.keys": "Клавиши: {count}",

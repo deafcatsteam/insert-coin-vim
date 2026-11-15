@@ -35,6 +35,7 @@
   "display.title": "显示设置",
   "game.buffer": "你的文本",
   "game.denied": "⚠ 拒绝访问",
+  "game.exitRefused": "完成方法：让文本与目标一致，然后输入 :{command} 并按 Enter。",
   "game.faults": "被拦截：{count}",
   "game.hint": "提示 {n}：{text}",
   "game.keys": "按键：{count}",

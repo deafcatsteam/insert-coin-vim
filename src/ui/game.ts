@@ -170,7 +170,12 @@ export function showGame(
     keysEl.textContent = t('game.keys', { count: session.keys.length });
     faultsEl.textContent = t('game.faults', { count: session.faults });
     // The message stays until the next key.
-    deniedEl.textContent = session.faults > faults ? t('game.denied') : '';
+    deniedEl.textContent =
+      session.faults > faults
+        ? t('game.denied')
+        : session.refused
+          ? t('game.exitRefused', { command: level.exit ?? '' })
+          : '';
     if (session.faults > faults) beep('denied');
     faults = session.faults;
     // `show` runs before Vim handles the key; read the recording once it has.

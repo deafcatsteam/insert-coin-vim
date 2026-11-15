@@ -35,6 +35,7 @@
   "display.title": "画面設定",
   "game.buffer": "あなたのテキスト",
   "game.denied": "⚠ アクセス拒否",
+  "game.exitRefused": "クリア条件：テキストをターゲットと一致させてから :{command} と入力し Enter。",
   "game.faults": "ブロック：{count}",
   "game.hint": "ヒント {n}：{text}",
   "game.keys": "キー数：{count}",

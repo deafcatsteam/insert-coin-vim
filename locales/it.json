@@ -35,6 +35,7 @@
   "display.title": "Impostazioni schermo",
   "game.buffer": "Il tuo testo",
   "game.denied": "⚠ ACCESSO NEGATO",
+  "game.exitRefused": "Per finire: il testo deve corrispondere all'obiettivo, poi digita :{command} e premi Invio.",
   "game.faults": "Bloccati: {count}",
   "game.hint": "Suggerimento {n}: {text}",
   "game.keys": "Tasti: {count}",

@@ -35,6 +35,7 @@
   "display.title": "Réglages de l'écran",
   "game.buffer": "Ton texte",
   "game.denied": "⚠ ACCÈS REFUSÉ",
+  "game.exitRefused": "Pour finir : le texte doit correspondre à la cible, puis tape :{command} et Entrée.",
   "game.faults": "Bloquées : {count}",
   "game.hint": "Indice {n} : {text}",
   "game.keys": "Touches : {count}",

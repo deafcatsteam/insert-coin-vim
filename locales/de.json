@@ -35,6 +35,7 @@
   "display.title": "Bildschirm-Einstellungen",
   "game.buffer": "Dein Text",
   "game.denied": "⚠ ZUGRIFF VERWEIGERT",
+  "game.exitRefused": "Zum Abschluss: Der Text muss dem Ziel entsprechen, dann :{command} tippen und Enter drücken.",
   "game.faults": "Blockiert: {count}",
   "game.hint": "Tipp {n}: {text}",
   "game.keys": "Tasten: {count}",

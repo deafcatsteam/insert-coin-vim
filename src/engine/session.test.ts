@@ -77,7 +77,8 @@ test.each(['w', 'q', 'wq', 'q!', 'quit!'])(
   (command) => {
     const exit = command === 'quit!' ? 'q!' : (command as 'w');
     const { session } = play({ start: 'abc', target: 'abc', exit });
-    for (const other of ['w', 'q', 'wq', 'q!'].filter((c) => c !== exit))
+    // ":w" last: ":w" then ":q" is also a ":wq".
+    for (const other of ['q', 'q!', 'wq', 'w'].filter((c) => c !== exit))
       notation(session.view, `:${other}<CR>`);
     expect(session.done).toBe(false);
 
@@ -96,6 +97,38 @@ test('an exit level needs the target text before its exit command', () => {
   notation(session.view, ':wq<CR>');
   expect(session.done).toBe(true);
   expect(session.keys).toHaveLength(9);
+});
+
+// Reported on r/vim: a Vim user ended "Save and quit" with ZZ and nothing happened.
+test.each(['ZZ', ':x<CR>', ':wq!<CR>', ':w<CR>:q<CR>'])(
+  'a ":wq" level also ends on %s',
+  (keys) => {
+    const { session } = play({ start: 'abc', target: 'abc', exit: 'wq' });
+    notation(session.view, keys);
+    expect(session.done).toBe(true);
+  },
+);
+
+test('ZQ ends a ":q!" level', () => {
+  const { session } = play({ start: 'abc', target: 'abc', exit: 'q!' });
+  notation(session.view, 'ZQ');
+  expect(session.done).toBe(true);
+  expect(session.keys).toEqual(['Z', 'Q']);
+});
+
+test('a change between ":w" and ":q" does not end a ":wq" level', () => {
+  const { session } = play({ start: 'abc', target: 'abc', exit: 'wq' });
+  notation(session.view, ':w<CR>xu:q<CR>');
+  expect(session.done).toBe(false);
+  expect(session.refused).toBe(true);
+});
+
+test('an exit command the level does not accept is refused until the next key', () => {
+  const { session } = play({ start: 'abc', target: 'bc', exit: 'wq' });
+  notation(session.view, ':wq<CR>');
+  expect(session.refused).toBe(true);
+  notation(session.view, 'x');
+  expect(session.refused).toBe(false);
 });
 
 test('":w" and ":q" do nothing in a level without an exit', () => {
