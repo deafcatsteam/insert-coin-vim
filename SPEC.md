@@ -169,7 +169,7 @@ Rules:
 - `solutions` use Vim key notation and are replayed by tests (section 10).
 - `optimal` MUST equal the keystroke count of the shortest listed solution (CI-checked).
 - A solution ends on the key that completes the level: the level completes as soon as the buffer equals `target`, so a final `<Esc>` is not part of it (CI-checked).
-- Optional `exit` (`"w"`, `"q"`, `"wq"` or `"q!"`), for chapter 0: the level completes when the player runs that Ex command while the buffer equals `target`.
+- Optional `exit` (`"w"`, `"q"`, `"wq"` or `"q!"`), for chapter 0: the level completes when the player runs that Ex command while the buffer equals `target`. Real Vim equivalents also count: `ZZ`, `:x` and `:wq!` for `wq`, `:w` then `:q` with no change between them for `wq`, and `ZQ` for `q!`. A refused exit command shows how to finish.
 - The reference is `levels/level.schema.json`; `npm run validate:levels` checks every level.
 
 ---
