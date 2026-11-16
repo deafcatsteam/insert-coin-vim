@@ -191,3 +191,13 @@ test('p pastes over a backward visual selection', () => {
   notation(session.view, 'yyGVkp');
   expect(buffer(session)).toBe('mode = safe\nspeed = 3\nmode = safe');
 });
+
+// Reported on r/vim: "/*" found nothing. In Vim a leading "*" is a literal star.
+test.each(['/*<CR>x', '?*<CR>x', '/^*<CR>x'])(
+  '%s finds a literal star',
+  (keys) => {
+    const { session } = play({ start: 'a\n*b', target: '' });
+    notation(session.view, keys);
+    expect(buffer(session)).toBe('a\nb');
+  },
+);

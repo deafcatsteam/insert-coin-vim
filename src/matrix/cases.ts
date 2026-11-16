@@ -88,6 +88,7 @@ export const cases: Case[] = [
   // 6 — Search
   { chapter: 6, command: '/', start: 'foo bar foo bar foo', keys: '/bar<CR>x', want: 'foo ar foo bar foo' },
   { chapter: 6, command: '?', start: 'foo bar foo bar foo', keys: '?bar<CR>x', want: 'foo bar foo ar foo' },
+  { chapter: 6, command: '/ leading * (literal star)', start: 'a * b', keys: '/*<CR>x', want: 'a  b' },
   { chapter: 6, command: 'n', start: 'foo bar foo bar foo', keys: '/bar<CR>nx', want: 'foo bar foo ar foo' },
   { chapter: 6, command: 'N', start: 'foo bar foo bar foo', keys: '/foo<CR>Nx', want: 'oo bar foo bar foo' },
   { chapter: 6, command: '*', start: 'foo bar foo bar foo', keys: '*x', want: 'foo bar oo bar foo' },

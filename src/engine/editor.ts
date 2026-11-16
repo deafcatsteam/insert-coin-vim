@@ -58,6 +58,20 @@ export function createEditor(
     ],
     parent,
   });
+  // Vim reads "*" at the start of a search pattern as a star (:help /star); the plugin
+  // hands it to a JavaScript RegExp, which throws, and the search does nothing.
+  // shortcut: only at the start or after "^", not after "\(" or "\|"; extend if a level needs it.
+  view.dom.addEventListener(
+    'keydown',
+    (e) => {
+      const input = e.target;
+      if (e.key !== 'Enter' || !(input instanceof HTMLInputElement)) return;
+      const prefix = input.previousSibling?.textContent;
+      if (prefix === '/' || prefix === '?')
+        input.value = input.value.replace(/^(\^?)\*/, '$1\\*');
+    },
+    true,
+  );
   // The plugin throws on p or P over a backward visual selection, after the paste: it
   // reads the old selection end in the shorter text, and the key then types a "p".
   // A paste covers the same text both ways, so turn the selection forward first.
